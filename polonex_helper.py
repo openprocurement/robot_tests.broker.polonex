@@ -12,14 +12,16 @@ def convert_date_polonex(isodate):
 
 def convert_polonex_string(string):
     return {
+            'True': '1',
+            'False': '0',
             u"Так": True,
-            u"Hi": False,
-            'active.enquiries': u'Період уточнень',
-            'active.tendering': u'Очікування пропозицій',
-            'active.auction': u'Період аукціону',
-            'active.qualification': u'Кваліфікація переможця',
-            'active.awarded': u'Пропозиції розглянуто',
-            'unsuccessful': u'Закупівля не відбулась',
-            'complete': u'Завершена закупівля',
-            'cancelled': u'Відмінена закупівля',
+            u"Hi":  False,
+            u'Період уточнень':        'active.enquiries',
+            u'Очікування пропозицій':  'active.tendering',
+            u'Період аукціону':        'active.auction',
+            u'Кваліфікація переможця': 'active.qualification',
+            u'Пропозиції розглянуто':  'active.awarded',
+            u'Закупівля не відбулась': 'unsuccessful',
+            u'Завершена закупівля':    'complete',
+            u'Відмінена закупівля':    'cancelled',
             }.get(string, string)

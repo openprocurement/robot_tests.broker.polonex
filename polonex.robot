@@ -86,7 +86,8 @@ Login
     ##${minimalstep_valueaddedtaxincluded}=  0
     ${value_amount}=                         Get From Dictionary         ${ARGUMENTS[1].data.value}             amount
     ${value_currency}=                       Get From Dictionary         ${ARGUMENTS[1].data.value}             currency
-    ##${value_valueaddedtaxincluded}=        Get From Dictionary         ${ARGUMENTS[1].data.value}             valueAddedTaxIncluded
+    ${value_valueaddedtaxincluded}=          Convert To String           ${ARGUMENTS[1].data.value.valueAddedTaxIncluded}
+    ${value_valueaddedtaxincluded}=          convert_polonex_string      ${value_valueaddedtaxincluded}
     ${items}=                                Get From Dictionary         ${ARGUMENTS[1].data}                   items
     ${item0}=                                Get From List               ${items}                               0
     ${item_description}=                     Get From Dictionary         ${item0}                               description
@@ -106,6 +107,19 @@ Login
     ${deliverylocation_latitude}=            Get From Dictionary         ${item0.deliveryLocation}              latitude
     ${deliverylocation_longitude}=           Get From Dictionary         ${item0.deliveryLocation}              longitude
 
+
+    ${procuringEntity}=                      Get From Dictionary         ${ARGUMENTS[1].data}                   procuringEntity
+
+    ${procuringEntity_address_countryName}=      Get From Dictionary     ${procuringEntity.address}            countryName
+    ${procuringEntity_address_locality}=         Get From Dictionary     ${procuringEntity.address}            locality
+    ${procuringEntity_address_postalCode}=       Get From Dictionary     ${procuringEntity.address}            postalCode
+    ${procuringEntity_address_region}=           Get From Dictionary     ${procuringEntity.address}            region
+    ${procuringEntity_address_streetAddress}=    Get From Dictionary     ${procuringEntity.address}            streetAddress
+    ${procuringEntity_contactPoint_name}=        Get From Dictionary     ${procuringEntity.contactPoint}       name
+    ${procuringEntity_contactPoint_telephone}=   Get From Dictionary     ${procuringEntity.contactPoint}       telephone
+    ${procuringEntity_identifier_id}=            Get From Dictionary     ${procuringEntity.identifier}         id
+    ${procuringEntity_identifier_scheme}=        Get From Dictionary     ${procuringEntity.identifier}         scheme
+    ${procuringEntity_name}=                     Get From Dictionary     ${procuringEntity}                    name
 
     ${minimalstep_amount}=              Convert To String     ${minimalstep_amount}
     ${value_amount}=                    Convert To String     ${value_amount}
@@ -130,10 +144,10 @@ Login
     Input text      id=addauctionform-tenderperiod_enddate                                        ${tenderperiod_enddate}
     Input text      id=addauctionform-minimalstep_amount                                          ${minimalstep_amount}
     Select From List    xpath=//select[@id="addauctionform-minimalstep_currency"]                 ${minimalstep_currency}
-    ##Select From List    xpath=//select[@id="addauctionform-minimalstep_valueaddedtaxincluded"]    ${minimalstep_valueaddedtaxincluded}
+    Select From List    xpath=//select[@id="addauctionform-minimalstep_valueaddedtaxincluded"]    ${value_valueaddedtaxincluded}
     Input text      id=addauctionform-value_amount                                                ${value_amount}
     Select From List    xpath=//select[@id="addauctionform-value_currency"]                       ${value_currency}
-    ##Select From List    xpath=//select[@id="addauctionform-value_valueaddedtaxincluded"]          ${value_valueaddedtaxincluded}
+    Select From List    xpath=//select[@id="addauctionform-value_valueaddedtaxincluded"]          ${value_valueaddedtaxincluded}
     Input text      id=additemform-0-description                                                  ${item_description}
     Select From List    xpath=//select[@id="additemform-0-classification_scheme"]                 ${classification_scheme}
     Input text      id=additemform-0-classification_description                                   ${classification_description}
@@ -151,11 +165,20 @@ Login
     Input text      id=additemform-0-deliverylocation_latitude                                    ${deliverylocation_latitude}
     Input text      id=additemform-0-deliverylocation_longitude                                   ${deliverylocation_longitude}
 
-    Sleep   5
+    Input text      id=addauctionform-procuringentity_address_countryname                         ${procuringEntity_address_countryName}
+    Input text      id=addauctionform-procuringentity_address_locality                            ${procuringEntity_address_locality}
+    Input text      id=addauctionform-procuringentity_address_postalcode                          ${procuringEntity_address_postalCode}
+    Input text      id=addauctionform-procuringentity_address_region                              ${procuringEntity_address_region}
+    Input text      id=addauctionform-procuringentity_address_streetaddress                       ${procuringEntity_address_streetAddress}
+    Input text      id=addauctionform-procuringentity_contactpoint_name                           ${procuringEntity_contactPoint_name}
+    Input text      id=addauctionform-procuringentity_contactpoint_telephone                      ${procuringEntity_contactPoint_telephone}
+    Input text      id=addauctionform-procuringentity_identifier_id                               ${procuringEntity_identifier_id}
+    Input text      id=addauctionform-procuringentity_identifier_scheme                           ${procuringEntity_identifier_scheme}
+    Input text      id=addauctionform-procuringentity_name                                        ${procuringEntity_name}
 
-    Click Button   id=add-auction-form-save
-    Sleep   2
-    Click Button   id=add-auction-form-save
+    Sleep   10
+
+    Click Element   id=add-auction-form-save
 
     Sleep   2
 
@@ -188,7 +211,6 @@ Login
   ...      ${ARGUMENTS[1]} ==  ${TENDER_UAID}
 
     Go to   ${USERS.users['${ARGUMENTS[0]}'].syncpage}
-    Sleep  20
     Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     Sleep  2
     Click Element       name=more-search-btn
@@ -209,27 +231,21 @@ Login
   ${title}=        Get From Dictionary  ${ARGUMENTS[2].data}  title
   ${description}=  Get From Dictionary  ${ARGUMENTS[2].data}  description
 
-  Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
-  Input Text      id=search_text_id   ${ARGUMENTS[1]}
-  Click Button    id=search_submit
+  polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
+
+  Click Element         id=add_question_btn
   Sleep  2
+  Input Text          id=addquestionform-title          ${title}
+  Input Text          id=addquestionform-description    ${description}
   Sleep  2
-  CLICK ELEMENT     xpath=(//a[contains(@class, 'qa_auctions_item')])[1]
-  Sleep   1
-  Click Element     id=qa_question_and_answer
-  Sleep   15
-  Click Element     xpath=//a[contains(@href, 'state_auction_question/add')]
-  Wait Until Page Contains Element    name=title    20
-  Input text                          name=title                 ${title}
-  Click Element                       id=submit_button
-  Wait Until Page Contains Element            xpath=//a[contains(@href, 'state_auction_question/add')]     30
-  capture page screenshot
+  Click Element       id=submit_add_question_form
+  Sleep  2
 
 Оновити сторінку з тендером
     [Arguments]    @{ARGUMENTS}
     [Documentation]    ${ARGUMENTS[0]} = username
     ...      ${ARGUMENTS[1]} = ${TENDER_UAID}
-    Selenium2Library.Switch Browser    ${ARGUMENTS[0]}
+    ##Selenium2Library.Switch Browser    ${ARGUMENTS[0]}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
 
 Отримати інформацію із тендера
@@ -274,24 +290,16 @@ Login
   [Documentation]
   ...      ${ARGUMENTS[0]} =  username
   ...      ${ARGUMENTS[1]} =  ${TENDER_UAID}
-  Selenium2Library.Switch Browser    ${ARGUMENTS[0]}
-  Go to   ${USERS.users['${ARGUMENTS[0]}'].default_page}
-  Input Text        id=search       ${ARGUMENTS[1]}
-  Click Button    xpath=//button[@type='submit']
+  ##Selenium2Library.Switch Browser    ${ARGUMENTS[0]}
+  polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[1]}
+
+  Click Element     id=update_auction_btn
   Sleep   2
-  Click Element   xpath=(//td[contains(@class, 'qa_item_name')]//a)[1]
+
+  ${title}=   Get Text     id=addauctionform-title
+  ${description}=   Get Text    id=addauctionform-description
+  Click Button    id=add-auction-form-save
   Sleep   2
-  Click Element     xpath=//a[contains(@href, 'state_auction/edit')]
-  Sleep   1
-  ${title}=   Get Text     id=title
-  ${description}=   Get Text    id=descr
-  Click Button    id=submit_button
-  Sleep   2
-  Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
-  Input Text      id=search_text_id   ${ARGUMENTS[1]}
-  Click Button    id=search_submit
-  Sleep   2
-  CLICK ELEMENT     xpath=(//a[contains(@href, 'net/dz/')])[1]
 
 
 Отримати інформацію про items[0].quantity
@@ -395,6 +403,10 @@ Login
   ${return_value}=   Отримати тест із поля і показати на сторінці  items[0].deliveryAddress.streetAddress
   [Return]  ${return_value}
 
+Отримати інформацію про items[0].deliveryDate.endDate
+  ${return_value}=   Отримати тест із поля і показати на сторінці  items[0].deliveryDate.endDate
+  [Return]  ${return_value}
+
 Отримати інформацію про questions[0].title
   Click Element                       xpath=//a[contains(@href, '#tab_questions')]
   ${return_value}=  Get text          ${locator.questions[0].title}
@@ -423,19 +435,14 @@ Login
   ...      ${ARGUMENTS[2]} = 0
   ...      ${ARGUMENTS[3]} = answer_data
   ${answer}=     Get From Dictionary  ${ARGUMENTS[3].data}  answer
-  Selenium2Library.Switch Browser     ${ARGUMENTS[0]}
-  Go to   ${USERS.users['${ARGUMENTS[0]}'].default_page}
-  Input Text        id=search       ${ARGUMENTS[1]}
-  Click Button    xpath=//button[@type='submit']
-  Sleep   2
-  Click Element   xpath=(//td[contains(@class, 'qa_item_name')]//a)[1]
-  Sleep   2
-  Wait Until Page Contains Element      xpath=//a[@class='b-tabs__link']
-  Click Element                         xpath=//a[@class='b-tabs__link']
-  Wait Until Page Contains Element      css=.zk-question
-  Click Element                         css=.zk-question
-  Input Text                            xpath=//textarea[@name='answer']        ${answer}
-  Click Element                         xpath=(//button[@type='submit'])[1]
+  ##Selenium2Library.Switch Browser     ${ARGUMENTS[0]}
+  polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[1]}
+
+  Click Element                         xpath=//a[contains(@href, '#tab_questions')]
+
+  Click Element                         id=add_answer_btn_0
+  Input Text                            id=addanswerform-answer        ${answer}
+  Click Element                         id=submit_add_answer_form
 
 Подати цінову пропозицію
     [Arguments]  @{ARGUMENTS}
@@ -444,22 +451,17 @@ Login
     ...    ${ARGUMENTS[1]} ==  tenderId
     ...    ${ARGUMENTS[2]} ==  ${test_bid_data}
     ${amount}=    Get From Dictionary     ${ARGUMENTS[2].data.value}    amount
-    Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
-    Go to   ${USERS.users['${ARGUMENTS[0]}'].default_page}
-    sleep   10
-    Input Text        id=search       ${ARGUMENTS[1]}
-    Click Button    xpath=//button[@type='submit']
+    ##Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
+
+    polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[1]}
+
+    Click Element       id=add_bid_btn
     Sleep   2
-    Click Element   xpath=(//td[contains(@class, 'qa_item_name')]//a)[1]
-    Sleep   180
-    reload page
-    Click Element       xpath=//a[contains(@class, 'zk-button_theme_green')]
-    Input Text          id=amount         ${amount}
-    sleep   2
-    Click Element       id=submit_button
-    sleep   30
-    reload page
-    ${resp}=    Get Text      css=.qa_offer_id
+    Input Text          id=addbidform-sum       ${amount}
+    Click Element       id=submit_add_bid_form
+    Sleep   4
+
+    ${resp}=    Get Text      id=userbidamount
     [Return]    ${resp}
 
 Скасувати цінову пропозицію
@@ -468,16 +470,10 @@ Login
     ...    ${ARGUMENTS[0]} ==  username
     ...    ${ARGUMENTS[1]} ==  none
     ...    ${ARGUMENTS[2]} ==  tenderId
-    Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
-    Go to   ${USERS.users['${ARGUMENTS[0]}'].default_page}
-    Input Text        id=search       ${ARGUMENTS[1]}
-    Click Button    xpath=//button[@type='submit']
+    ##Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
+
+    Click Element       id=cansel-bid
     Sleep   2
-    Click Element   xpath=(//td[contains(@class, 'qa_item_name')]//a)[1]
-    sleep   2
-    Wait Until Page Contains Element      css=.qa_your_suggestion_block     10
-    Click Element        css=.qa_your_withdraw_offer
-    Go to   ${USERS.users['${ARGUMENTS[0]}'].default_page}
 
 Змінити цінову пропозицію
     [Arguments]  @{ARGUMENTS}
@@ -486,12 +482,17 @@ Login
     ...    ${ARGUMENTS[1]} ==  tenderId
     ...    ${ARGUMENTS[2]} ==  amount
     ...    ${ARGUMENTS[3]} ==  amount.value
-    Selenium2Library.Switch Browser    ${ARGUMENTS[0]}
-    Click Element           css=.qa_your_modify_offer
-    Clear Element Text      id=amount
-    Input Text              id=amount         ${ARGUMENTS[3]}
-    sleep   3
-    Click Element       id=submit_button
+    ##Selenium2Library.Switch Browser    ${ARGUMENTS[0]}
+    Click Element       id=cansel-bid
+    Sleep   2
+    Click Element       id=add_bid_btn
+    Sleep   2
+    Input Text          id=addbidform-sum       ${ARGUMENTS[3]}
+    Click Element       id=submit_add_bid_form
+    Sleep   4
+
+    ${resp}=    Get Text      id=userbidamount
+    [Return]    ${resp}
 
 Завантажити документ в ставку
     [Arguments]  @{ARGUMENTS}
@@ -499,11 +500,12 @@ Login
     ...    ${ARGUMENTS[1]} ==  file
     ...    ${ARGUMENTS[2]} ==  tenderId
     Sleep   5
-    Click Element           css=.qa_your_modify_offer
+    Click Element           id=add_doc_to_bid
     Sleep   2
-    Choose File     xpath=//input[contains(@class, 'qa_state_offer_add_field')]   ${ARGUMENTS[1]}
+    Choose File             xpath=//input[contains(@id, 'prouploadform-filedata')]   ${ARGUMENTS[1]}
     sleep   2
-    Click Element       id=submit_button
+    Click Element           id=submit_add_file_form
+    sleep   2
 
 Змінити документ в ставці
     [Arguments]  @{ARGUMENTS}
@@ -511,40 +513,33 @@ Login
     ...    ${ARGUMENTS[0]} ==  username
     ...    ${ARGUMENTS[1]} ==  file
     ...    ${ARGUMENTS[2]} ==  tenderId
-    Selenium2Library.Switch Browser     ${ARGUMENTS[0]}
-    Click Element           css=.qa_your_modify_offer
+    ##Selenium2Library.Switch Browser     ${ARGUMENTS[0]}
+    polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[2]}
+    Sleep   10
+    Click Element           id=file_edit_0
     Sleep   2
-    Choose File     xpath=//input[contains(@class, 'qa_state_offer_add_field')]   ${ARGUMENTS[1]}
+    Choose File             xpath=//input[contains(@id, 'prouploadform-filedata')]   ${ARGUMENTS[1]}
     sleep   2
-    Click Element       id=submit_button
+    Click Element           id=submit_add_file_form
+    sleep   2
 
 Отримати інформацію про bids
     [Arguments]  @{ARGUMENTS}
-    Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
+    ##Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
 
 Отримати посилання на аукціон для глядача
     [Arguments]  @{ARGUMENTS}
-    Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
-    Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
-    Sleep   380
-    Input Text      id=search_text_id   ${ARGUMENTS[1]}
-    Click Button    id=search_submit
-    Sleep  2
-    CLICK ELEMENT     xpath=(//a[contains(@class, 'qa_auctions_item')])[1]
-    reload page
-    ${result} =    get text    xpath=//a[contains(@target, 'blank_')]
+    ##Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
+    polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}      ${ARGUMENTS[1]}
+    Sleep   2
+    ${result}=                  Get Element Attribute               id=show_public_btn@href
     [Return]   ${result}
 
 Отримати посилання на аукціон для учасника
     [Arguments]  @{ARGUMENTS}
-    Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
-    Go to   ${USERS.users['${ARGUMENTS[0]}'].default_page}
-    Input Text        id=search       ${ARGUMENTS[1]}
-    Click Button    xpath=//button[@type='submit']
+    ##Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
+    polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
     Sleep   2
-    CLICK Element     xpath=(//a[contains(@class, ' qa_procurement_name_in_list')])[1]
-    Sleep   120
-    reload page
-    ${result}=       get text    xpath=//a[contains(@target, 'blank_')]
+    ${result}=                  Get Element Attribute               id=show_private_btn@href
     [Return]   ${result}
 
