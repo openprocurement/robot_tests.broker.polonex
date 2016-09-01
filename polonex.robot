@@ -27,8 +27,6 @@ ${locator.tenderPeriod.startDate}                               id=tenderPeriodD
 ${locator.tenderPeriod.endDate}                                 id=tenderPeriodDataendDate
 ${locator.items[0].quantity}                                    id=items[0]_quantity
 ${locator.items[0].description}                                 id=items[0]_description
-${locator.items[0].deliveryLocation.latitude}                   id=items[0]_deliveryLocation_latitude
-${locator.items[0].deliveryLocation.longitude}                  id=items[0]_deliveryLocation_longitude
 ${locator.items[0].unit.code}                                   id=items[0]_unit_code
 ${locator.items[0].unit.name}                                   id=items[0]_unit_name
 ${locator.items[0].deliveryAddress.postalCode}                  id=item[0]deliveryAddress_postalCode
@@ -36,6 +34,8 @@ ${locator.items[0].deliveryAddress.countryName}                 id=item[0]delive
 ${locator.items[0].deliveryAddress.region}                      id=item[0]deliveryAddress_region
 ${locator.items[0].deliveryAddress.locality}                    id=item[0]deliveryAddress_locality
 ${locator.items[0].deliveryAddress.streetAddress}               id=item[0]deliveryAddress_streetAddress
+${locator.items[0].deliveryLocation.latitude}                   id=items[0]_deliveryLocation_latitude
+${locator.items[0].deliveryLocation.longitude}                  id=items[0]_deliveryLocation_longitude
 ${locator.items[0].deliveryDate.endDate}                        id=item[0]deliveryDate_endDate
 ${locator.items[0].classification.scheme}                       id=classification_scheme
 ${locator.items[0].classification.id}                           id=classification_id
@@ -335,15 +335,6 @@ Login
   ${return_value}=   Отримати тест із поля і показати на сторінці   procuringEntity.name
   [Return]  ${return_value}
 
-Отримати інформацію про items[0].deliveryLocation.latitude
-  ${return_value}=   Отримати тест із поля і показати на сторінці   items[0].deliveryLocation.latitude
-  ${return_value}=   convert to number   ${return_value}
-  [Return]  ${return_value}
-
-Отримати інформацію про items[0].deliveryLocation.longitude
-  ${return_value}=   Отримати тест із поля і показати на сторінці   items[0].deliveryLocation.longitude
-  ${return_value}=   convert to number    ${return_value}
-  [Return]  ${return_value}
 
 Отримати інформацію про tenderPeriod.startDate
   ${return_value}=    Отримати тест із поля і показати на сторінці  tenderPeriod.startDate
@@ -406,6 +397,16 @@ Login
 Отримати інформацію про items[0].deliveryDate.endDate
   ${return_value}=   Отримати тест із поля і показати на сторінці  items[0].deliveryDate.endDate
   [Return]  ${return_value}
+
+Отримати інформацію про items[0].deliveryLocation.latitude
+  ${return_value}=   Отримати тест із поля і показати на сторінці   items[0].deliveryLocation.latitude
+  ${return_value}=   Convert To Number   ${return_value}
+  [return]  ${return_value}
+
+Отримати інформацію про items[0].deliveryLocation.longitude
+  ${return_value}=   Отримати тест із поля і показати на сторінці   items[0].deliveryLocation.longitude
+  ${return_value}=   Convert To Number   ${return_value}
+  [return]  ${return_value}
 
 Отримати інформацію про questions[0].title
   Click Element                       xpath=//a[contains(@href, '#tab_questions')]
