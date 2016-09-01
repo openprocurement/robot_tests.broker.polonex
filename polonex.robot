@@ -73,7 +73,6 @@ Login
   ...      ${ARGUMENTS[1]} ==  tender_data
 
 
-    log to console      ${ARGUMENTS[1]}
 
     ${title}=                                Get From Dictionary         ${ARGUMENTS[1].data}                   title
     ${description}=                          Get From Dictionary         ${ARGUMENTS[1].data}                   description
@@ -133,8 +132,8 @@ Login
     ${deliverydate_enddate}=        polonex_convertdate   ${deliverydate_enddate}
 
 
-    Sleep   2
     Click Element   id=addauctionbtn
+    Sleep   2
 
     Input text      id=addauctionform-title                                                       ${title}
     Input text      id=addauctionform-description                                                 ${description}
@@ -182,18 +181,16 @@ Login
 
     Sleep   2
 
-    ${TENDER}=     Get Text        id=info_auctionID
-    log to console      ${TENDER}
-    [Return]    ${TENDER}
+    ${tender_uaid}=     Get Text        id=info_auctionID
+    [Return]    ${tender_uaid}
 
 Завантажити документ
   [Arguments]  @{ARGUMENTS}
   [Documentation]
   ...      ${ARGUMENTS[0]} ==  username
   ...      ${ARGUMENTS[1]} ==  ${filepath}
-  ...      ${ARGUMENTS[2]} ==  ${TENDER}
+  ...      ${ARGUMENTS[2]} ==  ${tender_uaid}
 
-      Sleep   10
       Click Element     id=add_doc_to_auction_btn
       Sleep   2
       Choose File       id=auctionfile   ${ARGUMENTS[1]}
@@ -208,14 +205,13 @@ Login
   [Arguments]  @{ARGUMENTS}
   [Documentation]
   ...      ${ARGUMENTS[0]} ==  username
-  ...      ${ARGUMENTS[1]} ==  ${TENDER_UAID}
+  ...      ${ARGUMENTS[1]} ==  ${tender_uaid}
 
-    Go to   ${USERS.users['${ARGUMENTS[0]}'].syncpage}
     Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     Sleep  2
     Click Element       name=more-search-btn
+    Sleep  2
     Input Text          id=proauctionssearch-auctionid   ${ARGUMENTS[1]}
-    log to console      ${ARGUMENTS[1]}
     Sleep  2
     Click Element       name=search-btn
     Sleep  2
@@ -231,8 +227,6 @@ Login
   ${title}=        Get From Dictionary  ${ARGUMENTS[2].data}  title
   ${description}=  Get From Dictionary  ${ARGUMENTS[2].data}  description
 
-  polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
-
   Click Element         id=add_question_btn
   Sleep  2
   Input Text          id=addquestionform-title          ${title}
@@ -245,7 +239,6 @@ Login
     [Arguments]    @{ARGUMENTS}
     [Documentation]    ${ARGUMENTS[0]} = username
     ...      ${ARGUMENTS[1]} = ${TENDER_UAID}
-    ##Selenium2Library.Switch Browser    ${ARGUMENTS[0]}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
 
 Отримати інформацію із тендера
@@ -256,32 +249,32 @@ Login
   ${return_value}=  run keyword  Отримати інформацію про ${ARGUMENTS[1]}
   [Return]  ${return_value}
 
-Отримати тест із поля і показати на сторінці
+Отримати текст із поля і показати на сторінці
   [Arguments]   ${fieldname}
   ${return_value}=   Get Text  ${locator.${fieldname}}
   [Return]  ${return_value}
 
 Отримати інформацію про title
-  ${return_value}=   Отримати тест із поля і показати на сторінці   title
+  ${return_value}=   Отримати текст із поля і показати на сторінці   title
   [Return]  ${return_value}
 
 Отримати інформацію про status
   reload page
-  ${return_value}=   Отримати тест із поля і показати на сторінці   status
+  ${return_value}=   Отримати текст із поля і показати на сторінці   status
   ${return_value}=   convert_polonex_string     ${return_value}
   [Return]  ${return_value}
 
 Отримати інформацію про description
-  ${return_value}=   Отримати тест із поля і показати на сторінці   description
+  ${return_value}=   Отримати текст із поля і показати на сторінці   description
   [Return]  ${return_value}
 
 Отримати інформацію про value.amount
-  ${return_value}=   Отримати тест із поля і показати на сторінці  value.amount
+  ${return_value}=   Отримати текст із поля і показати на сторінці  value.amount
   ${return_value}=   Convert To Number   ${return_value}
   [Return]  ${return_value}
 
 Отримати інформацію про minimalStep.amount
-  ${return_value}=   Отримати тест із поля і показати на сторінці   minimalStep.amount
+  ${return_value}=   Отримати текст із поля і показати на сторінці   minimalStep.amount
   ${return_value}=   Convert To Number   ${return_value}
   [Return]   ${return_value}
 
@@ -290,8 +283,6 @@ Login
   [Documentation]
   ...      ${ARGUMENTS[0]} =  username
   ...      ${ARGUMENTS[1]} =  ${TENDER_UAID}
-  ##Selenium2Library.Switch Browser    ${ARGUMENTS[0]}
-  polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[1]}
 
   Click Element     id=update_auction_btn
   Sleep   2
@@ -303,106 +294,106 @@ Login
 
 
 Отримати інформацію про items[0].quantity
-  ${return_value}=   Отримати тест із поля і показати на сторінці   items[0].quantity
+  ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].quantity
   ${return_value}=   Convert To Number   ${return_value}
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].unit.code
-  ${return_value}=   Отримати тест із поля і показати на сторінці   items[0].unit.code
+  ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].unit.code
   ${return_value}=   Convert To String     ${return_value}
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].unit.name
-  ${return_value}=   Отримати тест із поля і показати на сторінці   items[0].unit.name
+  ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].unit.name
   ${return_value}=   Convert To String     ${return_value}
   [Return]   ${return_value}
 
 Отримати інформацію про value.currency
-  ${return_value}=   Отримати тест із поля і показати на сторінці  value.currency
+  ${return_value}=   Отримати текст із поля і показати на сторінці  value.currency
   ${return_value}=   Convert To String     ${return_value}
   [Return]  ${return_value}
 
 Отримати інформацію про value.valueAddedTaxIncluded
-  ${return_value}=   Отримати тест із поля і показати на сторінці  value.valueAddedTaxIncluded
+  ${return_value}=   Отримати текст із поля і показати на сторінці  value.valueAddedTaxIncluded
   ${return_value}=   convert_polonex_string      ${return_value}
   [Return]  ${return_value}
 
 Отримати інформацію про auctionId
-  ${return_value}=   Отримати тест із поля і показати на сторінці   tenderId
+  ${return_value}=   Отримати текст із поля і показати на сторінці   tenderId
   [Return]  ${return_value}
 
 Отримати інформацію про procuringEntity.name
-  ${return_value}=   Отримати тест із поля і показати на сторінці   procuringEntity.name
+  ${return_value}=   Отримати текст із поля і показати на сторінці   procuringEntity.name
   [Return]  ${return_value}
 
 
 Отримати інформацію про tenderPeriod.startDate
-  ${return_value}=    Отримати тест із поля і показати на сторінці  tenderPeriod.startDate
+  ${return_value}=    Отримати текст із поля і показати на сторінці  tenderPeriod.startDate
   ${return_value}=    convert_date_polonex      ${return_value}
   [Return]    ${return_value}
 
 Отримати інформацію про tenderPeriod.endDate
-  ${return_value}=   Отримати тест із поля і показати на сторінці  tenderPeriod.endDate
+  ${return_value}=   Отримати текст із поля і показати на сторінці  tenderPeriod.endDate
   ${return_value}=    convert_date_polonex      ${return_value}
   [Return]    ${return_value}
 
 Отримати інформацію про enquiryPeriod.startDate
-  ${return_value}=   Отримати тест із поля і показати на сторінці  enquiryPeriod.startDate
+  ${return_value}=   Отримати текст із поля і показати на сторінці  enquiryPeriod.startDate
   ${return_value}=    convert_date_polonex      ${return_value}
   [Return]    ${return_value}
 
 Отримати інформацію про enquiryPeriod.endDate
-  ${return_value}=   Отримати тест із поля і показати на сторінці  enquiryPeriod.endDate
+  ${return_value}=   Отримати текст із поля і показати на сторінці  enquiryPeriod.endDate
   ${return_value}=    convert_date_polonex      ${return_value}
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].description
-  ${return_value}=   Отримати тест із поля і показати на сторінці   items[0].description
+  ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].description
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].classification.id
-  ${return_value}=   Отримати тест із поля і показати на сторінці  items[0].classification.id
+  ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].classification.id
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].classification.scheme
-  ${return_value}=   Отримати тест із поля і показати на сторінці  items[0].classification.scheme
+  ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].classification.scheme
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].classification.description
-  ${return_value}=   Отримати тест із поля і показати на сторінці  items[0].classification.description
+  ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].classification.description
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].deliveryAddress.countryName
-  ${return_value}=   Отримати тест із поля і показати на сторінці  items[0].deliveryAddress.countryName
+  ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].deliveryAddress.countryName
   [Return]      ${return_value}
 
 Отримати інформацію про items[0].deliveryAddress.postalCode
-  ${return_value}=   Отримати тест із поля і показати на сторінці  items[0].deliveryAddress.postalCode
+  ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].deliveryAddress.postalCode
   [Return]      ${return_value}
 
 Отримати інформацію про items[0].deliveryAddress.region
-  ${return_value}=   Отримати тест із поля і показати на сторінці  items[0].deliveryAddress.region
+  ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].deliveryAddress.region
   [Return]   ${return_value}
 
 Отримати інформацію про items[0].deliveryAddress.locality
-  ${return_value}=   Отримати тест із поля і показати на сторінці  items[0].deliveryAddress.locality
+  ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].deliveryAddress.locality
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].deliveryAddress.streetAddress
-  ${return_value}=   Отримати тест із поля і показати на сторінці  items[0].deliveryAddress.streetAddress
+  ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].deliveryAddress.streetAddress
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].deliveryDate.endDate
-  ${return_value}=   Отримати тест із поля і показати на сторінці  items[0].deliveryDate.endDate
+  ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].deliveryDate.endDate
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].deliveryLocation.latitude
-  ${return_value}=   Отримати тест із поля і показати на сторінці   items[0].deliveryLocation.latitude
+  ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].deliveryLocation.latitude
   ${return_value}=   Convert To Number   ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[0].deliveryLocation.longitude
-  ${return_value}=   Отримати тест із поля і показати на сторінці   items[0].deliveryLocation.longitude
+  ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].deliveryLocation.longitude
   ${return_value}=   Convert To Number   ${return_value}
   [return]  ${return_value}
 
@@ -412,13 +403,11 @@ Login
   [Return]  ${return_value}
 
 Отримати інформацію про questions[0].description
-  ${return_value}=   Отримати тест із поля і показати на сторінці   questions[0].description
+  ${return_value}=   Отримати текст із поля і показати на сторінці   questions[0].description
   [Return]  ${return_value}
 
 Отримати інформацію про questions[0].date
-  ${return_value}=   Отримати тест із поля і показати на сторінці   questions[0].date
-  ##TODO
-  ##${return_value}=    convert_date_prom     ${return_value}
+  ${return_value}=   Отримати текст із поля і показати на сторінці   questions[0].date
   [Return]  ${return_value}
 
 Отримати інформацію про questions[0].answer
@@ -434,8 +423,6 @@ Login
   ...      ${ARGUMENTS[2]} = 0
   ...      ${ARGUMENTS[3]} = answer_data
   ${answer}=     Get From Dictionary  ${ARGUMENTS[3].data}  answer
-  ##Selenium2Library.Switch Browser     ${ARGUMENTS[0]}
-  polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[1]}
 
   Click Element                         xpath=//a[contains(@href, '#tab_questions')]
 
@@ -450,9 +437,6 @@ Login
     ...    ${ARGUMENTS[1]} ==  tenderId
     ...    ${ARGUMENTS[2]} ==  ${test_bid_data}
     ${amount}=    Get From Dictionary     ${ARGUMENTS[2].data.value}    amount
-    ##Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
-
-    polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[1]}
 
     Click Element       id=add_bid_btn
     Sleep   2
@@ -469,7 +453,6 @@ Login
     ...    ${ARGUMENTS[0]} ==  username
     ...    ${ARGUMENTS[1]} ==  none
     ...    ${ARGUMENTS[2]} ==  tenderId
-    ##Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
 
     Click Element       id=cansel-bid
     Sleep   2
@@ -481,7 +464,7 @@ Login
     ...    ${ARGUMENTS[1]} ==  tenderId
     ...    ${ARGUMENTS[2]} ==  amount
     ...    ${ARGUMENTS[3]} ==  amount.value
-    ##Selenium2Library.Switch Browser    ${ARGUMENTS[0]}
+
     Click Element       id=cansel-bid
     Sleep   2
     Click Element       id=add_bid_btn
@@ -512,9 +495,7 @@ Login
     ...    ${ARGUMENTS[0]} ==  username
     ...    ${ARGUMENTS[1]} ==  file
     ...    ${ARGUMENTS[2]} ==  tenderId
-    ##Selenium2Library.Switch Browser     ${ARGUMENTS[0]}
-    ##polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[2]}
-    ##Sleep   10
+
     Click Element           id=file_edit_0
     Sleep   2
     Choose File             xpath=//input[contains(@id, 'prouploadform-filedata')]   ${ARGUMENTS[1]}
@@ -528,17 +509,13 @@ Login
 
 Отримати посилання на аукціон для глядача
     [Arguments]  @{ARGUMENTS}
-    ##Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
-    polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}      ${ARGUMENTS[1]}
-    Sleep   2
+    polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
     ${result}=                  Get Element Attribute               id=show_public_btn@href
     [Return]   ${result}
 
 Отримати посилання на аукціон для учасника
     [Arguments]  @{ARGUMENTS}
-    ##Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
-    Sleep   2
     ${result}=                  Get Element Attribute               id=show_private_btn@href
     [Return]   ${result}
 
