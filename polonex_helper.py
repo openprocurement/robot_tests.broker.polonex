@@ -8,7 +8,7 @@ def polonex_convertdate(isodate):
     return date.strftime("%Y-%m-%d %H:%M")
 
 def convert_date_polonex(isodate):
-    return datetime.strptime(isodate, "%Y-%m-%d %H:%M").isoformat()
+    return datetime.strptime(isodate, "%d-%m-%Y\n%H:%M").isoformat()
 
 def convert_polonex_string(string):
     return {

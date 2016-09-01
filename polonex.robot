@@ -338,24 +338,22 @@ Login
 
 Отримати інформацію про tenderPeriod.startDate
   ${return_value}=    Отримати тест із поля і показати на сторінці  tenderPeriod.startDate
-  ##TODO
-  ##${return_value}=    convert_date_to_prom_tender_startdate      ${return_value}
+  ${return_value}=    convert_date_polonex      ${return_value}
   [Return]    ${return_value}
 
 Отримати інформацію про tenderPeriod.endDate
   ${return_value}=   Отримати тест із поля і показати на сторінці  tenderPeriod.endDate
-  ##TODO
-  ##${return_value}=    convert_date_to_prom_tender_enddate    ${return_value}
+  ${return_value}=    convert_date_polonex      ${return_value}
   [Return]    ${return_value}
 
 Отримати інформацію про enquiryPeriod.startDate
   ${return_value}=   Отримати тест із поля і показати на сторінці  enquiryPeriod.startDate
+  ${return_value}=    convert_date_polonex      ${return_value}
   [Return]    ${return_value}
 
 Отримати інформацію про enquiryPeriod.endDate
   ${return_value}=   Отримати тест із поля і показати на сторінці  enquiryPeriod.endDate
-  ##TODO
-  ##${return_value}=    convert_date_to_prom_tender_startdate    ${return_value}
+  ${return_value}=    convert_date_polonex      ${return_value}
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].description
@@ -515,8 +513,8 @@ Login
     ...    ${ARGUMENTS[1]} ==  file
     ...    ${ARGUMENTS[2]} ==  tenderId
     ##Selenium2Library.Switch Browser     ${ARGUMENTS[0]}
-    polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[2]}
-    Sleep   10
+    ##polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[2]}
+    ##Sleep   10
     Click Element           id=file_edit_0
     Sleep   2
     Choose File             xpath=//input[contains(@id, 'prouploadform-filedata')]   ${ARGUMENTS[1]}
