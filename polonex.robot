@@ -56,10 +56,10 @@ ${locator.questions[0].answer}                                  id=q[0]answer
 
 Login
   [Arguments]  @{ARGUMENTS}
-  Click Element   ${sign_in}
+  Click Element        xpath=//li[contains(@id, 'loginbtn')]/a
   Sleep   2
   Clear Element Text   id=loginform-username
-  Input text      ${login_email}          ${USERS.users['${ARGUMENTS[0]}'].login}
+  Input text      ${login_email}      ${USERS.users['${ARGUMENTS[0]}'].login}
   Input text      ${login_pass}       ${USERS.users['${ARGUMENTS[0]}'].password}
   Click Button    name=login-button
   Sleep   2
@@ -132,8 +132,10 @@ Login
     ${deliverydate_enddate}=        polonex_convertdate   ${deliverydate_enddate}
 
 
-    Click Element   id=addauctionbtn
+    Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     Sleep   2
+    Click Element       xpath=//a[contains(@id, 'addauctionbtn')]
+    Sleep   4
 
     Input text      id=addauctionform-title                                                       ${title}
     Input text      id=addauctionform-description                                                 ${description}
@@ -175,10 +177,8 @@ Login
     Input text      id=addauctionform-procuringentity_identifier_scheme                           ${procuringEntity_identifier_scheme}
     Input text      id=addauctionform-procuringentity_name                                        ${procuringEntity_name}
 
-    Sleep   10
-
-    Click Element   id=add-auction-form-save
-
+    Sleep   15
+    Click Element   xpath=//button[contains(@id, 'add-auction-form-save')]
     Sleep   2
 
     ${tender_uaid}=     Get Text        id=info_auctionID
