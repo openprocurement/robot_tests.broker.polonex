@@ -181,7 +181,7 @@ Login
     Click Element   xpath=//button[contains(@id, 'add-auction-form-save')]
     Sleep   2
 
-    ${tender_uaid}=     Get Text        id=info_auctionID
+    ${tender_uaid}=     Get Text        xpath=//td[contains(@id, 'info_auctionID')]
     [Return]    ${tender_uaid}
 
 Завантажити документ
@@ -423,10 +423,11 @@ Login
   ...      ${ARGUMENTS[2]} = 0
   ...      ${ARGUMENTS[3]} = answer_data
   ${answer}=     Get From Dictionary  ${ARGUMENTS[3].data}  answer
-
+  Reload Page
   Click Element                         xpath=//a[contains(@href, '#tab_questions')]
-
-  Click Element                         id=add_answer_btn_0
+  Sleep     4
+  Click Element                         xpath=//a[contains(@id, 'add_answer_btn_0')]
+  Sleep     4
   Input Text                            id=addanswerform-answer        ${answer}
   Click Element                         id=submit_add_answer_form
 
