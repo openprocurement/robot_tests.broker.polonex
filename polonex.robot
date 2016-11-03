@@ -15,10 +15,10 @@ ${prozorropage}                                                 id=prozorropageb
 ${locator.title}                                                id=auction_title
 ${locator.status}                                               id=auction_status_name
 ${locator.description}                                          id=info_description
-${locator.minimalStep.amount}                                   id=info_minimalStep_amount
-${locator.value.amount}                                         id=info_value_amount
-${locator.value.currency}                                       id=info_value_currency
-${locator.value.valueAddedTaxIncluded}                          id=info_value_valueAddedTaxIncluded
+${locator.minimalStep.amount}                      xpath=//td[contains(@id, 'info_minimalStep')]/span[contains(@class, 'amount')]
+${locator.value.amount}                            xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'amount')]
+${locator.value.currency}                          xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'currency')]
+${locator.value.valueAddedTaxIncluded}             xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'tax')]
 ${locator.tenderId}                                             id=info_auctionID
 ${locator.procuringEntity.name}                                 id=org_name
 ${locator.enquiryPeriod.startDate}                              id=enquiryPeriodDatastartDate
@@ -66,6 +66,11 @@ Login
   Click Element   ${prozorropage}
   Sleep   2
 
+Підготувати дані для оголошення тендера
+  [Documentation]  Це слово використовується в майданчиків, тому потрібно, щоб воно було і тут
+  [Arguments]  ${username}  ${tender_data}  ${role_name}
+  [return]  ${tender_data}
+
 Створити тендер
   [Arguments]  @{ARGUMENTS}
   [Documentation]
@@ -73,13 +78,11 @@ Login
   ...      ${ARGUMENTS[1]} ==  tender_data
 
 
-
+    ${procurementmethodtype}=                Get From Dictionary         ${ARGUMENTS[1].data}                   procurementMethodType
     ${title}=                                Get From Dictionary         ${ARGUMENTS[1].data}                   title
+    ${dgfID}=                                Get From Dictionary         ${ARGUMENTS[1].data}                   dgfID
     ${description}=                          Get From Dictionary         ${ARGUMENTS[1].data}                   description
-    ${enquiryperiod_startdate}=              Get From Dictionary         ${ARGUMENTS[1].data.enquiryPeriod}     startDate
-    ${enquiryperiod_enddate}=                Get From Dictionary         ${ARGUMENTS[1].data.enquiryPeriod}     endDate
-    ${tenderperiod_startdate}=               Get From Dictionary         ${ARGUMENTS[1].data.tenderPeriod}      startDate
-    ${tenderperiod_enddate}=                 Get From Dictionary         ${ARGUMENTS[1].data.tenderPeriod}      endDate
+    ${auctionperiod_startdate}=              Get From Dictionary         ${ARGUMENTS[1].data.auctionPeriod}     startDate
     ${minimalstep_amount}=                   Get From Dictionary         ${ARGUMENTS[1].data.minimalStep}       amount
     ${minimalstep_currency}=                 Get From Dictionary         ${ARGUMENTS[1].data.minimalStep}       currency
     ##${minimalstep_valueaddedtaxincluded}=  0
@@ -87,6 +90,10 @@ Login
     ${value_currency}=                       Get From Dictionary         ${ARGUMENTS[1].data.value}             currency
     ${value_valueaddedtaxincluded}=          Convert To String           ${ARGUMENTS[1].data.value.valueAddedTaxIncluded}
     ${value_valueaddedtaxincluded}=          convert_polonex_string      ${value_valueaddedtaxincluded}
+
+
+    ${guarantee_amount}=                     Get From Dictionary         ${ARGUMENTS[1].data.guarantee}         amount
+
     ${items}=                                Get From Dictionary         ${ARGUMENTS[1].data}                   items
     ${item0}=                                Get From List               ${items}                               0
     ${item_description}=                     Get From Dictionary         ${item0}                               description
@@ -122,49 +129,36 @@ Login
 
     ${minimalstep_amount}=              Convert To String     ${minimalstep_amount}
     ${value_amount}=                    Convert To String     ${value_amount}
+    ${guarantee_amount}=                Convert To String     ${guarantee_amount}
     ${deliverylocation_latitude}=       Convert To String     ${deliverylocation_latitude}
     ${deliverylocation_longitude}=      Convert To String     ${deliverylocation_longitude}
 
-    ${enquiryperiod_startdate}=     polonex_convertdate   ${enquiryperiod_startdate}
-    ${enquiryperiod_enddate}=       polonex_convertdate   ${enquiryperiod_enddate}
-    ${tenderperiod_startdate}=      polonex_convertdate   ${tenderperiod_startdate}
-    ${tenderperiod_enddate}=        polonex_convertdate   ${tenderperiod_enddate}
-    ${deliverydate_enddate}=        polonex_convertdate   ${deliverydate_enddate}
-
+    ${auctionperiod_startdate}=        polonex_convertdate   ${auctionperiod_startdate}
 
     Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     Sleep   2
     Click Element       xpath=//a[contains(@id, 'addauctionbtn')]
     Sleep   4
 
-    Input text      id=addauctionform-title                                                       ${title}
-    Input text      id=addauctionform-description                                                 ${description}
-    Input text      id=addauctionform-enquiryperiod_startdate                                     ${enquiryperiod_startdate}
-    Input text      id=addauctionform-enquiryperiod_enddate                                       ${enquiryperiod_enddate}
-    Input text      id=addauctionform-tenderperiod_startdate                                      ${tenderperiod_startdate}
-    Input text      id=addauctionform-tenderperiod_enddate                                        ${tenderperiod_enddate}
-    Input text      id=addauctionform-minimalstep_amount                                          ${minimalstep_amount}
-    Select From List    xpath=//select[@id="addauctionform-minimalstep_currency"]                 ${minimalstep_currency}
+
+    Select From List    xpath=//select[@id="addauctionform-procurementmethodtype"]                ${procurementmethodtype}
     Select From List    xpath=//select[@id="addauctionform-minimalstep_valueaddedtaxincluded"]    ${value_valueaddedtaxincluded}
-    Input text      id=addauctionform-value_amount                                                ${value_amount}
-    Select From List    xpath=//select[@id="addauctionform-value_currency"]                       ${value_currency}
     Select From List    xpath=//select[@id="addauctionform-value_valueaddedtaxincluded"]          ${value_valueaddedtaxincluded}
+    Select From List    xpath=//select[@id="addauctionform-procuringentity_identifier_scheme"]    ${procuringEntity_identifier_scheme}
+    Select From List    xpath=//select[@id="additemform-0-unit_code"]                             ${unit_code}
+    Input text      id=addauctionform-title                                                       ${title}
+    Input text      id=addauctionform-dgfid                                                       ${dgfID}
+
+
+    Input text      id=addauctionform-description                                                 ${description}
+    Input text      id=addauctionform-auctionperiod_startdate                                     ${auctionperiod_startdate}
+    Input text      id=addauctionform-minimalstep_amount                                          ${minimalstep_amount}
+    Input text      id=addauctionform-value_amount                                                ${value_amount}
+
+    Input text      id=addauctionform-guarantee_amount                                            ${guarantee_amount}
+
     Input text      id=additemform-0-description                                                  ${item_description}
-    Select From List    xpath=//select[@id="additemform-0-classification_scheme"]                 ${classification_scheme}
-    Input text      id=additemform-0-classification_description                                   ${classification_description}
-    Input text      id=additemform-0-classification_id                                            ${classification_id}
-    Input text      id=additemform-0-deliveryaddress_postalcode                                   ${deliveryaddress_postalcode}
-    Input text      id=additemform-0-deliveryaddress_countryname                                  ${deliveryaddress_countryname}
-    Input text      id=additemform-0-deliveryaddress_streetaddress                                ${deliveryaddress_streetaddress}
-    Input text      id=additemform-0-deliveryaddress_region                                       ${deliveryaddress_region}
-    Input text      id=additemform-0-deliveryaddress_locality                                     ${deliveryaddress_locality}
-    ##Input text      id=additemform-0-deliverydate_startdate                                       ${deliverydate_startdate}
-    Input text      id=additemform-0-deliverydate_enddate                                         ${deliverydate_enddate}
-    Input text      id=additemform-0-unit_code                                                    ${unit_code}
-    Input text      id=additemform-0-unit_name                                                    ${unit_name}
     Input text      id=additemform-0-quantity                                                     ${quantity}
-    Input text      id=additemform-0-deliverylocation_latitude                                    ${deliverylocation_latitude}
-    Input text      id=additemform-0-deliverylocation_longitude                                   ${deliverylocation_longitude}
 
     Input text      id=addauctionform-procuringentity_address_countryname                         ${procuringEntity_address_countryName}
     Input text      id=addauctionform-procuringentity_address_locality                            ${procuringEntity_address_locality}
@@ -174,12 +168,16 @@ Login
     Input text      id=addauctionform-procuringentity_contactpoint_name                           ${procuringEntity_contactPoint_name}
     Input text      id=addauctionform-procuringentity_contactpoint_telephone                      ${procuringEntity_contactPoint_telephone}
     Input text      id=addauctionform-procuringentity_identifier_id                               ${procuringEntity_identifier_id}
-    Input text      id=addauctionform-procuringentity_identifier_scheme                           ${procuringEntity_identifier_scheme}
     Input text      id=addauctionform-procuringentity_name                                        ${procuringEntity_name}
+
+    ##Select From List    xpath=//select[@id="additemform-0-classification_id"]                     ${classification_id}
+
+    Execute Javascript    $('#additemform-0-classification_id').val('${classification_id}');
+    Execute Javascript    $('#additemform-0-classification_id').trigger('change');
 
     Sleep   15
     Click Element   xpath=//button[contains(@id, 'add-auction-form-save')]
-    Sleep   2
+    Wait Until Element Is Visible       xpath=//td[contains(@id, 'info_auctionID')]   30
 
     ${tender_uaid}=     Get Text        xpath=//td[contains(@id, 'info_auctionID')]
     [Return]    ${tender_uaid}
@@ -244,10 +242,16 @@ Login
 Отримати інформацію із тендера
   [Arguments]  @{ARGUMENTS}
   [Documentation]
-  ...      ${ARGUMENTS[0]} ==  username
-  ...      ${ARGUMENTS[1]} ==  fieldname
-  ${return_value}=  run keyword  Отримати інформацію про ${ARGUMENTS[1]}
+  ...      ${ARGUMENTS[0]} ==  ${username}
+  ...      ${ARGUMENTS[1]} ==  ${tender_uaid}
+  ...      ${ARGUMENTS[3]} ==  ${field_name}
+  ${return_value}=  run keyword  Отримати інформацію про ${ARGUMENTS[2]}
   [Return]  ${return_value}
+
+Отримати інформацію із предмету
+  [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${field_name}
+  ${field_name}=  Отримати шлях до поля об’єкта  ${username}  ${field_name}  ${item_id}
+  Run Keyword And Return  polonex.Отримати інформацію із тендера  ${username}  ${tender_uaid}  ${field_name}
 
 Отримати текст із поля і показати на сторінці
   [Arguments]   ${fieldname}
@@ -306,11 +310,13 @@ Login
 Отримати інформацію про items[0].unit.name
   ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].unit.name
   ${return_value}=   Convert To String     ${return_value}
+  ${return_value}=      split_descr     ${return_value}
   [Return]   ${return_value}
 
 Отримати інформацію про value.currency
   ${return_value}=   Отримати текст із поля і показати на сторінці  value.currency
   ${return_value}=   Convert To String     ${return_value}
+  ${return_value}=   convert_polonex_string      ${return_value}
   [Return]  ${return_value}
 
 Отримати інформацію про value.valueAddedTaxIncluded
@@ -361,6 +367,8 @@ Login
 
 Отримати інформацію про items[0].classification.description
   ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].classification.description
+  ${return_value}=   Convert To String     ${return_value}
+  ${return_value}=      split_descr     ${return_value}
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].deliveryAddress.countryName
@@ -438,12 +446,14 @@ Login
     ...    ${ARGUMENTS[1]} ==  tenderId
     ...    ${ARGUMENTS[2]} ==  ${test_bid_data}
     ${amount}=    Get From Dictionary     ${ARGUMENTS[2].data.value}    amount
+    ${amount}=              Convert To String     ${amount}
 
     Click Element       id=add_bid_btn
     Sleep   2
     Input Text          id=addbidform-sum       ${amount}
-    Click Element       id=submit_add_bid_form
     Sleep   4
+    Click Element       id=submit_add_bid_form
+    Wait Until Element Is Visible       id=userbidamount   30
 
     ${resp}=    Get Text      id=userbidamount
     [Return]    ${resp}
@@ -482,12 +492,12 @@ Login
     [Documentation]
     ...    ${ARGUMENTS[1]} ==  file
     ...    ${ARGUMENTS[2]} ==  tenderId
-    Sleep   5
-    Click Element           id=add_doc_to_bid
+    Click Element           id=edit_user_bid
     Sleep   2
-    Choose File             xpath=//input[contains(@id, 'prouploadform-filedata')]   ${ARGUMENTS[1]}
-    sleep   2
-    Click Element           id=submit_add_file_form
+    Click Element           id=bid_doc_upload_fieldcommercialProposal
+    Choose File             xpath=//input[contains(@id, 'bid_doc_upload_fieldcommercialProposal')]   ${ARGUMENTS[1]}
+    sleep   4
+    Click Element           id=submit_add_bid_form
     sleep   2
 
 Змінити документ в ставці
@@ -503,6 +513,21 @@ Login
     sleep   2
     Click Element           id=submit_add_file_form
     sleep   2
+
+Отримати пропозицію
+  [Arguments]  ${username}  ${tender_uaid}
+  ${tender}=  polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  ${bid_id}=  Get Variable Value  ${USERS.users['${username}'].bid_id}
+  ${token}=  Get Variable Value  ${USERS.users['${username}'].access_token}
+  ${reply}=  Call Method  ${USERS.users['${username}'].client}  get_bid  ${tender}  ${bid_id}  ${token}
+  ${reply}=  munch_dict  arg=${reply}
+  [return]  ${reply}
+
+
+Отримати інформацію із пропозиції
+  [Arguments]  ${username}  ${tender_uaid}  ${field}
+  ${bid}=  polonex.Отримати пропозицію  ${username}  ${tender_uaid}
+  [return]  ${bid.data.${field}}
 
 Отримати інформацію про bids
     [Arguments]  @{ARGUMENTS}
