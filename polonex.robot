@@ -13,6 +13,7 @@ ${login_email}                                                  id=loginform-use
 ${login_pass}                                                   id=loginform-password
 ${prozorropage}                                                 id=prozorropagebtn
 ${locator.title}                                                id=auction_title
+${locator.dgfID}                                                id=info_dgfID
 ${locator.status}                                               id=auction_status_name
 ${locator.description}                                          id=info_description
 ${locator.minimalStep.amount}                      xpath=//td[contains(@id, 'info_minimalStep')]/span[contains(@class, 'amount')]
@@ -25,6 +26,10 @@ ${locator.enquiryPeriod.startDate}                              id=enquiryPeriod
 ${locator.enquiryPeriod.endDate}                                id=enquiryPeriodDataendDate
 ${locator.tenderPeriod.startDate}                               id=tenderPeriodDatastartDate
 ${locator.tenderPeriod.endDate}                                 id=tenderPeriodDataendDate
+
+${locator.auctionPeriod.startDate}                              id=auctionPeriodDatastartDate
+${locator.auctionPeriod.endDate}                                id=auctionPeriodDataendDate
+
 ${locator.items[0].quantity}                                    id=items[0]_quantity
 ${locator.items[0].description}                                 id=items[0]_description
 ${locator.items[0].unit.code}                                   id=items[0]_unit_code
@@ -262,6 +267,10 @@ Login
   ${return_value}=   Отримати текст із поля і показати на сторінці   title
   [Return]  ${return_value}
 
+Отримати інформацію про dgfID
+  ${return_value}=   Отримати текст із поля і показати на сторінці   dgfID
+  [Return]  ${return_value}
+
 Отримати інформацію про status
   reload page
   ${return_value}=   Отримати текст із поля і показати на сторінці   status
@@ -350,6 +359,16 @@ Login
 
 Отримати інформацію про enquiryPeriod.endDate
   ${return_value}=   Отримати текст із поля і показати на сторінці  enquiryPeriod.endDate
+  ${return_value}=    convert_date_polonex      ${return_value}
+  [Return]  ${return_value}
+
+Отримати інформацію про auctionPeriod.startDate
+  ${return_value}=   Отримати текст із поля і показати на сторінці  auctionPeriod.startDate
+  ${return_value}=    convert_date_polonex      ${return_value}
+  [Return]  ${return_value}
+
+Отримати інформацію про auctionPeriod.endDate
+  ${return_value}=   Отримати текст із поля і показати на сторінці  auctionPeriod.endDate
   ${return_value}=    convert_date_polonex      ${return_value}
   [Return]  ${return_value}
 
@@ -495,7 +514,7 @@ Login
     Click Element           id=edit_user_bid
     Sleep   2
     Click Element           id=bid_doc_upload_fieldcommercialProposal
-    Choose File             xpath=//input[contains(@id, 'bid_doc_upload_fieldcommercialProposal')]   ${ARGUMENTS[1]}
+    ##Choose File             xpath=//input[contains(@id, 'bid_doc_upload_fieldcommercialProposal')]   ${ARGUMENTS[1]}
     sleep   4
     Click Element           id=submit_add_bid_form
     sleep   2
@@ -514,20 +533,11 @@ Login
     Click Element           id=submit_add_file_form
     sleep   2
 
-Отримати пропозицію
-  [Arguments]  ${username}  ${tender_uaid}
-  ${tender}=  polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  ${bid_id}=  Get Variable Value  ${USERS.users['${username}'].bid_id}
-  ${token}=  Get Variable Value  ${USERS.users['${username}'].access_token}
-  ${reply}=  Call Method  ${USERS.users['${username}'].client}  get_bid  ${tender}  ${bid_id}  ${token}
-  ${reply}=  munch_dict  arg=${reply}
-  [return]  ${reply}
-
-
 Отримати інформацію із пропозиції
   [Arguments]  ${username}  ${tender_uaid}  ${field}
-  ${bid}=  polonex.Отримати пропозицію  ${username}  ${tender_uaid}
-  [return]  ${bid.data.${field}}
+  ${resp}=    Get Text      id=userbidamount
+  ${resp}=    Convert To String      ${resp}
+  [return]  ${resp}
 
 Отримати інформацію про bids
     [Arguments]  @{ARGUMENTS}
