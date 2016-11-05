@@ -30,6 +30,9 @@ ${locator.tenderPeriod.endDate}                                 id=tenderPeriodD
 ${locator.auctionPeriod.startDate}                              id=auctionPeriodDatastartDate
 ${locator.auctionPeriod.endDate}                                id=auctionPeriodDataendDate
 
+${locator.proposition.value.amount}                             xpath=//div[contains(@class, 'userbidamount')]/span[contains(@id, 'userbidamount')]
+
+
 ${locator.items[0].quantity}                                    id=items[0]_quantity
 ${locator.items[0].description}                                 id=items[0]_description
 ${locator.items[0].unit.code}                                   id=items[0]_unit_code
@@ -249,7 +252,7 @@ Login
   [Documentation]
   ...      ${ARGUMENTS[0]} ==  ${username}
   ...      ${ARGUMENTS[1]} ==  ${tender_uaid}
-  ...      ${ARGUMENTS[3]} ==  ${field_name}
+  ...      ${ARGUMENTS[2]} ==  ${field_name}
   ${return_value}=  run keyword  Отримати інформацію про ${ARGUMENTS[2]}
   [Return]  ${return_value}
 
@@ -319,7 +322,6 @@ Login
 Отримати інформацію про items[0].unit.name
   ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].unit.name
   ${return_value}=   Convert To String     ${return_value}
-  ${return_value}=      split_descr     ${return_value}
   [Return]   ${return_value}
 
 Отримати інформацію про value.currency
@@ -387,7 +389,6 @@ Login
 Отримати інформацію про items[0].classification.description
   ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].classification.description
   ${return_value}=   Convert To String     ${return_value}
-  ${return_value}=      split_descr     ${return_value}
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].deliveryAddress.countryName
@@ -533,11 +534,26 @@ Login
     Click Element           id=submit_add_file_form
     sleep   2
 
+Отримати пропозицію
+  [Arguments]  ${field}
+  Wait Until Page Contains Element    ${locator.proposition.${field}}            60
+  ${proposition_amount}=            Get Value                                    ${locator.proposition.${field}}
+  log                                 ${proposition_amount}
+  ${proposition_amount}=              Convert To Number                          ${proposition_amount}
+  log                                 ${proposition_amount}
+  Capture Page Screenshot
+  ${data}=     Create Dictionary
+  ${bid}=      Create Dictionary
+  ${value}=    Create Dictionary
+  Set To Dictionary  ${bid}     data=${data}
+  Set To Dictionary  ${data}    value=${value}
+  Set To Dictionary  ${value}   amount=${proposition_amount}
+  [return]           ${bid}
+
 Отримати інформацію із пропозиції
   [Arguments]  ${username}  ${tender_uaid}  ${field}
-  ${resp}=    Get Text      id=userbidamount
-  ${resp}=    Convert To String      ${resp}
-  [return]  ${resp}
+  ${bid}=   polonex.Отримати пропозицію  ${field}
+  [return]  ${bid.data.${field}}
 
 Отримати інформацію про bids
     [Arguments]  @{ARGUMENTS}
@@ -548,10 +564,27 @@ Login
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
     ${result}=                  Get Element Attribute               id=show_public_btn@href
     [Return]   ${result}
-
 Отримати посилання на аукціон для учасника
     [Arguments]  @{ARGUMENTS}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
     ${result}=                  Get Element Attribute               id=show_private_btn@href
     [Return]   ${result}
 
+Підтвердити постачальника
+  [Documentation]
+  ...      [Arguments] Username, tender uaid and number of the award to confirm
+  ...      [Return] Nothing
+  [Arguments]  ${username}  ${tender_uaid}  ${award_num}
+  sleep  5
+  Capture Page Screenshot
+  ##Click Element  xpath=//a[@data-target='#modalGetAwards']
+
+Підтвердити підписання контракту
+  [Documentation]
+  ...      [Arguments] Username, tender uaid, contract number
+  ...      [Return] Nothing
+  [Arguments]  ${username}  ${tender_uaid}  ${contract_num}
+  polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  sleep  10
+  Capture Page Screenshot
+  ##Click Element  xpath=//a[text()='Контракт']
