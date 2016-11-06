@@ -30,7 +30,7 @@ ${locator.tenderPeriod.endDate}                                 id=tenderPeriodD
 ${locator.auctionPeriod.startDate}                              id=auctionPeriodDatastartDate
 ${locator.auctionPeriod.endDate}                                id=auctionPeriodDataendDate
 
-${locator.proposition.value.amount}                             xpath=//div[contains(@class, 'userbidamount')]/span[contains(@id, 'userbidamount')]
+${locator.proposition.value.amount}                             xpath=//div[contains(@class, 'userbidinfo')]/span[contains(@id, 'userbidamount')]
 
 
 ${locator.items[0].quantity}                                    id=items[0]_quantity
@@ -366,12 +366,14 @@ Login
 
 Отримати інформацію про auctionPeriod.startDate
   ${return_value}=   Отримати текст із поля і показати на сторінці  auctionPeriod.startDate
-  ${return_value}=    convert_date_polonex      ${return_value}
-  [Return]  ${return_value}
+  ${return_value}=   convert_polonex_date_to_iso_format   ${return_value}
+  ${return_value}=   add_timezone_to_date   ${return_value.split('.')[0]}
+  [return]  ${return_value}
 
 Отримати інформацію про auctionPeriod.endDate
   ${return_value}=   Отримати текст із поля і показати на сторінці  auctionPeriod.endDate
-  ${return_value}=    convert_date_polonex      ${return_value}
+  ${return_value}=   convert_polonex_date_to_iso_format   ${return_value}
+  ${return_value}=   add_timezone_to_date   ${return_value.split('.')[0]}
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].description
@@ -577,7 +579,7 @@ Login
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
   sleep  5
   Capture Page Screenshot
-  ##Click Element  xpath=//a[@data-target='#modalGetAwards']
+  Click Element  id=cwalificate_winer_btn
 
 Підтвердити підписання контракту
   [Documentation]
@@ -587,4 +589,4 @@ Login
   polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   sleep  10
   Capture Page Screenshot
-  ##Click Element  xpath=//a[text()='Контракт']
+  Click Element  id=signed_contract_btn
