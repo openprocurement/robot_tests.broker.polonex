@@ -8,50 +8,50 @@ Library     polonex_helper.py
 
 
 *** Variables ***
-${sign_in}                                                      id=loginbtn
-${login_email}                                                  id=loginform-username
-${login_pass}                                                   id=loginform-password
-${prozorropage}                                                 id=prozorropagebtn
-${locator.title}                                                id=auction_title
-${locator.dgfID}                                                id=info_dgfID
-${locator.status}                                               id=auction_status_name
-${locator.description}                                          id=info_description
-${locator.minimalStep.amount}                      xpath=//td[contains(@id, 'info_minimalStep')]/span[contains(@class, 'amount')]
-${locator.value.amount}                            xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'amount')]
-${locator.value.currency}                          xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'currency')]
-${locator.value.valueAddedTaxIncluded}             xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'tax')]
-${locator.tenderId}                                             id=info_auctionID
-${locator.procuringEntity.name}                                 id=org_name
-${locator.enquiryPeriod.startDate}                              id=enquiryPeriodDatastartDate
-${locator.enquiryPeriod.endDate}                                id=enquiryPeriodDataendDate
-${locator.tenderPeriod.startDate}                               id=tenderPeriodDatastartDate
-${locator.tenderPeriod.endDate}                                 id=tenderPeriodDataendDate
+${sign_in}                                           id=loginbtn
+${login_email}                                       id=loginform-username
+${login_pass}                                        id=loginform-password
+${prozorropage}                                      id=prozorropagebtn
+${locator.title}                                     id=auction_title
+${locator.dgfID}                                     id=info_dgfID
+${locator.status}                                    id=auction_status_name
+${locator.description}                               id=info_description
+${locator.minimalStep.amount}                        xpath=//td[contains(@id, 'info_minimalStep')]/span[contains(@class, 'amount')]
+${locator.value.amount}                              xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'amount')]
+${locator.value.currency}                            xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'currency')]
+${locator.value.valueAddedTaxIncluded}               xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'tax')]
+${locator.tenderId}                                  id=info_auctionID
+${locator.procuringEntity.name}                      id=org_name
+${locator.enquiryPeriod.startDate}                   id=enquiryPeriodDatastartDate
+${locator.enquiryPeriod.endDate}                     id=enquiryPeriodDataendDate
+${locator.tenderPeriod.startDate}                    id=tenderPeriodDatastartDate
+${locator.tenderPeriod.endDate}                      id=tenderPeriodDataendDate
 
-${locator.auctionPeriod.startDate}                              id=auctionPeriodDatastartDate
-${locator.auctionPeriod.endDate}                                id=auctionPeriodDataendDate
+${locator.auctionPeriod.startDate}                   id=auctionPeriodDatastartDate
+${locator.auctionPeriod.endDate}                     id=auctionPeriodDataendDate
 
-${locator.proposition.value.amount}                             xpath=//div[contains(@class, 'userbidinfo')]/span[contains(@id, 'userbidamount')]
+${locator.proposition.value.amount}                  xpath=//div[contains(@class, 'userbidinfo')]/span[contains(@id, 'userbidamount')]
 
 
-${locator.items[0].quantity}                                    id=items[0]_quantity
-${locator.items[0].description}                                 id=items[0]_description
-${locator.items[0].unit.code}                                   id=items[0]_unit_code
-${locator.items[0].unit.name}                                   id=items[0]_unit_name
-${locator.items[0].deliveryAddress.postalCode}                  id=item[0]deliveryAddress_postalCode
-${locator.items[0].deliveryAddress.countryName}                 id=item[0]deliveryAddress_countryName
-${locator.items[0].deliveryAddress.region}                      id=item[0]deliveryAddress_region
-${locator.items[0].deliveryAddress.locality}                    id=item[0]deliveryAddress_locality
-${locator.items[0].deliveryAddress.streetAddress}               id=item[0]deliveryAddress_streetAddress
-${locator.items[0].deliveryLocation.latitude}                   id=items[0]_deliveryLocation_latitude
-${locator.items[0].deliveryLocation.longitude}                  id=items[0]_deliveryLocation_longitude
-${locator.items[0].deliveryDate.endDate}                        id=item[0]deliveryDate_endDate
-${locator.items[0].classification.scheme}                       id=classification_scheme
-${locator.items[0].classification.id}                           id=classification_id
-${locator.items[0].classification.description}                  id=classification_description
-${locator.questions[0].title}                                   id=q[0]title
-${locator.questions[0].description}                             id=q[0]description
-${locator.questions[0].date}                                    id=q[0]date
-${locator.questions[0].answer}                                  id=q[0]answer
+${locator.items[0].quantity}                         id=items[0]_quantity
+${locator.items[0].description}                      id=items[0]_description
+${locator.items[0].unit.code}                        id=items[0]_unit_code
+${locator.items[0].unit.name}                        id=items[0]_unit_name
+${locator.items[0].deliveryAddress.postalCode}       id=item[0]deliveryAddress_postalCode
+${locator.items[0].deliveryAddress.countryName}      id=item[0]deliveryAddress_countryName
+${locator.items[0].deliveryAddress.region}           id=item[0]deliveryAddress_region
+${locator.items[0].deliveryAddress.locality}         id=item[0]deliveryAddress_locality
+${locator.items[0].deliveryAddress.streetAddress}    id=item[0]deliveryAddress_streetAddress
+${locator.items[0].deliveryLocation.latitude}        id=items[0]_deliveryLocation_latitude
+${locator.items[0].deliveryLocation.longitude}       id=items[0]_deliveryLocation_longitude
+${locator.items[0].deliveryDate.endDate}             id=item[0]deliveryDate_endDate
+${locator.items[0].classification.scheme}            id=classification_scheme
+${locator.items[0].classification.id}                id=classification_id
+${locator.items[0].classification.description}       id=classification_description
+${locator.questions[0].title}                        id=q[0]title
+${locator.questions[0].description}                  id=q[0]description
+${locator.questions[0].date}                         id=q[0]date
+${locator.questions[0].answer}                       id=q[0]answer
 
 *** Keywords ***
 Підготувати клієнт для користувача
@@ -213,6 +213,8 @@ Login
   ...      ${ARGUMENTS[0]} ==  username
   ...      ${ARGUMENTS[1]} ==  ${tender_uaid}
 
+    Go to   ${USERS.users['${ARGUMENTS[0]}'].syncpage}
+    Sleep  2
     Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     Sleep  2
     Click Element       name=more-search-btn
@@ -220,8 +222,8 @@ Login
     Input Text          id=proauctionssearch-auctionid   ${ARGUMENTS[1]}
     Sleep  2
     Click Element       name=search-btn
-    Sleep  2
-    Click Element     xpath=(//a[contains(@class, 'btn-default')])[1]
+    Wait Until Element Is Visible    xpath=(//a[text() = 'Детальніше'])   30
+    Click Element     xpath=(//a[text() = 'Детальніше'])
     Sleep  1
 
 Задати питання
@@ -275,7 +277,9 @@ Login
   [Return]  ${return_value}
 
 Отримати інформацію про status
+  Sleep     30
   reload page
+  Sleep     5
   ${return_value}=   Отримати текст із поля і показати на сторінці   status
   ${return_value}=   convert_polonex_string     ${return_value}
   [Return]  ${return_value}
