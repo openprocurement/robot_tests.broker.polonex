@@ -212,9 +212,7 @@ Login
   [Documentation]
   ...      ${ARGUMENTS[0]} ==  username
   ...      ${ARGUMENTS[1]} ==  ${tender_uaid}
-
-    Go to   ${USERS.users['${ARGUMENTS[0]}'].syncpage}
-    Sleep  2
+    Selenium2Library.Switch browser   ${ARGUMENTS[0]}
     Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     Sleep  2
     Click Element       name=more-search-btn
@@ -222,9 +220,10 @@ Login
     Input Text          id=proauctionssearch-auctionid   ${ARGUMENTS[1]}
     Sleep  2
     Click Element       name=search-btn
-    Wait Until Element Is Visible    xpath=(//a[text() = 'Детальніше'])   30
-    Click Element     xpath=(//a[text() = 'Детальніше'])
-    Sleep  1
+    Sleep  5
+    Click Element     xpath=(//a[contains(@class, 'auction_detail_btn')])
+    Wait Until Element Is Visible       id=info   30
+    Capture Page Screenshot
 
 Задати питання
   [Arguments]  @{ARGUMENTS}
@@ -247,6 +246,9 @@ Login
     [Arguments]    @{ARGUMENTS}
     [Documentation]    ${ARGUMENTS[0]} = username
     ...      ${ARGUMENTS[1]} = ${TENDER_UAID}
+    Selenium2Library.Switch browser   ${ARGUMENTS[0]}
+    Go to   ${USERS.users['${ARGUMENTS[0]}'].syncpage}
+    Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
 
 Отримати інформацію із тендера
@@ -277,11 +279,11 @@ Login
   [Return]  ${return_value}
 
 Отримати інформацію про status
-  Sleep     30
   reload page
-  Sleep     5
+  Sleep    10
   ${return_value}=   Отримати текст із поля і показати на сторінці   status
   ${return_value}=   convert_polonex_string     ${return_value}
+  Capture Page Screenshot
   [Return]  ${return_value}
 
 Отримати інформацію про description
@@ -350,22 +352,26 @@ Login
 
 Отримати інформацію про tenderPeriod.startDate
   ${return_value}=    Отримати текст із поля і показати на сторінці  tenderPeriod.startDate
-  ${return_value}=    convert_date_polonex      ${return_value}
+  ${return_value}=   convert_polonex_date_to_iso_format   ${return_value}
+  ${return_value}=   add_timezone_to_date   ${return_value.split('.')[0]}
   [Return]    ${return_value}
 
 Отримати інформацію про tenderPeriod.endDate
   ${return_value}=   Отримати текст із поля і показати на сторінці  tenderPeriod.endDate
-  ${return_value}=    convert_date_polonex      ${return_value}
+  ${return_value}=   convert_polonex_date_to_iso_format   ${return_value}
+  ${return_value}=   add_timezone_to_date   ${return_value.split('.')[0]}
   [Return]    ${return_value}
 
 Отримати інформацію про enquiryPeriod.startDate
   ${return_value}=   Отримати текст із поля і показати на сторінці  enquiryPeriod.startDate
-  ${return_value}=    convert_date_polonex      ${return_value}
+  ${return_value}=   convert_polonex_date_to_iso_format   ${return_value}
+  ${return_value}=   add_timezone_to_date   ${return_value.split('.')[0]}
   [Return]    ${return_value}
 
 Отримати інформацію про enquiryPeriod.endDate
   ${return_value}=   Отримати текст із поля і показати на сторінці  enquiryPeriod.endDate
-  ${return_value}=    convert_date_polonex      ${return_value}
+  ${return_value}=   convert_polonex_date_to_iso_format   ${return_value}
+  ${return_value}=   add_timezone_to_date   ${return_value.split('.')[0]}
   [Return]  ${return_value}
 
 Отримати інформацію про auctionPeriod.startDate
@@ -501,15 +507,12 @@ Login
     ...    ${ARGUMENTS[1]} ==  tenderId
     ...    ${ARGUMENTS[2]} ==  amount
     ...    ${ARGUMENTS[3]} ==  amount.value
-
-    Click Element       id=cansel-bid
+    Click Element       id=edit_user_bid
     Sleep   2
-    Click Element       id=add_bid_btn
-    Sleep   2
-    Input Text          id=addbidform-sum       ${ARGUMENTS[3]}
+    ${newsum}=          Convert To String       ${ARGUMENTS[3]}
+    Input Text          id=addbidform-sum       ${newsum}
     Click Element       id=submit_add_bid_form
-    Sleep   4
-
+    Sleep   10
     ${resp}=    Get Text      id=userbidamount
     [Return]    ${resp}
 
@@ -543,11 +546,12 @@ Login
 Отримати пропозицію
   [Arguments]  ${field}
   Wait Until Page Contains Element    ${locator.proposition.${field}}            60
-  ${proposition_amount}=            Get Value                                    ${locator.proposition.${field}}
+  Capture Page Screenshot
+  ##${proposition_amount}=            Get Value                                    ${locator.proposition.${field}}
+  ${proposition_amount}=              Execute Javascript    return $('#userbidamount').html();
   log                                 ${proposition_amount}
   ${proposition_amount}=              Convert To Number                          ${proposition_amount}
   log                                 ${proposition_amount}
-  Capture Page Screenshot
   ${data}=     Create Dictionary
   ${bid}=      Create Dictionary
   ${value}=    Create Dictionary
@@ -569,11 +573,14 @@ Login
     [Arguments]  @{ARGUMENTS}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
     ${result}=                  Get Element Attribute               id=show_public_btn@href
+    Capture Page Screenshot
     [Return]   ${result}
+
 Отримати посилання на аукціон для учасника
     [Arguments]  @{ARGUMENTS}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
     ${result}=                  Get Element Attribute               id=show_private_btn@href
+    Capture Page Screenshot
     [Return]   ${result}
 
 Підтвердити постачальника
