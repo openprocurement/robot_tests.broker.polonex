@@ -212,7 +212,7 @@ Login
   [Documentation]
   ...      ${ARGUMENTS[0]} ==  username
   ...      ${ARGUMENTS[1]} ==  ${tender_uaid}
-    Selenium2Library.Switch browser   ${ARGUMENTS[0]}
+    Switch browser   ${ARGUMENTS[0]}
     Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     Sleep  2
     Click Element       name=more-search-btn
@@ -246,7 +246,7 @@ Login
     [Arguments]    @{ARGUMENTS}
     [Documentation]    ${ARGUMENTS[0]} = username
     ...      ${ARGUMENTS[1]} = ${TENDER_UAID}
-    Selenium2Library.Switch browser   ${ARGUMENTS[0]}
+    Switch browser   ${ARGUMENTS[0]}
     Go to   ${USERS.users['${ARGUMENTS[0]}'].syncpage}
     Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
@@ -567,7 +567,7 @@ Login
 
 Отримати інформацію про bids
     [Arguments]  @{ARGUMENTS}
-    ##Selenium2Library.Switch Browser       ${ARGUMENTS[0]}
+    ##Switch Browser       ${ARGUMENTS[0]}
 
 Отримати посилання на аукціон для глядача
     [Arguments]  @{ARGUMENTS}
