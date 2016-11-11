@@ -601,3 +601,21 @@ Login
   sleep  10
   Capture Page Screenshot
   Click Element  id=signed_contract_btn
+
+Скасувати закупівлю
+  [Documentation]
+  ...      [Arguments] Username, tender uaid, cancellation reason,
+  ...      document and new description of document
+  ...      [Description] Find tender using uaid, set cancellation reason, get data from cancel_tender
+  ...      and call create_cancellation
+  ...      After that add document to cancellation and change description of document
+  ...      [Return] Nothing
+  [Arguments]  ${username}  ${tender_uaid}  ${cancellation_reason}  ${document}  ${new_description}
+  polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Wait Until Element Is Visible       id=cansel_auction_btn   30
+  Click Element           id=cansel_auction_btn
+  sleep  2
+  Input text      xpath=//textarea[@id="canselform-reason"]            ${cancellation_reason}
+  sleep  2
+  Click Element           id=submit_cansel_form
+
