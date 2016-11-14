@@ -28,6 +28,28 @@ def convert_polonex_date_to_iso_format(date_time_from_ui):
 def split_descr(str):
     return str.split(' - ')[1];
 
+def get_document_by_id(data, doc_id):
+    for document in data.get('documents', []):
+        if doc_id in document.get('title', ''):
+            return document
+    for complaint in data.get('complaints', []):
+        for document in complaint.get('documents', []):
+            if doc_id in document.get('title', ''):
+                return document
+    for award in data.get('awards', []):
+        for document in award.get('documents', []):
+            if doc_id in document.get('title', ''):
+                return document
+        for complaint in award.get('complaints', []):
+            for document in complaint.get('documents', []):
+                if doc_id in document.get('title', ''):
+                    return document
+    for cancellation in data.get('cancellations', []):
+        for document in cancellation.get('documents', []):
+            if doc_id in document.get('title', ''):
+                return document
+    raise Exception('Document with id {} not found'.format(doc_id))
+
 def convert_polonex_string(string):
     return {
             'True': '1',

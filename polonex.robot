@@ -53,6 +53,9 @@ ${locator.questions[0].description}                  id=q[0]description
 ${locator.questions[0].date}                         id=q[0]date
 ${locator.questions[0].answer}                       id=q[0]answer
 
+${locator.cancellations[0].status}                   id=cancell_status
+${locator.cancellations[0].reason}                   id=cancell_reason
+
 *** Keywords ***
 Підготувати клієнт для користувача
   [Arguments]     @{ARGUMENTS}
@@ -454,6 +457,21 @@ Login
   Click Element                       xpath=//a[contains(@href, '#tab_questions')]
   ${return_value}=  Get text          ${locator.questions[0].answer}
   [Return]  ${return_value}
+
+Отримати інформацію про cancellations[0].status
+  ${return_value}=  Get text          ${locator.cancellations[0].status}
+  [Return]  ${return_value}
+
+Отримати інформацію про cancellations[0].reason
+  ${return_value}=  Get text          ${locator.cancellations[0].reason}
+  [Return]  ${return_value}
+
+Отримати інформацію із документа
+  [Arguments]  ${username}  ${tender_uaid}  ${doc_id}  ${field}
+  ${tender}=  polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  ${document}=  polonex_helper.Get Document By Id  ${tender.data}  ${doc_id}
+  Log  ${document}
+  [Return]  ${document['${field}']}
 
 Відповісти на питання
   [Arguments]  @{ARGUMENTS}
