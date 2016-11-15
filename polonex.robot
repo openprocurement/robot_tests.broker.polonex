@@ -56,6 +56,9 @@ ${locator.questions[0].answer}                       id=q[0]answer
 ${locator.cancellations[0].status}                   id=cancell_status
 ${locator.cancellations[0].reason}                   id=cancell_reason
 
+${locator.cancelldoc.title}                          xpath=//div[contains(@class, 'fg_modal_title')]
+${locator.cancelldoc.description}                    xpath=//div[contains(@class, 'fg_modal_description')]
+
 *** Keywords ***
 Підготувати клієнт для користувача
   [Arguments]     @{ARGUMENTS}
@@ -469,9 +472,14 @@ Login
 Отримати інформацію із документа
   [Arguments]  ${username}  ${tender_uaid}  ${doc_id}  ${field}
   ${tender}=  polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  ${document}=  polonex_helper.Get Document By Id  ${tender.data}  ${doc_id}
-  Log  ${document}
-  [Return]  ${document['${field}']}
+  ##${document}=  polonex_helper.Get Document By Id  ${tender.data}  ${doc_id}
+  ##Log  ${document}
+  Click Element                         xpath=//div[contains(@class, 'fg_item_content')]
+  Sleep     2
+  ${return_value}=  Get text          ${locator.cancelldoc.${field}}
+  Sleep     2
+  Capture Page Screenshot
+  [Return]  ${return_value}
 
 Відповісти на питання
   [Arguments]  @{ARGUMENTS}
@@ -633,7 +641,15 @@ Login
   Wait Until Element Is Visible       id=cansel_auction_btn   30
   Click Element           id=cansel_auction_btn
   sleep  2
-  Input text      xpath=//textarea[@id="canselform-reason"]            ${cancellation_reason}
+  Input text        xpath=//textarea[@id="canselform-reason"]       ${cancellation_reason}
+  Click Element     id=cansel_doc_upload_field
+  sleep  2
+  Choose File       id=cansel_doc_upload_field                      ${document}
+  Wait Until Element Is Visible       xpath=//div[contains(@class, 'ho_upload_item_wrap')]   30
+  Click Element     xpath=//div[contains(@class, 'ho_upload_item_wrap')]/div[contains(@class, 'edit')]
+  sleep  2
+  Input text        xpath=//textarea[@name="ho_file_info_edit_description"]       ${new_description}
+  Click Element           id=fileeditform_submit
   sleep  2
   Click Element           id=submit_cansel_form
 
