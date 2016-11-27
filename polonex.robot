@@ -14,6 +14,7 @@ ${login_pass}                                        id=loginform-password
 ${prozorropage}                                      id=prozorropagebtn
 ${locator.title}                                     id=auction_title
 ${locator.dgfID}                                     id=info_dgfID
+${locator.eligibilityCriteria}                       id=eligibilityCriteria_marker
 ${locator.status}                                    id=auction_status_name
 ${locator.description}                               id=info_description
 ${locator.minimalStep.amount}                        xpath=//td[contains(@id, 'info_minimalStep')]/span[contains(@class, 'amount')]
@@ -191,7 +192,7 @@ Login
 
     Sleep   15
     Click Element   xpath=//button[contains(@id, 'add-auction-form-save')]
-    Wait Until Element Is Visible       xpath=//td[contains(@id, 'info_auctionID')]   30
+    Wait Until Element Is Visible       xpath=//td[contains(@id, 'info_auctionID')]   60
 
     ${tender_uaid}=     Get Text        xpath=//td[contains(@id, 'info_auctionID')]
     [Return]    ${tender_uaid}
@@ -231,7 +232,7 @@ Login
     Wait Until Element Is Visible       id=info   30
     Capture Page Screenshot
 
-Задати питання
+Задати запитання
   [Arguments]  @{ARGUMENTS}
   [Documentation]
   ...      ${ARGUMENTS[0]} ==  username
@@ -284,6 +285,10 @@ Login
   ${return_value}=   Отримати текст із поля і показати на сторінці   dgfID
   [Return]  ${return_value}
 
+Отримати інформацію про eligibilityCriteria
+  ${return_value}=   Отримати текст із поля і показати на сторінці   eligibilityCriteria
+  [Return]  ${return_value}
+
 Отримати інформацію про status
   reload page
   Sleep    10
@@ -307,18 +312,13 @@ Login
   [Return]   ${return_value}
 
 Внести зміни в тендер
-  [Arguments]  @{ARGUMENTS}
-  [Documentation]
-  ...      ${ARGUMENTS[0]} =  username
-  ...      ${ARGUMENTS[1]} =  ${TENDER_UAID}
-
+  [Arguments]  ${username}  ${tender_uaid}  ${field_name}  ${field_value}
+  polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element     id=update_auction_btn
   Sleep   2
-
-  ${title}=   Get Text     id=addauctionform-title
-  ${description}=   Get Text    id=addauctionform-description
+  Input text  name=addauctionform-[${field_name}]  ${field_value}
   Click Button    id=add-auction-form-save
-  Sleep   2
+  Wait Until Page Contains  ${field_value}  30
 
 
 Отримати інформацію про items[0].quantity
@@ -481,7 +481,7 @@ Login
   Capture Page Screenshot
   [Return]  ${return_value}
 
-Відповісти на питання
+Відповісти на запитання
   [Arguments]  @{ARGUMENTS}
   [Documentation]
   ...      ${ARGUMENTS[0]} = username
