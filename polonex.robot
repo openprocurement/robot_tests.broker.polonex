@@ -198,21 +198,37 @@ Login
     [Return]    ${tender_uaid}
 
 Завантажити документ
-  [Arguments]  @{ARGUMENTS}
-  [Documentation]
-  ...      ${ARGUMENTS[0]} ==  username
-  ...      ${ARGUMENTS[1]} ==  ${filepath}
-  ...      ${ARGUMENTS[2]} ==  ${tender_uaid}
+    [Arguments]  ${username}  ${filepath}  ${tender_uaid}
+    Switch Browser  ${username}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element     id=update_auction_btn
+    Sleep   4
+    ##Click Element     id=doc_upload_field_biddingDocuments
+    sleep  2
+    Choose File       id=doc_upload_field_biddingDocuments        ${filepath}
+    sleep  15
+    Click Button    id=add-auction-form-save
 
-      Click Element     id=add_doc_to_auction_btn
-      Sleep   2
-      Choose File       id=auctionfile   ${ARGUMENTS[1]}
-      Sleep   2
-      Click Button      id=submit_add_auction_file_form
-      Sleep   1
-      Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
-      Sleep   2
+Завантажити ілюстрацію
+    [Arguments]  ${username}  ${tender_uaid}  ${filepath}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element     id=update_auction_btn
+    Sleep   4
+    ##Click Element     id=doc_upload_field_illustration
+    sleep  2
+    Choose File       id=doc_upload_field_illustration        ${filepath}
+    sleep  15
+    Click Button    id=add-auction-form-save
 
+Додати Virtual Data Room
+    [Arguments]  ${username}  ${tender_uaid}  ${vdr_url}  ${title}=Sample Virtual Data Room
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element     id=update_auction_btn
+    Sleep   4
+    Click Element   xpath=//div[contains(@class,'ho_upload_link_btn')]
+    Input Text      xpath=//input[contains(@name,'ho_link')]   ${vdr_url}
+    Click Button    xpath=//a[contains(@class,'linkadd_submit')]
+    Click Button    id=add-auction-form-save
 
 Пошук тендера по ідентифікатору
   [Arguments]  @{ARGUMENTS}
@@ -232,7 +248,7 @@ Login
     Wait Until Element Is Visible       id=info   30
     Capture Page Screenshot
 
-Задати запитання
+Задати питання
   [Arguments]  @{ARGUMENTS}
   [Documentation]
   ...      ${ARGUMENTS[0]} ==  username
@@ -444,7 +460,6 @@ Login
   [return]  ${return_value}
 
 Отримати інформацію про questions[0].title
-  Click Element                       xpath=//a[contains(@href, '#tab_questions')]
   ${return_value}=  Get text          ${locator.questions[0].title}
   [Return]  ${return_value}
 
@@ -457,7 +472,6 @@ Login
   [Return]  ${return_value}
 
 Отримати інформацію про questions[0].answer
-  Click Element                       xpath=//a[contains(@href, '#tab_questions')]
   ${return_value}=  Get text          ${locator.questions[0].answer}
   [Return]  ${return_value}
 
@@ -490,8 +504,6 @@ Login
   ...      ${ARGUMENTS[3]} = answer_data
   ${answer}=     Get From Dictionary  ${ARGUMENTS[3].data}  answer
   Reload Page
-  Click Element                         xpath=//a[contains(@href, '#tab_questions')]
-  Sleep     4
   Click Element                         xpath=//a[contains(@id, 'add_answer_btn_0')]
   Sleep     4
   Input Text                            id=addanswerform-answer        ${answer}
@@ -585,6 +597,12 @@ Login
   Set To Dictionary  ${data}    value=${value}
   Set To Dictionary  ${value}   amount=${proposition_amount}
   [return]           ${bid}
+
+Отримати інформацію із запитання
+  [Arguments]  ${username}  ${tender_uaid}  ${question_id}  ${field_name}
+  polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  ${value}=  Get Text  id=q[${question_id}]${field_name}
+  [return]  ${value}
 
 Отримати інформацію із пропозиції
   [Arguments]  ${username}  ${tender_uaid}  ${field}
