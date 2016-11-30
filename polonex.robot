@@ -199,13 +199,11 @@ Login
 
 Завантажити документ
     [Arguments]  ${username}  ${filepath}  ${tender_uaid}
-    ##polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    ##Click Element     id=update_auction_btn
-    ##Sleep   4
-    ##Click Element     id=doc_upload_field_biddingDocuments
-    ##sleep  2
-    Choose File     xpath=//input[contains(@id, 'doc_upload_field_biddingDocuments')]   ${filepath}
-    Sleep   30
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element   xpath=//a[contains(@id, "update_auction_btn")]
+    Sleep   4
+    Choose File     xpath=//input[contains(@id, "doc_upload_field_biddingDocuments")]   ${filepath}
+    Sleep   15
     Click Button    id=add-auction-form-save
 
 Завантажити ілюстрацію
@@ -222,7 +220,7 @@ Login
 Додати Virtual Data Room
     [Arguments]  ${username}  ${tender_uaid}  ${vdr_url}  ${title}=Sample Virtual Data Room
     ##polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Click Element     id=update_auction_btn
+    Click Element     xpath=//a[contains(@id, "update_auction_btn")]
     Sleep   4
     Click Element   xpath=//div[contains(@class,'ho_upload_link_btn')]
     Input Text      xpath=//input[contains(@name,'ho_link')]   ${vdr_url}
@@ -572,8 +570,10 @@ Login
     ...    ${ARGUMENTS[2]} ==  tenderId
     Click Element           id=edit_user_bid
     Sleep   2
-    Click Element           id=bid_doc_upload_fieldcommercialProposal
-    ##Choose File             xpath=//input[contains(@id, 'bid_doc_upload_fieldcommercialProposal')]   ${ARGUMENTS[1]}
+    Capture Page Screenshot
+    Sleep   2
+    ##Click Element           id=bid_doc_upload_fieldcommercialProposal
+    Choose File             xpath=//input[contains(@id, 'bid_doc_upload_fieldcommercialProposal')]   ${ARGUMENTS[1]}
     sleep   4
     Click Element           id=submit_add_bid_form
     sleep   2
@@ -591,6 +591,10 @@ Login
     sleep   2
     Click Element           id=submit_add_file_form
     sleep   2
+
+Завантажити фінансову ліцензію
+  [Arguments]  ${username}  ${tender_uaid}  ${filepath}
+  polonex.Завантажити документ в ставку  ${username}  ${filepath}  ${tender_uaid}
 
 Отримати пропозицію
   [Arguments]  ${field}
