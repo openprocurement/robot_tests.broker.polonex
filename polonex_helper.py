@@ -3,6 +3,7 @@ import dateutil.parser
 from datetime import datetime
 from pytz import timezone
 import os
+import urllib
 
 
 def polonex_convertdate(isodate):
@@ -28,27 +29,8 @@ def convert_polonex_date_to_iso_format(date_time_from_ui):
 def split_descr(str):
     return str.split(' - ')[1];
 
-def get_document_by_id(data, doc_id):
-    for document in data.get('documents', []):
-        if doc_id in document.get('title', ''):
-            return document
-    for complaint in data.get('complaints', []):
-        for document in complaint.get('documents', []):
-            if doc_id in document.get('title', ''):
-                return document
-    for award in data.get('awards', []):
-        for document in award.get('documents', []):
-            if doc_id in document.get('title', ''):
-                return document
-        for complaint in award.get('complaints', []):
-            for document in complaint.get('documents', []):
-                if doc_id in document.get('title', ''):
-                    return document
-    for cancellation in data.get('cancellations', []):
-        for document in cancellation.get('documents', []):
-            if doc_id in document.get('title', ''):
-                return document
-    raise Exception('Document with id {} not found'.format(doc_id))
+def polonex_download_file(url, file_name, output_dir):
+    urllib.urlretrieve(url, ('{}/{}'.format(output_dir, file_name)))
 
 def convert_polonex_string(string):
     return {
@@ -68,3 +50,4 @@ def convert_polonex_string(string):
             u'(включно з ПДВ)': True,
             u'(без ПДВ)': False,
             }.get(string, string)
+

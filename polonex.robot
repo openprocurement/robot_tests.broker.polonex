@@ -192,26 +192,25 @@ Login
 
     Sleep   15
     Click Element   xpath=//button[contains(@id, 'add-auction-form-save')]
-    Wait Until Element Is Visible       xpath=//td[contains(@id, 'info_auctionID')]   60
+    Wait Until Element Is Visible       xpath=//td[contains(@id, 'info_auctionID')]   120
 
     ${tender_uaid}=     Get Text        xpath=//td[contains(@id, 'info_auctionID')]
     [Return]    ${tender_uaid}
 
 Завантажити документ
     [Arguments]  ${username}  ${filepath}  ${tender_uaid}
-    Switch Browser  ${username}
-    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Click Element     id=update_auction_btn
-    Sleep   4
+    ##polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    ##Click Element     id=update_auction_btn
+    ##Sleep   4
     ##Click Element     id=doc_upload_field_biddingDocuments
-    sleep  2
-    Choose File       id=doc_upload_field_biddingDocuments        ${filepath}
-    sleep  15
+    ##sleep  2
+    Choose File     xpath=//input[contains(@id, 'doc_upload_field_biddingDocuments')]   ${filepath}
+    Sleep   30
     Click Button    id=add-auction-form-save
 
 Завантажити ілюстрацію
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}
-    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    ##polonex.ошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     Click Element     id=update_auction_btn
     Sleep   4
     ##Click Element     id=doc_upload_field_illustration
@@ -222,7 +221,7 @@ Login
 
 Додати Virtual Data Room
     [Arguments]  ${username}  ${tender_uaid}  ${vdr_url}  ${title}=Sample Virtual Data Room
-    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    ##polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     Click Element     id=update_auction_btn
     Sleep   4
     Click Element   xpath=//div[contains(@class,'ho_upload_link_btn')]
@@ -245,7 +244,7 @@ Login
     Click Element       name=search-btn
     Sleep  5
     Click Element     xpath=(//a[contains(@class, 'auction_detail_btn')])
-    Wait Until Element Is Visible       id=info   30
+    Wait Until Element Is Visible       id=info   120
     Capture Page Screenshot
 
 Задати питання
@@ -265,6 +264,14 @@ Login
   Click Element       id=submit_add_question_form
   Sleep  2
 
+Задати запитання на тендер
+  [Arguments]  ${username}  ${tender_uaid}  ${question}
+  polonex.Задати питання  ${username}  ${tender_uaid}  ${question}
+
+Задати запитання на предмет
+  [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${question}
+  polonex.Задати питання  ${username}  ${tender_uaid}  ${question}
+
 Оновити сторінку з тендером
     [Arguments]    @{ARGUMENTS}
     [Documentation]    ${ARGUMENTS[0]} = username
@@ -275,13 +282,9 @@ Login
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
 
 Отримати інформацію із тендера
-  [Arguments]  @{ARGUMENTS}
-  [Documentation]
-  ...      ${ARGUMENTS[0]} ==  ${username}
-  ...      ${ARGUMENTS[1]} ==  ${tender_uaid}
-  ...      ${ARGUMENTS[2]} ==  ${field_name}
-  ${return_value}=  run keyword  Отримати інформацію про ${ARGUMENTS[2]}
-  [Return]  ${return_value}
+    [Arguments]  ${username}  ${tender_uaid}  ${field_name}
+    ${return_value}=  run keyword  Отримати інформацію про ${field_name}
+    [Return]  ${return_value}
 
 Отримати інформацію із предмету
   [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${field_name}
@@ -334,7 +337,7 @@ Login
   Sleep   2
   Input text  name=addauctionform-[${field_name}]  ${field_value}
   Click Button    id=add-auction-form-save
-  Wait Until Page Contains  ${field_value}  30
+  Wait Until Page Contains  ${field_value}  120
 
 
 Отримати інформацію про items[0].quantity
@@ -486,28 +489,36 @@ Login
 Отримати інформацію із документа
   [Arguments]  ${username}  ${tender_uaid}  ${doc_id}  ${field}
   ${tender}=  polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  ##${document}=  polonex_helper.Get Document By Id  ${tender.data}  ${doc_id}
-  ##Log  ${document}
-  Click Element                         xpath=//div[contains(@class, 'fg_item_content')]
-  Sleep     2
-  ${return_value}=  Get text          ${locator.cancelldoc.${field}}
-  Sleep     2
-  Capture Page Screenshot
+  ${return_value}=   Get Element Attribute   xpath=//div[contains(@data-name,'${doc_id}')]@data-name
   [Return]  ${return_value}
 
+Отримати документ
+    [Arguments]  ${username}  ${tender_uaid}  ${doc_id}
+    ${file_name}=   Get Element Attribute   xpath=//div[contains(@data-name,'${doc_id}')]@data-name
+    ${url}=   Get Element Attribute   xpath=//div[contains(@data-name,'${doc_id}')]@data-src
+    polonex_download_file   ${url}  ${file_name}  ${OUTPUT_DIR}
+    [return]  ${file_name}
+
+Отримати кількість документів в ставці
+  [Arguments]  ${username}  ${tender_uaid}  ${bid_index}
+  polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  Capture Page Screenshot
+  ${bid_doc_number}=   Get Matching Xpath Count   //div[contains(@class,"bidfiles")]/div[contains(@class,"fg_item")]
+  [return]  ${bid_doc_number}
+
+Скасування рішення кваліфікаційної комісії
+    [Arguments]  ${username}  ${tender_uaid}  ${award_num}
+    polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+    Capture Page Screenshot
+
 Відповісти на запитання
-  [Arguments]  @{ARGUMENTS}
-  [Documentation]
-  ...      ${ARGUMENTS[0]} = username
-  ...      ${ARGUMENTS[1]} = ${TENDER_UAID}
-  ...      ${ARGUMENTS[2]} = 0
-  ...      ${ARGUMENTS[3]} = answer_data
-  ${answer}=     Get From Dictionary  ${ARGUMENTS[3].data}  answer
-  Reload Page
-  Click Element                         xpath=//a[contains(@id, 'add_answer_btn_0')]
-  Sleep     4
-  Input Text                            id=addanswerform-answer        ${answer}
-  Click Element                         id=submit_add_answer_form
+    [Arguments]  ${username}  ${tender_uaid}  ${answer_data}  ${question_id}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element                         xpath=//a[contains(@id, 'add_answer_btn_0')]
+    Sleep     4
+    Input Text                            id=addanswerform-answer        ${answer_data.data.answer}
+    Sleep     2
+    Click Element                         id=submit_add_answer_form
 
 Подати цінову пропозицію
     [Arguments]  @{ARGUMENTS}
@@ -523,7 +534,7 @@ Login
     Input Text          id=addbidform-sum       ${amount}
     Sleep   4
     Click Element       id=submit_add_bid_form
-    Wait Until Element Is Visible       id=userbidamount   30
+    Wait Until Element Is Visible       id=userbidamount   120
 
     ${resp}=    Get Text      id=userbidamount
     [Return]    ${resp}
@@ -583,7 +594,7 @@ Login
 
 Отримати пропозицію
   [Arguments]  ${field}
-  Wait Until Page Contains Element    ${locator.proposition.${field}}            60
+  Wait Until Page Contains Element    ${locator.proposition.${field}}            120
   Capture Page Screenshot
   ##${proposition_amount}=            Get Value                                    ${locator.proposition.${field}}
   ${proposition_amount}=              Execute Javascript    return $('#userbidamount').html();
@@ -601,7 +612,7 @@ Login
 Отримати інформацію із запитання
   [Arguments]  ${username}  ${tender_uaid}  ${question_id}  ${field_name}
   polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  ${value}=  Get Text  id=q[${question_id}]${field_name}
+  ${value}=  Get Text  id=q[0]${field_name}
   [return]  ${value}
 
 Отримати інформацію із пропозиції
@@ -656,18 +667,23 @@ Login
   ...      [Return] Nothing
   [Arguments]  ${username}  ${tender_uaid}  ${cancellation_reason}  ${document}  ${new_description}
   polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Wait Until Element Is Visible       id=cansel_auction_btn   30
+  Wait Until Element Is Visible       id=cansel_auction_btn   120
   Click Element           id=cansel_auction_btn
   sleep  2
   Input text        xpath=//textarea[@id="canselform-reason"]       ${cancellation_reason}
   Click Element     id=cansel_doc_upload_field
   sleep  2
   Choose File       id=cansel_doc_upload_field                      ${document}
-  Wait Until Element Is Visible       xpath=//div[contains(@class, 'ho_upload_item_wrap')]   30
+  Wait Until Element Is Visible       xpath=//div[contains(@class, 'ho_upload_item_wrap')]   120
   Click Element     xpath=//div[contains(@class, 'ho_upload_item_wrap')]/div[contains(@class, 'edit')]
   sleep  2
   Input text        xpath=//textarea[@name="ho_file_info_edit_description"]       ${new_description}
   Click Element           id=fileeditform_submit
   sleep  2
   Click Element           id=submit_cansel_form
+
+Завантажити угоду до тендера
+    [Arguments]  ${username}  ${tender_uaid}  ${contract_num}  ${filepath}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Capture Page Screenshot
 
