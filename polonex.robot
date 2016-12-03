@@ -211,8 +211,6 @@ Login
     ##polonex.ошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     Click Element     id=update_auction_btn
     Sleep   4
-    ##Click Element     id=doc_upload_field_illustration
-    sleep  2
     Choose File       id=doc_upload_field_illustration        ${filepath}
     sleep  15
     Click Button    id=add-auction-form-save
@@ -220,10 +218,13 @@ Login
 Додати Virtual Data Room
     [Arguments]  ${username}  ${tender_uaid}  ${vdr_url}  ${title}=Sample Virtual Data Room
     ##polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Wait Until Element Is Visible       xpath=//a[contains(@id, "update_auction_btn")]      120
     Click Element     xpath=//a[contains(@id, "update_auction_btn")]
-    Sleep   4
+    Wait Until Element Is Visible       xpath=//div[contains(@class,'ho_upload_link_btn')]      120
     Click Element   xpath=//div[contains(@class,'ho_upload_link_btn')]
-    Input Text      xpath=//input[contains(@name,'ho_link')]   ${vdr_url}
+    Sleep   4
+    ##Input Text      xpath=//input[contains(@name,"ho_link")]   ${vdr_url}
+    Input Text      xpath=//input[contains(@placeholder,"http://example.com")]   ${vdr_url}
     Click Button    xpath=//a[contains(@class,'linkadd_submit')]
     Click Button    id=add-auction-form-save
 
@@ -657,9 +658,10 @@ Login
   ...      [Return] Nothing
   [Arguments]  ${username}  ${tender_uaid}  ${contract_num}
   polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  sleep  10
-  Capture Page Screenshot
-  Click Element  id=signed_contract_btn
+  Click Element     xpath=//a[@id="signed_contract_btn"]
+  Input Text  xpath=//input[contains(@id,"addsignform-contractnumber")]  12345
+  Click Element     xpath=//button[@id="submit_add_bid_form"]
+
 
 Скасувати закупівлю
   [Documentation]
@@ -679,6 +681,7 @@ Login
   sleep  2
   Choose File       id=cansel_doc_upload_field                      ${document}
   Wait Until Element Is Visible       xpath=//div[contains(@class, 'ho_upload_item_wrap')]   120
+  sleep  4
   Click Element     xpath=//div[contains(@class, 'ho_upload_item_wrap')]/div[contains(@class, 'edit')]
   sleep  2
   Input text        xpath=//textarea[@name="ho_file_info_edit_description"]       ${new_description}
