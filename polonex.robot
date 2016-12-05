@@ -229,6 +229,17 @@ Login
     Click Button    xpath=//a[contains(@class,"linkadd_submit")]
     Click Button    id=add-auction-form-save
 
+Завантажити протокол аукціону
+    [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${award_index}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element           id=edit_user_bid
+    Sleep   2
+    Capture Page Screenshot
+    Sleep   2
+    Choose File             xpath=//input[contains(@id, 'bid_doc_upload_fieldauctionProtocol')]   ${filepath}
+    sleep   4
+    Click Element           id=submit_add_bid_form
+
 Пошук тендера по ідентифікатору
   [Arguments]  @{ARGUMENTS}
   [Documentation]
@@ -574,7 +585,6 @@ Login
     Sleep   2
     Capture Page Screenshot
     Sleep   2
-    ##Click Element           id=bid_doc_upload_fieldcommercialProposal
     Choose File             xpath=//input[contains(@id, 'bid_doc_upload_fieldcommercialProposal')]   ${ARGUMENTS[1]}
     sleep   4
     Click Element           id=submit_add_bid_form
@@ -650,8 +660,8 @@ Login
   ...      [Return] Nothing
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
   sleep  5
-  Capture Page Screenshot
-  Click Element  id=cwalificate_winer_btn
+  Click Element     xpath=//a[@id="cwalificate_winer_btn"]
+  Wait Until Element Is Visible       id=signed_contract_btn   120
 
 Підтвердити підписання контракту
   [Documentation]
