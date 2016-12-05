@@ -203,16 +203,18 @@ Login
     Click Element   xpath=//a[contains(@id, "update_auction_btn")]
     Sleep   4
     Choose File     xpath=//input[contains(@id, "doc_upload_field_biddingDocuments")]   ${filepath}
-    Sleep   15
+    Sleep   5
     Click Button    id=add-auction-form-save
 
 Завантажити ілюстрацію
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}
-    ##polonex.ошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Click Element     id=update_auction_btn
+    ##polonex.пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    reload page
+    Wait Until Element Is Visible       xpath=//a[contains(@id, "update_auction_btn")]      120
+    Click Element   xpath=//a[contains(@id, "update_auction_btn")]
     Sleep   4
     Choose File       id=doc_upload_field_illustration        ${filepath}
-    sleep  15
+    sleep  5
     Click Button    id=add-auction-form-save
 
 Додати Virtual Data Room
@@ -223,10 +225,20 @@ Login
     Wait Until Element Is Visible       xpath=//div[contains(@class,'ho_upload_link_btn')]      120
     Click Element   xpath=//div[contains(@class,'ho_upload_link_btn')]
     Sleep   4
-    ##Input Text      xpath=//input[contains(@name,"ho_link")]   ${vdr_url}
-    Input Text      xpath=//input[contains(@placeholder,"http://example.com")]   ${vdr_url}
-    Click Button    xpath=//a[contains(@class,'linkadd_submit')]
+    Input Text      xpath=//input[contains(@id,"input_link")]   ${vdr_url}
+    Click Button    xpath=//a[contains(@class,"linkadd_submit")]
     Click Button    id=add-auction-form-save
+
+Завантажити протокол аукціону
+    [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${award_index}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element           id=edit_user_bid
+    Sleep   2
+    Capture Page Screenshot
+    Sleep   2
+    Choose File             xpath=//input[contains(@id, 'bid_doc_upload_fieldauctionProtocol')]   ${filepath}
+    sleep   4
+    Click Element           id=submit_add_bid_form
 
 Пошук тендера по ідентифікатору
   [Arguments]  @{ARGUMENTS}
@@ -501,8 +513,8 @@ Login
 Отримати кількість документів в ставці
   [Arguments]  ${username}  ${tender_uaid}  ${bid_index}
   polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
-  Capture Page Screenshot
-  ${bid_doc_number}=   Get Matching Xpath Count   //div[contains(@class,"bidfiles")]/div[contains(@class,"fg_item")]
+  ${bid_doc_number}=   Get Text      id=bid_doc_count
+  ${bid_doc_number}=   Convert To Number      ${bid_doc_number}
   [return]  ${bid_doc_number}
 
 Скасування рішення кваліфікаційної комісії
@@ -573,7 +585,6 @@ Login
     Sleep   2
     Capture Page Screenshot
     Sleep   2
-    ##Click Element           id=bid_doc_upload_fieldcommercialProposal
     Choose File             xpath=//input[contains(@id, 'bid_doc_upload_fieldcommercialProposal')]   ${ARGUMENTS[1]}
     sleep   4
     Click Element           id=submit_add_bid_form
@@ -649,8 +660,8 @@ Login
   ...      [Return] Nothing
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
   sleep  5
-  Capture Page Screenshot
-  Click Element  id=cwalificate_winer_btn
+  Click Element     xpath=//a[@id="cwalificate_winer_btn"]
+  Wait Until Element Is Visible       id=signed_contract_btn   120
 
 Підтвердити підписання контракту
   [Documentation]
@@ -660,7 +671,7 @@ Login
   polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element     xpath=//a[@id="signed_contract_btn"]
   Input Text  xpath=//input[contains(@id,"addsignform-contractnumber")]  12345
-  Click Element     xpath=//button[@id="submit_add_bid_form"]
+  Click Button     id=submit_sign_contract
 
 
 Скасувати закупівлю
