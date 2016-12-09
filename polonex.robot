@@ -224,15 +224,15 @@ Login
     Click Element     xpath=//a[contains(@id, "update_auction_btn")]
     Wait Until Element Is Visible       xpath=//div[contains(@class,'ho_upload_link_btn')]      120
     Click Element   xpath=//div[contains(@class,'ho_upload_link_btn')]
-    Sleep   4
-    Input Text      xpath=//input[contains(@id,"input_link")]   ${vdr_url}
-    Click Button    xpath=//a[contains(@class,"linkadd_submit")]
-    Click Button    id=add-auction-form-save
+    ##Sleep   4
+    ##Input Text      xpath=//input[contains(@id,"input_link")]   ${vdr_url}
+    ##Click Button    xpath=//a[contains(@class,"linkadd_submit")]
+    ##Click Button    id=add-auction-form-save
 
 Завантажити протокол аукціону
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${award_index}
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Click Element           id=edit_user_bid
+    Click Element           id=add_user_bid_docs
     Sleep   2
     Capture Page Screenshot
     Sleep   2
@@ -517,8 +517,23 @@ Login
   ${bid_doc_number}=   Convert To Number      ${bid_doc_number}
   [return]  ${bid_doc_number}
 
+Отримати дані із документу пропозиції
+    [Arguments]  ${username}  ${tender_uaid}  ${bid_index}  ${document_index}  ${field}
+    ${doc_value}=   Get Element Attribute   xpath=//p[contains(@id,"bid_files_auctionProtocol")]@data-key
+    [return]  ${doc_value}
+
 Скасування рішення кваліфікаційної комісії
     [Arguments]  ${username}  ${tender_uaid}  ${award_num}
+    Click Element                         xpath=//a[contains(@id, "cansel_winer_btn")]
+    Wait Until Page Contains   Рішення кваліфікаційної комісії скасовано   120
+
+Дискваліфікувати постачальника
+    [Arguments]  ${username}  ${tender_uaid}  ${award_num}  ${description}
+    polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+    Capture Page Screenshot
+
+Завантажити документ рішення кваліфікаційної комісії
+    [Arguments]  ${username}  ${document}  ${tender_uaid}  ${award_num}
     polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
     Capture Page Screenshot
 
@@ -537,16 +552,18 @@ Login
     ...    ${ARGUMENTS[0]} ==  username
     ...    ${ARGUMENTS[1]} ==  tenderId
     ...    ${ARGUMENTS[2]} ==  ${test_bid_data}
+    ${status}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${ARGUMENTS[2].data}  qualified
     ${amount}=    Get From Dictionary     ${ARGUMENTS[2].data.value}    amount
     ${amount}=              Convert To String     ${amount}
-
+    Run Keyword If  ${status}
+    ...  Go To  http://test.polonex.in.ua
+    ...  ELSE   polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[1]}
     Click Element       id=add_bid_btn
     Sleep   2
     Input Text          id=addbidform-sum       ${amount}
     Sleep   4
     Click Element       id=submit_add_bid_form
     Wait Until Element Is Visible       id=userbidamount   120
-
     ${resp}=    Get Text      id=userbidamount
     [Return]    ${resp}
 
