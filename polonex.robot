@@ -234,11 +234,8 @@ Login
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     Click Element           id=add_user_bid_docs
     Sleep   2
-    Capture Page Screenshot
-    Sleep   2
     Choose File             xpath=//input[contains(@id, 'bid_doc_upload_fieldauctionProtocol')]   ${filepath}
-    sleep   4
-    Click Element           id=submit_add_bid_form
+    Click Button           xpath=//button[contains(@id,'submit_add_bid_doc_form')]
 
 Пошук тендера по ідентифікатору
   [Arguments]  @{ARGUMENTS}
