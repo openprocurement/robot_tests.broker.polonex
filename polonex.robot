@@ -356,7 +356,7 @@ Login
 Отримати інформацію про класифікатор із предмету
     [Arguments]  ${field_name}
     ${prop_fild_name}=         Replace String    ${field_name}    .   _    count=1
-    ${list}=    Split String    .
+    ${list}=    Split String    ${prop_fild_name}    .
     ${return_value}=   Get Text     xpath=//td[contains(@id, ${list[0]})]/td[contains(@id, "classification_${list[1]}")]
     [Return]  ${return_value}
 
@@ -368,7 +368,11 @@ Login
 
 Отримати інформацію із предмету
     [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${field_name}
-    ${return_value}=   Get Text     id=items[${item_id}]_${field_name}
+    ${index}=   Get Element Attribute   xpath=//td[contains(text(), '${item_id}')]@id
+    ${index}=   Get Substring   ${index}    0   8
+    ${return_value}=    Get Text     id=${item_id}${field_name}
+    ${return_value}=  Run Keyword If
+    ...  ${field_name} == 'quantity'      Convert To Integer    ${return_value}
     [Return]  ${return_value}
 
 Отримати текст із поля і показати на сторінці
@@ -606,17 +610,22 @@ Login
     polonex_download_file   ${url}  ${file_name}  ${OUTPUT_DIR}
     [return]  ${file_name}
 
+Отримати кількість документів в тендері
+    [Arguments]  ${username}  ${tender_uaid}
+    ${bid_doc_number}=   Get Text      id=bid_doc_count
+    ${bid_doc_number}=   Convert To Number      ${bid_doc_number}
+    [return]  ${bid_doc_number}
+
 Отримати кількість документів в ставці
-  [Arguments]  ${username}  ${tender_uaid}  ${bid_index}
-  polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
-  ${bid_doc_number}=   Get Text      id=bid_doc_count
-  ${bid_doc_number}=   Convert To Number      ${bid_doc_number}
-  [return]  ${bid_doc_number}
+    [Arguments]  ${username}  ${tender_uaid}  ${bid_index}
+    ${number}=   Get Element Attribute   xpath=//p[contains(@id,'document_section_title')]@data-num
+    ${number}=   Convert To Number      ${number}
+    [return]  ${number}
 
 Отримати кількість предметів в тендері
     [Arguments]  ${username}  ${tender_uaid}
     ${res}=   Get Text      id=item_count
-    ${res}=   Convert To Number      ${res}
+    ##${res}=   Convert To Number      ${res}
     [return]  ${res}
 
 Отримати дані із документу пропозиції
