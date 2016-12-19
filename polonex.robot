@@ -234,18 +234,18 @@ Login
 
 Завантажити ілюстрацію
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}
-    #polonex.пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Wait Until Element Is Visible       xpath=//a[contains(@id, "update_auction_btn")]      30
-    Click Element   xpath=//a[contains(@id, "update_auction_btn")]
-    Sleep   4
+    ##polonex.пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    ##Wait Until Element Is Visible       xpath=//a[contains(@id, "update_auction_btn")]      30
+    ##Click Element   xpath=//a[contains(@id, "update_auction_btn")]
+    ##Sleep   4
     Choose File       id=doc_upload_field_illustration        ${filepath}
     sleep  5
     Click Button    id=add-auction-form-save
 
 Додати Virtual Data Room
     [Arguments]  ${username}  ${tender_uaid}  ${vdr_url}  ${title}=Sample Virtual Data Room
-    #polonex.пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Click Element     xpath=//a[contains(@id, "update_auction_btn")]
+    ##polonex.пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    ##Click Element     xpath=//a[contains(@id, "update_auction_btn")]
     Wait Until Element Is Visible       xpath=//div[contains(@id,'doc_upload_wrap_virtualDataRoom')]/div[contains(@class,'ho_upload_link_btn')]      30
     Click Element   xpath=//div[contains(@id,'doc_upload_wrap_virtualDataRoom')]/div[contains(@class,'ho_upload_link_btn')]
     ##Sleep   4
@@ -255,8 +255,8 @@ Login
 
 Додати публічний паспорт активу
     [Arguments]  ${username}  ${tender_uaid}  ${certificate_url}
-    #polonex.пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Click Element     xpath=//a[contains(@id, "update_auction_btn")]
+    ##polonex.пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    ##Click Element     xpath=//a[contains(@id, "update_auction_btn")]
     Wait Until Element Is Visible       xpath=//div[contains(@id,'doc_upload_wrap_x_dgfPublicAssetCertificate')]/div[contains(@class,'ho_upload_link_btn')]      30
     Click Element   xpath=//div[contains(@id,'doc_upload_wrap_x_dgfPublicAssetCertificate')]/div[contains(@class,'ho_upload_link_btn')]
     Sleep   4
@@ -270,10 +270,10 @@ Login
 
 Завантажити документ в тендер з типом
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${documentType}
-    #polonex.пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Wait Until Element Is Visible       xpath=//a[contains(@id, "update_auction_btn")]      30
-    Click Element   xpath=//a[contains(@id, "update_auction_btn")]
-    Sleep   4
+    ##polonex.пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    ##Wait Until Element Is Visible       xpath=//a[contains(@id, "update_auction_btn")]      30
+    ##Click Element   xpath=//a[contains(@id, "update_auction_btn")]
+    ##Sleep   4
     Choose File       id=doc_upload_field_${documentType}        ${filepath}
     sleep  5
     Click Button    id=add-auction-form-save
@@ -344,6 +344,7 @@ Login
     ...  'classification' in '${field_name}'       Отримати інформацію про класифікатор із предмету  ${field_name}
     ...  ELSE IF    'unit' in '${field_name}'      Отримати інформацію про юніт із предмету  ${field_name}
     ...  ELSE IF    'items' in '${field_name}'     Отримати інформацію із предмету без індекса  ${field_name}
+    ...  ELSE IF    'questions' in '${field_name}'     Отримати інформацію із запитання без індекса  ${field_name}
     ...  ELSE       Отримати інформацію про ${field_name}
     [Return]  ${return_value}
 
@@ -351,14 +352,29 @@ Login
     [Arguments]  ${field_name}
     ${prop_fild_name}=         Replace String    ${field_name}    .   _    count=1
     ${return_value}=   Get Text     id=${prop_fild_name}
+    ${return_value}=  Run Keyword If
+    ...  'quantity' in '${prop_fild_name}'    Convert To Integer    ${return_value}
+    ...  ELSE       Convert To String   ${return_value}
+    [Return]  ${return_value}
+
+Отримати інформацію із запитання без індекса
+    [Arguments]  ${field_name}
+    ${index}=   Get Substring   ${field_name}    10      11
+    ${index}=   Convert To Integer    ${index}
+    ${list}=    Split String    ${field_name}    .
+    ${return_value}=   Get Text     id=q[${index}]${list[1]}
     [Return]  ${return_value}
 
 Отримати інформацію про класифікатор із предмету
     [Arguments]  ${field_name}
-    ${prop_fild_name}=         Replace String    ${field_name}    .   _    count=1
-    ${list}=    Split String    ${prop_fild_name}    .
-    ${return_value}=   Get Text     xpath=//td[contains(@id, ${list[0]})]/td[contains(@id, "classification_${list[1]}")]
+    ${prop_fild_name}=         Replace String    ${field_name}    .   _    count=2
+    ${return_value}=   Get Text     id=${prop_fild_name}
     [Return]  ${return_value}
+
+Отримати інформацію із документа по індексу
+    [Arguments]  ${username}  ${tender_uaid}  ${document_index}  ${field}
+    log to console      ${document_index}
+    log to console      ${field}
 
 Отримати інформацію про юніт із предмету
     [Arguments]  ${field_name}
@@ -369,7 +385,7 @@ Login
 Отримати інформацію із предмету
     [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${field_name}
     ${index}=   Get Element Attribute   xpath=//td[contains(text(), '${item_id}')]@id
-    ${index}=   Get Substring   ${index}    0   8
+    ${index}=   Get Substring   ${index}    0   9
     ${return_value}=    Get Text     id=${item_id}${field_name}
     ${return_value}=  Run Keyword If
     ...  ${field_name} == 'quantity'      Convert To Integer    ${return_value}
@@ -612,15 +628,15 @@ Login
 
 Отримати кількість документів в тендері
     [Arguments]  ${username}  ${tender_uaid}
-    ${bid_doc_number}=   Get Text      id=bid_doc_count
-    ${bid_doc_number}=   Convert To Number      ${bid_doc_number}
-    [return]  ${bid_doc_number}
-
-Отримати кількість документів в ставці
-    [Arguments]  ${username}  ${tender_uaid}  ${bid_index}
     ${number}=   Get Element Attribute   xpath=//p[contains(@id,'document_section_title')]@data-num
     ${number}=   Convert To Number      ${number}
     [return]  ${number}
+
+Отримати кількість документів в ставці
+    [Arguments]  ${username}  ${tender_uaid}  ${bid_index}
+    ${bid_doc_number}=   Get Text      id=bid_doc_count
+    ${bid_doc_number}=   Convert To Number      ${bid_doc_number}
+    [return]  ${bid_doc_number}
 
 Отримати кількість предметів в тендері
     [Arguments]  ${username}  ${tender_uaid}
@@ -663,12 +679,14 @@ Login
     ...    ${ARGUMENTS[0]} ==  username
     ...    ${ARGUMENTS[1]} ==  tenderId
     ...    ${ARGUMENTS[2]} ==  ${test_bid_data}
-    ${status}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${ARGUMENTS[2].data}  qualified
+    ##${status}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${ARGUMENTS[2].data}  qualified
+    ${status}=          Get From Dictionary         ${ARGUMENTS[2].data}    qualified
+    log to console      ${status}
     ${amount}=    Get From Dictionary     ${ARGUMENTS[2].data.value}    amount
-    ${amount}=              Convert To String     ${amount}
+    ${amount}=          Convert To String     ${amount}
     Run Keyword If  ${status}
-    ...  Go To  http://test.polonex.in.ua
-    ...  ELSE   polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[1]}
+    ...  polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[1]}
+    ...  ELSE   Go To  http://test.polonex.in.ua
     Click Element       id=add_bid_btn
     Sleep   2
     Input Text          id=addbidform-sum       ${amount}
@@ -754,10 +772,11 @@ Login
   [return]           ${bid}
 
 Отримати інформацію із запитання
-  [Arguments]  ${username}  ${tender_uaid}  ${question_id}  ${field_name}
-  polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  ${value}=  Get Text  id=q[0]${field_name}
-  [return]  ${value}
+    [Arguments]  ${username}  ${tender_uaid}  ${question_id}  ${field_name}
+    ${index}=   Get Element Attribute   xpath=//td[contains(text(), '${question_id}')]@id
+    ${index}=   Get Substring   ${index}    0   4
+    ${return_value}=    Get Text     id=${item_id}${field_name}
+    [Return]  ${return_value}
 
 Отримати інформацію із пропозиції
   [Arguments]  ${username}  ${tender_uaid}  ${field}
