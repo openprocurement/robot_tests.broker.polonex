@@ -223,14 +223,27 @@ Login
     Execute Javascript    $("#additemform-${index}-classification_id").val("${item.classification.id}");
     Execute Javascript    $("#additemform-${index}-classification_id").trigger("change");
 
+Додати предмет закупівлі
+    [Arguments]  ${username}  ${tender_uaid}  ${item}
+    ##polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element   xpath=//a[contains(@id, "update_auction_btn")]
+    polonex.Додати предмет      ${item}    11
+
+Видалити предмет закупівлі
+    [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${lot_id}=${Empty}
+    ##polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element   xpath=//a[contains(@id, "update_auction_btn")]
+    Click Element   xpath=//a[contains(@class, "close_lot_item")]
+
 Завантажити документ
     [Arguments]  ${username}  ${filepath}  ${tender_uaid}
-    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Click Element   xpath=//a[contains(@id, "update_auction_btn")]
-    Sleep   4
+    ##polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    ##Click Element   xpath=//a[contains(@id, "update_auction_btn")]
+    ##Sleep   4
     Choose File     xpath=//input[contains(@id, "doc_upload_field_biddingDocuments")]   ${filepath}
-    Sleep   5
-    Click Button    id=add-auction-form-save
+    Sleep   15
+    ##Sleep   5
+    ##Click Button    id=add-auction-form-save
 
 Завантажити ілюстрацію
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}
@@ -239,43 +252,48 @@ Login
     ##Click Element   xpath=//a[contains(@id, "update_auction_btn")]
     ##Sleep   4
     Choose File       id=doc_upload_field_illustration        ${filepath}
-    sleep  5
-    Click Button    id=add-auction-form-save
+    Sleep   15
+    ##sleep  5
+    ##Click Button    id=add-auction-form-save
 
 Додати Virtual Data Room
     [Arguments]  ${username}  ${tender_uaid}  ${vdr_url}  ${title}=Sample Virtual Data Room
     ##polonex.пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     ##Click Element     xpath=//a[contains(@id, "update_auction_btn")]
-    Wait Until Element Is Visible       xpath=//div[contains(@id,'doc_upload_wrap_virtualDataRoom')]/div[contains(@class,'ho_upload_link_btn')]      30
-    Click Element   xpath=//div[contains(@id,'doc_upload_wrap_virtualDataRoom')]/div[contains(@class,'ho_upload_link_btn')]
-    ##Sleep   4
-    ##Input Text      xpath=//input[contains(@id,"input_link")]   ${vdr_url}
-    ##Click Button    xpath=//a[contains(@class,"linkadd_submit")]
+    log to console      ${vdr_url}
+    Wait Until Element Is Visible       xpath=//div[contains(@id,'doc_upload_wrap_virtualDataRoom')]/div/div[contains(@class,'ho_upload_link_btn')]      30
+    Click Element   xpath=//div[contains(@id,'doc_upload_wrap_virtualDataRoom')]/div/div[contains(@class,'ho_upload_link_btn')]
+    Sleep   4
+    Input Text      jquery=#doc_upload_wrap_virtualDataRoom input#input_link   ${vdr_url}
+    Click Element    jquery=#doc_upload_wrap_virtualDataRoom a.linkadd_submit
+    Sleep   4
     ##Click Button    id=add-auction-form-save
 
 Додати публічний паспорт активу
     [Arguments]  ${username}  ${tender_uaid}  ${certificate_url}
     ##polonex.пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     ##Click Element     xpath=//a[contains(@id, "update_auction_btn")]
-    Wait Until Element Is Visible       xpath=//div[contains(@id,'doc_upload_wrap_x_dgfPublicAssetCertificate')]/div[contains(@class,'ho_upload_link_btn')]      30
-    Click Element   xpath=//div[contains(@id,'doc_upload_wrap_x_dgfPublicAssetCertificate')]/div[contains(@class,'ho_upload_link_btn')]
+    Wait Until Element Is Visible       xpath=//div[contains(@id,'doc_upload_wrap_x_dgfPublicAssetCertificate')]/div/div[contains(@class,'ho_upload_link_btn')]      30
+    Click Element   xpath=//div[contains(@id,'doc_upload_wrap_x_dgfPublicAssetCertificate')]/div/div[contains(@class,'ho_upload_link_btn')]
     Sleep   4
-    Input Text      xpath=//input[contains(@id,"input_link")]   ${certificate_url}
-    Click Button    xpath=//a[contains(@class,"linkadd_submit")]
-    Click Button    id=add-auction-form-save
-
-Додати офлайн документ
-    [Arguments]  ${username}  ${tender_uaid}  ${accessDetails}
-    log to console      ${accessDetails}
+    Input Text      jquery=#doc_upload_wrap_x_dgfPublicAssetCertificate input#input_link   ${certificate_url}
+    Click Element    jquery=#doc_upload_wrap_x_dgfPublicAssetCertificate a.linkadd_submit
+    Sleep   4
+    ##Click Button    id=add-auction-form-save
 
 Завантажити документ в тендер з типом
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${documentType}
     ##polonex.пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     ##Wait Until Element Is Visible       xpath=//a[contains(@id, "update_auction_btn")]      30
     ##Click Element   xpath=//a[contains(@id, "update_auction_btn")]
-    ##Sleep   4
+    Sleep   4
     Choose File       id=doc_upload_field_${documentType}        ${filepath}
-    sleep  5
+    sleep  10
+    ##Click Button    id=add-auction-form-save
+
+Додати офлайн документ
+    [Arguments]  ${username}  ${tender_uaid}  ${accessDetails}
+    log to console      ${accessDetails}
     Click Button    id=add-auction-form-save
 
 Завантажити протокол аукціону
@@ -640,6 +658,7 @@ Login
 
 Отримати кількість предметів в тендері
     [Arguments]  ${username}  ${tender_uaid}
+    polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
     ${res}=   Get Text      id=item_count
     ##${res}=   Convert To Number      ${res}
     [return]  ${res}
@@ -666,8 +685,11 @@ Login
 
 Відповісти на запитання
     [Arguments]  ${username}  ${tender_uaid}  ${answer_data}  ${question_id}
-    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Click Element                         xpath=//a[contains(@id, 'add_answer_btn_0')]
+    ##polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    ##log to console      ${question_id}
+    ${index}=   Get Element Attribute   xpath=//div[contains(text(), '${question_id}')]@id
+    ${index}=   Get Substring   ${index}    2   3
+    Click Element                         xpath=//a[contains(@id, 'add_answer_btn_${index}')]
     Sleep     4
     Input Text                            id=addanswerform-answer        ${answer_data.data.answer}
     Sleep     2
