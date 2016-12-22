@@ -1,5 +1,4 @@
 *** Settings ***
-Library     Selenium2Screenshots
 Library     String
 Library     DateTime
 Library     Selenium2Library
@@ -368,10 +367,10 @@ Login
 
 Отримати інформацію із предмету без індекса
     [Arguments]  ${field_name}
-    ${prop_fild_name}=         Replace String    ${field_name}    .   _    count=1
-    ${return_value}=   Get Text     id=${prop_fild_name}
+    ${prop_field_name}=         Replace String    ${field_name}    .   _    count=1
+    ${return_value}=   Get Text     id=${prop_field_name}
     ${return_value}=  Run Keyword If
-    ...  'quantity' in '${prop_fild_name}'    Convert To Integer    ${return_value}
+    ...  'quantity' in '${prop_field_name}'    Convert To Integer    ${return_value}
     ...  ELSE       Convert To String   ${return_value}
     [Return]  ${return_value}
 
@@ -385,8 +384,8 @@ Login
 
 Отримати інформацію про класифікатор із предмету
     [Arguments]  ${field_name}
-    ${prop_fild_name}=         Replace String    ${field_name}    .   _    count=2
-    ${return_value}=   Get Text     id=${prop_fild_name}
+    ${prop_field_name}=         Replace String    ${field_name}    .   _    count=2
+    ${return_value}=   Get Text     id=${prop_field_name}
     [Return]  ${return_value}
 
 Отримати інформацію із документа по індексу
@@ -396,8 +395,8 @@ Login
 
 Отримати інформацію про юніт із предмету
     [Arguments]  ${field_name}
-    ${prop_fild_name}=         Replace String    ${field_name}    .   _    count=2
-    ${return_value}=   Get Text     id=${prop_fild_name}
+    ${prop_field_name}=         Replace String    ${field_name}    .   _    count=2
+    ${return_value}=   Get Text     id=${prop_field_name}
     [Return]  ${return_value}
 
 Отримати інформацію із предмету
