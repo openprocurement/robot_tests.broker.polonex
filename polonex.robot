@@ -222,12 +222,13 @@ Login
 Додати предмет закупівлі
     [Arguments]  ${username}  ${tender_uaid}  ${item}
     Click Element   xpath=//a[contains(@id, "update_auction_btn")]
-    polonex.Додати предмет      ${item}    11
+    Capture Page Screenshot
 
 Видалити предмет закупівлі
     [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${lot_id}=${Empty}
     Click Element   xpath=//a[contains(@id, "update_auction_btn")]
-    Click Element   xpath=//a[contains(@class, "close_lot_item")]
+    ##Click Element   xpath=//a[contains(@class, "close_lot_item")]
+    Capture Page Screenshot
 
 Завантажити документ
     [Arguments]  ${username}  ${filepath}  ${tender_uaid}
@@ -244,6 +245,7 @@ Login
     Sleep   4
     Input Text      jquery=#doc_upload_wrap_virtualDataRoom input#input_link   ${vdr_url}
     Click Element    jquery=#doc_upload_wrap_virtualDataRoom a.linkadd_submit
+    Wait Until Element Is Visible       jquery=#doc_upload_wrap_virtualDataRoom div.ho_upload_item      30
 
 Додати публічний паспорт активу
     [Arguments]  ${username}  ${tender_uaid}  ${certificate_url}
@@ -286,22 +288,22 @@ Login
     Sleep  5
     Click Element     xpath=(//a[contains(@class, 'auction_detail_btn')])
     Wait Until Element Is Visible       id=info   30
-    Capture Page Screenshot
 
 Задати питання
-  [Arguments]  @{ARGUMENTS}
-  [Documentation]
-  ...      ${ARGUMENTS[0]} ==  username
-  ...      ${ARGUMENTS[1]} ==  tenderUaId
-  ...      ${ARGUMENTS[2]} ==  questionId
-  ${title}=        Get From Dictionary  ${ARGUMENTS[2].data}  title
-  ${description}=  Get From Dictionary  ${ARGUMENTS[2].data}  description
-  Click Element         id=add_question_btn
-  Sleep  2
-  Input Text          id=addquestionform-title          ${title}
-  Input Text          id=addquestionform-description    ${description}
-  Sleep  2
-  Click Element       id=submit_add_question_form
+    [Arguments]  @{ARGUMENTS}
+    [Documentation]
+    ...      ${ARGUMENTS[0]} ==  username
+    ...      ${ARGUMENTS[1]} ==  tenderUaId
+    ...      ${ARGUMENTS[2]} ==  questionId
+    ${title}=        Get From Dictionary  ${ARGUMENTS[2].data}  title
+    ${description}=  Get From Dictionary  ${ARGUMENTS[2].data}  description
+    Click Element         id=add_question_btn
+    Sleep  2
+    Input Text          id=addquestionform-title          ${title}
+    Input Text          id=addquestionform-description    ${description}
+    Sleep  2
+    Click Element       id=submit_add_question_form
+    Wait Until Page Contains  ${title}  30
 
 Задати запитання на тендер
   [Arguments]  ${username}  ${tender_uaid}  ${question}
@@ -654,7 +656,8 @@ Login
     Sleep     4
     Input Text                            id=addanswerform-answer        ${answer_data.data.answer}
     Sleep     2
-    Click Element                         id=submit_add_answer_form
+    Click Button                        id=submit_add_answer_form
+    Wait Until Page Contains   ${answer_data.data.answer}   10
 
 Подати цінову пропозицію
     [Arguments]  @{ARGUMENTS}
@@ -703,15 +706,12 @@ Login
     [Return]    ${resp}
 
 Завантажити документ в ставку
-    [Arguments]  @{ARGUMENTS}
-    [Documentation]
-    ...    ${ARGUMENTS[1]} ==  file
-    ...    ${ARGUMENTS[2]} ==  tenderId
+    [Arguments]  ${username}  ${path}  ${tender_uaid}  ${doc_type}=documents
+    Sleep   30
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     Click Element           id=edit_user_bid
     Sleep   2
-    Capture Page Screenshot
-    Sleep   2
-    Choose File             xpath=//input[contains(@id, 'bid_doc_upload_fieldcommercialProposal')]   ${ARGUMENTS[1]}
+    Choose File             xpath=//input[contains(@id, 'bid_doc_upload_fieldcommercialProposal')]   ${path}
     sleep   4
     Click Element           id=submit_add_bid_form
 
@@ -736,7 +736,7 @@ Login
     [Arguments]  ${field}
     Wait Until Page Contains Element    ${locator.proposition.${field}}            30
     Capture Page Screenshot
-    ${proposition_amount}=              Get Value             id=userbidamount
+    ${proposition_amount}=              Get Text            id=userbidamount
     ${proposition_amount}=              Convert To Number                          ${proposition_amount}
     ${data}=     Create Dictionary
     ${bid}=      Create Dictionary
