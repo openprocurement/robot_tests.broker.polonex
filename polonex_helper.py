@@ -26,9 +26,6 @@ def convert_polonex_date_to_iso_format(date_time_from_ui):
     new_date_time_string = new_timedata.strftime("%Y-%m-%d %H:%M:%S.%f")
     return new_date_time_string
 
-def split_descr(str):
-    return str.split(' - ')[1];
-
 def polonex_download_file(url, file_name, output_dir):
     urllib.urlretrieve(url, ('{}/{}'.format(output_dir, file_name)))
 

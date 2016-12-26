@@ -222,13 +222,10 @@ Login
 Додати предмет закупівлі
     [Arguments]  ${username}  ${tender_uaid}  ${item}
     Click Element   xpath=//a[contains(@id, "update_auction_btn")]
-    Capture Page Screenshot
 
 Видалити предмет закупівлі
     [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${lot_id}=${Empty}
     Click Element   xpath=//a[contains(@id, "update_auction_btn")]
-    ##Click Element   xpath=//a[contains(@class, "close_lot_item")]
-    Capture Page Screenshot
 
 Завантажити документ
     [Arguments]  ${username}  ${filepath}  ${tender_uaid}
@@ -641,12 +638,10 @@ Login
 Дискваліфікувати постачальника
     [Arguments]  ${username}  ${tender_uaid}  ${award_num}  ${description}
     polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
-    Capture Page Screenshot
 
 Завантажити документ рішення кваліфікаційної комісії
     [Arguments]  ${username}  ${document}  ${tender_uaid}  ${award_num}
     polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
-    Capture Page Screenshot
 
 Відповісти на запитання
     [Arguments]  ${username}  ${tender_uaid}  ${answer_data}  ${question_id}
@@ -735,7 +730,6 @@ Login
 Отримати пропозицію
     [Arguments]  ${field}
     Wait Until Page Contains Element    ${locator.proposition.${field}}            30
-    Capture Page Screenshot
     ${proposition_amount}=              Get Text            id=userbidamount
     ${proposition_amount}=              Convert To Number                          ${proposition_amount}
     ${data}=     Create Dictionary
@@ -762,14 +756,12 @@ Login
     [Arguments]  @{ARGUMENTS}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
     ${result}=                  Get Element Attribute               id=show_public_btn@href
-    Capture Page Screenshot
     [Return]   ${result}
 
 Отримати посилання на аукціон для учасника
     [Arguments]  @{ARGUMENTS}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
     ${result}=                  Get Element Attribute               id=show_private_btn@href
-    Capture Page Screenshot
     [Return]   ${result}
 
 Підтвердити постачальника
@@ -821,5 +813,4 @@ Login
 Завантажити угоду до тендера
     [Arguments]  ${username}  ${tender_uaid}  ${contract_num}  ${filepath}
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Capture Page Screenshot
 
