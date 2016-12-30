@@ -97,6 +97,7 @@ Login
   ...      ${ARGUMENTS[0]} ==  username
   ...      ${ARGUMENTS[1]} ==  tender_data
 
+    log to console      ${ARGUMENTS[1]}
 
     ${procurementmethodtype}=                Get From Dictionary         ${ARGUMENTS[1].data}                   procurementMethodType
     ${title}=                                Get From Dictionary         ${ARGUMENTS[1].data}                   title
@@ -156,7 +157,6 @@ Login
     ${tenderAttempts}=                  Convert To String     ${tenderAttempts}
 
     ${auctionperiod_startdate}=        polonex_convertdate   ${auctionperiod_startdate}
-    ${dgfDecisionDate}=                polonex_convertdate   ${dgfDecisionDate}
 
     Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     Sleep   2
@@ -354,8 +354,9 @@ Login
 
 Отримати інформацію із документа по індексу
     [Arguments]  ${username}  ${tender_uaid}  ${document_index}  ${field}
-    log to console      ${document_index}
-    log to console      ${field}
+    ${index}=   Convert To Integer    ${document_index}
+    ${return_value}=   Get Element Attribute   xpath=//div[contains(@data-findex, ${index})]@data-${field}
+    [Return]    ${return_value}
 
 Отримати інформацію про юніт із предмету
     [Arguments]  ${field_name}
@@ -395,7 +396,6 @@ Login
 
 Отримати інформацію про tenderAttempts
     ${return_value}=   Отримати текст із поля і показати на сторінці   tenderAttempts
-    ${return_value}=   convert_polonex_string     ${return_value}
     [Return]  ${return_value}
 
 Отримати інформацію про eligibilityCriteria
@@ -769,8 +769,8 @@ Login
   ...      [Arguments] Username, tender uaid and number of the award to confirm
   ...      [Return] Nothing
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
-  sleep  5
-  Click Element     xpath=//a[@id="cwalificate_winer_btn"]
+  Wait Until Element Is Visible     id=cwalificate_winer_btn    15
+  Click Element     id=cwalificate_winer_btn
   Wait Until Element Is Visible       id=signed_contract_btn   30
 
 Підтвердити підписання контракту
@@ -779,7 +779,7 @@ Login
   ...      [Return] Nothing
   [Arguments]  ${username}  ${tender_uaid}  ${contract_num}
   polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Click Element     xpath=//a[@id="signed_contract_btn"]
+  Click Element     id=signed_contract_btn
   Input Text  xpath=//input[contains(@id,"addsignform-contractnumber")]  12345
   Click Button     id=submit_sign_contract
 
