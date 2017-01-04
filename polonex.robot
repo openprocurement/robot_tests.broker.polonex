@@ -636,8 +636,9 @@ Login
     [Arguments]  ${username}  ${tender_uaid}  ${award_num}  ${description}
     polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
     Click Element              xpath=//a[contains(@id, "discwalificate_cansel_btn")]
-    Input Text                 xpath=//textarea[contains(@id, "adddisqualifyform-description")]    ${description}
-    Click Element              xpath=//button[contains(text(),'Додати') and contains(@id,'submit_bid_disqualify_form')]
+    Sleep   4
+    Execute Javascript          $('textarea#adddisqualifyform-description').value = '${description}'
+    Execute Javascript          $('#submit_bid_disqualify_form').click()
     Wait Until Page Contains   Учасника дискваліфіковано   30
 
 Завантажити документ рішення кваліфікаційної комісії
