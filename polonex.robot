@@ -97,8 +97,6 @@ Login
   ...      ${ARGUMENTS[0]} ==  username
   ...      ${ARGUMENTS[1]} ==  tender_data
 
-    log to console      ${ARGUMENTS[1]}
-
     ${procurementmethodtype}=                Get From Dictionary         ${ARGUMENTS[1].data}                   procurementMethodType
     ${title}=                                Get From Dictionary         ${ARGUMENTS[1].data}                   title
     ${dgfID}=                                Get From Dictionary         ${ARGUMENTS[1].data}                   dgfID
@@ -258,7 +256,6 @@ Login
 
 Додати офлайн документ
     [Arguments]  ${username}  ${tender_uaid}  ${accessDetails}
-    log to console      ${accessDetails}
     Click Button    id=add-auction-form-save
 
 Завантажити протокол аукціону
@@ -638,6 +635,11 @@ Login
 Дискваліфікувати постачальника
     [Arguments]  ${username}  ${tender_uaid}  ${award_num}  ${description}
     polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+    Click Element              xpath=//a[contains(@id, "discwalificate_cansel_btn")]
+    Sleep   4
+    Execute Javascript          $('textarea#adddisqualifyform-description').value = '${description}'
+    Execute Javascript          $('#submit_bid_disqualify_form').click()
+    Wait Until Page Contains   Учасника дискваліфіковано   30
 
 Завантажити документ рішення кваліфікаційної комісії
     [Arguments]  ${username}  ${document}  ${tender_uaid}  ${award_num}
@@ -661,7 +663,6 @@ Login
     ...    ${ARGUMENTS[1]} ==  tenderId
     ...    ${ARGUMENTS[2]} ==  ${test_bid_data}
     ${status}=          Get From Dictionary         ${ARGUMENTS[2].data}    qualified
-    log to console      ${status}
     ${amount}=    Get From Dictionary     ${ARGUMENTS[2].data.value}    amount
     ${amount}=          Convert To String     ${amount}
     Run Keyword If  ${status}
