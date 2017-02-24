@@ -10,11 +10,6 @@ def polonex_convertdate(isodate):
     date = dateutil.parser.parse(isodate)
     return date.strftime("%Y-%m-%d %H:%M")
 
-def convert_date_polonex(isodate):
-    date = datetime.strptime(isodate, "%d-%m-%Y\n%H:%M")
-    res = date.strftime("%Y-%m-%d %H:%M:%S.%f")
-    return res
-
 def add_timezone_to_date(date_str):
     new_date = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
     TZ = timezone(os.environ['TZ'] if 'TZ' in os.environ else 'Europe/Kiev')
