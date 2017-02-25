@@ -626,10 +626,10 @@ Login
 Дискваліфікувати постачальника
     [Arguments]  ${username}  ${tender_uaid}  ${award_num}  ${description}
     polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
-    Click Element              xpath=//a[contains(@id, "discwalificate_cansel_btn")]
+    Click Element              xpath=//a[contains(@id, 'discwalificate_winer_btn_${award_num}')]
     Sleep   4
-    Execute Javascript          $('textarea#adddisqualifyform-description').value = '${description}'
-    Execute Javascript          $('#submit_bid_disqualify_form').click()
+    Execute Javascript          $('textarea#adddisqualifyform-description_${award_num}').value = '${description}'
+    Execute Javascript          $('#submit_bid_disqualify_form_${award_num}').click()
     Wait Until Page Contains   Учасника дискваліфіковано   30
 
 Завантажити документ рішення кваліфікаційної комісії
@@ -658,7 +658,7 @@ Login
     ${amount}=          Convert To String     ${amount}
     Run Keyword If  ${status}
     ...  polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[1]}
-    ...  ELSE   Go To  http://test.polonex.in.ua/
+    ...  ELSE   Go To   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     Click Element       id=add_bid_btn
     Sleep   2
     Input Text          id=addbidform-sum       ${amount}
@@ -803,3 +803,17 @@ Login
     [Arguments]  ${username}  ${tender_uaid}  ${contract_num}  ${filepath}
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
 
+Завантажити протокол аукціону в авард
+    [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${award_index}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element           id=upload_owner_protocol
+    sleep  4
+    Choose File             xpath=//input[contains(@id, "award_doc_upload_field_auctionProtocol")]   ${filepath}
+    sleep  5
+    Click Element           id=submit_owner_add_protocol
+    sleep  5
+    Click Element           id=confirm_owner_protocol
+
+Підтвердити наявність протоколу аукціону
+    [Arguments]  ${username}  ${tender_uaid}  ${award_index}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
