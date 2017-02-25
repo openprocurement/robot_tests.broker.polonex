@@ -379,6 +379,16 @@ Login
   ${return_value}=   Get Text  ${locator.${fieldname}}
   [Return]  ${return_value}
 
+Отримати інформацію про awards[0].status
+    ${return_value}=   Get Text  id=award_status_0
+    ${return_value}=   convert_polonex_string     ${return_value}
+    [Return]  ${return_value}
+
+Отримати інформацію про awards[1].status
+    ${return_value}=   Get Text  id=award_status_1
+    ${return_value}=   convert_polonex_string     ${return_value}
+    [Return]  ${return_value}
+
 Отримати інформацію про title
   ${return_value}=   Отримати текст із поля і показати на сторінці   title
   [Return]  ${return_value}
