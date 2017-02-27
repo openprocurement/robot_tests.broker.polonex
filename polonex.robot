@@ -638,8 +638,8 @@ Login
     polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
     Click Element              xpath=//a[contains(@id, 'discwalificate_winer_btn_${award_num}')]
     Sleep   4
-    Execute Javascript          $('textarea#adddisqualifyform-description_${award_num}').value = '${description}'
-    Execute Javascript          $('#submit_bid_disqualify_form_${award_num}').click()
+    Execute Javascript          $('textarea#adddisqualifyform-description_${award_num}').value = '${description}';
+    Execute Javascript          $('#submit_bid_disqualify_form_${award_num}').click();
     Wait Until Page Contains   Учасника дискваліфіковано   30
 
 Завантажити документ рішення кваліфікаційної комісії
@@ -672,6 +672,8 @@ Login
     Click Element       id=add_bid_btn
     Sleep   2
     Input Text          id=addbidform-sum       ${amount}
+    ${present}=  Run Keyword And Return Status    Element Should Be Visible   id=addbidform-no_credit_relation
+    Run Keyword If    ${present}    Click Element       id=addbidform-no_credit_relation
     Sleep   4
     Click Element       id=submit_add_bid_form
     Wait Until Element Is Visible       id=userbidamount   30
