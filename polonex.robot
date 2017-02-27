@@ -823,9 +823,11 @@ Login
     Choose File             xpath=//input[contains(@id, "award_doc_upload_field_auctionProtocol")]   ${filepath}
     sleep  5
     Click Element           id=submit_owner_add_protocol
-    sleep  5
-    Click Element           id=confirm_owner_protocol
+    Wait Until Page Contains  Підписаний протокол успішно опубліковано  10
+
 
 Підтвердити наявність протоколу аукціону
     [Arguments]  ${username}  ${tender_uaid}  ${award_index}
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element           id=confirm_owner_protocol
+    Wait Until Page Contains  Переможець кваліфікований успішно  10
