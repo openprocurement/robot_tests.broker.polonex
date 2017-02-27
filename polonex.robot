@@ -823,7 +823,7 @@ Login
     Choose File             xpath=//input[contains(@id, "award_doc_upload_field_auctionProtocol")]   ${filepath}
     sleep  5
     Click Element           id=submit_owner_add_protocol
-    Wait Until Page Contains  Підписаний протокол успішно опубліковано  10
+    Wait Until Page Contains  Документи успішно збережено  10
 
 
 Підтвердити наявність протоколу аукціону
