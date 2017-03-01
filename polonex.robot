@@ -261,6 +261,10 @@ Login
 Завантажити протокол аукціону
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${award_index}
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    :FOR    ${i}    IN RANGE    1   5
+    \    ${test}=   Wait Until Page Contains    Кваліфікація переможця  30
+    \    Exit For Loop If    ${test}
+    \    reload page
     Click Element           id=add_user_bid_docs
     Sleep   2
     Choose File             xpath=//input[contains(@id, 'bid_doc_upload_fieldauctionProtocol')]   ${filepath}
@@ -375,6 +379,16 @@ Login
   ${return_value}=   Get Text  ${locator.${fieldname}}
   [Return]  ${return_value}
 
+Отримати інформацію про awards[0].status
+    ${return_value}=   Get Text  id=award_status_0
+    ${return_value}=   convert_polonex_string     ${return_value}
+    [Return]  ${return_value}
+
+Отримати інформацію про awards[1].status
+    ${return_value}=   Get Text  id=award_status_1
+    ${return_value}=   convert_polonex_string     ${return_value}
+    [Return]  ${return_value}
+
 Отримати інформацію про title
   ${return_value}=   Отримати текст із поля і показати на сторінці   title
   [Return]  ${return_value}
@@ -433,21 +447,6 @@ Login
   Click Button    id=add-auction-form-save
   Wait Until Page Contains  ${field_value}  30
 
-Отримати інформацію про items[0].quantity
-  ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].quantity
-  ${return_value}=   Convert To Number   ${return_value}
-  [Return]  ${return_value}
-
-Отримати інформацію про items[0].unit.code
-  ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].unit.code
-  ${return_value}=   Convert To String     ${return_value}
-  [Return]  ${return_value}
-
-Отримати інформацію про items[0].unit.name
-  ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].unit.name
-  ${return_value}=   Convert To String     ${return_value}
-  [Return]   ${return_value}
-
 Отримати інформацію про value.currency
   ${return_value}=   Отримати текст із поля і показати на сторінці  value.currency
   ${return_value}=   Convert To String     ${return_value}
@@ -466,7 +465,6 @@ Login
 Отримати інформацію про procuringEntity.name
   ${return_value}=   Отримати текст із поля і показати на сторінці   procuringEntity.name
   [Return]  ${return_value}
-
 
 Отримати інформацію про tenderPeriod.startDate
   ${return_value}=    Отримати текст із поля і показати на сторінці  tenderPeriod.startDate
@@ -504,20 +502,23 @@ Login
   ${return_value}=   add_timezone_to_date   ${return_value.split('.')[0]}
   [Return]  ${return_value}
 
+Отримати інформацію про items[0].quantity
+  ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].quantity
+  ${return_value}=   Convert To Number   ${return_value}
+  [Return]  ${return_value}
+
+Отримати інформацію про items[0].unit.code
+  ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].unit.code
+  ${return_value}=   Convert To String     ${return_value}
+  [Return]  ${return_value}
+
+Отримати інформацію про items[0].unit.name
+  ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].unit.name
+  ${return_value}=   Convert To String     ${return_value}
+  [Return]   ${return_value}
+
 Отримати інформацію про items[0].description
   ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].description
-  [Return]  ${return_value}
-
-Отримати інформацію про items[1].description
-  ${return_value}=   Отримати текст із поля і показати на сторінці   items[1].description
-  [Return]  ${return_value}
-
-Отримати інформацію про items[2].description
-  ${return_value}=   Отримати текст із поля і показати на сторінці   items[2].description
-  [Return]  ${return_value}
-
-Отримати інформацію про items[3].description
-  ${return_value}=   Отримати текст із поля і показати на сторінці   items[3].description
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].classification.id
@@ -635,10 +636,10 @@ Login
 Дискваліфікувати постачальника
     [Arguments]  ${username}  ${tender_uaid}  ${award_num}  ${description}
     polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
-    Click Element              xpath=//a[contains(@id, "discwalificate_cansel_btn")]
+    Click Element              xpath=//a[contains(@id, 'discwalificate_winer_btn_${award_num}')]
     Sleep   4
-    Execute Javascript          $('textarea#adddisqualifyform-description').value = '${description}'
-    Execute Javascript          $('#submit_bid_disqualify_form').click()
+    Execute Javascript          $('textarea#adddisqualifyform-description_${award_num}').value = '${description}';
+    Execute Javascript          $('#submit_bid_disqualify_form_${award_num}').click();
     Wait Until Page Contains   Учасника дискваліфіковано   30
 
 Завантажити документ рішення кваліфікаційної комісії
@@ -667,10 +668,12 @@ Login
     ${amount}=          Convert To String     ${amount}
     Run Keyword If  ${status}
     ...  polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[1]}
-    ...  ELSE   Go To  http://test.polonex.in.ua
+    ...  ELSE   Go To   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     Click Element       id=add_bid_btn
     Sleep   2
     Input Text          id=addbidform-sum       ${amount}
+    ${present}=  Run Keyword And Return Status    Element Should Be Visible   id=addbidform-no_credit_relation
+    Run Keyword If    ${present}    Click Element       id=addbidform-no_credit_relation
     Sleep   4
     Click Element       id=submit_add_bid_form
     Wait Until Element Is Visible       id=userbidamount   30
@@ -678,11 +681,8 @@ Login
     [Return]    ${resp}
 
 Скасувати цінову пропозицію
-    [Arguments]  @{ARGUMENTS}
-    [Documentation]
-    ...    ${ARGUMENTS[0]} ==  username
-    ...    ${ARGUMENTS[1]} ==  none
-    ...    ${ARGUMENTS[2]} ==  tenderId
+    [Arguments]  ${username}  ${tender_uaid}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     Click Element       id=cansel-bid
 
 Змінити цінову пропозицію
@@ -703,7 +703,7 @@ Login
 
 Завантажити документ в ставку
     [Arguments]  ${username}  ${path}  ${tender_uaid}  ${doc_type}=documents
-    Sleep   30
+    Sleep   60
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     Click Element           id=edit_user_bid
     Sleep   2
@@ -766,13 +766,13 @@ Login
     [Return]   ${result}
 
 Підтвердити постачальника
-  [Documentation]
-  ...      [Arguments] Username, tender uaid and number of the award to confirm
-  ...      [Return] Nothing
-  [Arguments]  ${username}  ${tender_uaid}  ${award_num}
-  Wait Until Element Is Visible     id=cwalificate_winer_btn    15
-  Click Element     id=cwalificate_winer_btn
-  Wait Until Element Is Visible       id=signed_contract_btn   30
+    [Arguments]  ${username}  ${tender_uaid}  ${award_num}
+    :FOR    ${i}    IN RANGE    1   5
+    \    ${test}=   Wait Until Element Is Visible     id=cwalificate_winer_btn    30
+    \    Exit For Loop If    ${test}
+    \    reload page
+    Click Element     id=cwalificate_winer_btn
+    Wait Until Element Is Visible       id=signed_contract_btn   30
 
 Підтвердити підписання контракту
   [Documentation]
@@ -815,3 +815,19 @@ Login
     [Arguments]  ${username}  ${tender_uaid}  ${contract_num}  ${filepath}
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
 
+Завантажити протокол аукціону в авард
+    [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${award_index}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element           id=upload_owner_protocol
+    sleep  4
+    Choose File             xpath=//input[contains(@id, "award_doc_upload_field_auctionProtocol")]   ${filepath}
+    sleep  5
+    Click Element           id=submit_owner_add_protocol
+    Wait Until Page Contains  Документи успішно збережено  10
+
+
+Підтвердити наявність протоколу аукціону
+    [Arguments]  ${username}  ${tender_uaid}  ${award_index}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element           id=confirm_owner_protocol
+    Wait Until Page Contains  Переможець кваліфікований успішно  10
