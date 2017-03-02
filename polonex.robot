@@ -156,6 +156,16 @@ Login
 
     ${auctionperiod_startdate}=        polonex_convertdate   ${auctionperiod_startdate}
 
+    Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}/../../../prozorrosale/user/profile
+    Sleep   2
+    Input text      id=user-firm_phone                      ${procuringEntity_contactPoint_telephone}
+    Input text      id=user-edrpoy                          ${procuringEntity_identifier_id}
+    Input text      id=user-firm_name                       ${procuringEntity_name}
+    Click Element       id=user-reglament_apply
+    Click Element       id=profile_save_btn
+    Sleep   4
+
+
     Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     Sleep   2
     Click Element       xpath=//a[contains(@id, 'addauctionbtn')]
@@ -166,7 +176,6 @@ Login
     Select From List    xpath=//select[@id="addauctionform-tenderattempts"]                       ${tenderAttempts}
     Select From List    xpath=//select[@id="addauctionform-minimalstep_valueaddedtaxincluded"]    ${value_valueaddedtaxincluded}
     Select From List    xpath=//select[@id="addauctionform-value_valueaddedtaxincluded"]          ${value_valueaddedtaxincluded}
-    Select From List    xpath=//select[@id="addauctionform-procuringentity_identifier_scheme"]    ${procuringEntity_identifier_scheme}
     Input text      id=addauctionform-title                                                       ${title}
     Input text      id=addauctionform-dgfid                                                       ${dgfID}
 
@@ -179,17 +188,6 @@ Login
     Input text      id=addauctionform-value_amount                                                ${value_amount}
 
     Input text      id=addauctionform-guarantee_amount                                            ${guarantee_amount}
-
-
-    Input text      id=addauctionform-procuringentity_address_countryname                         ${procuringEntity_address_countryName}
-    Input text      id=addauctionform-procuringentity_address_locality                            ${procuringEntity_address_locality}
-    Input text      id=addauctionform-procuringentity_address_postalcode                          ${procuringEntity_address_postalCode}
-    Input text      id=addauctionform-procuringentity_address_region                              ${procuringEntity_address_region}
-    Input text      id=addauctionform-procuringentity_address_streetaddress                       ${procuringEntity_address_streetAddress}
-    Input text      id=addauctionform-procuringentity_contactpoint_name                           ${procuringEntity_contactPoint_name}
-    Input text      id=addauctionform-procuringentity_contactpoint_telephone                      ${procuringEntity_contactPoint_telephone}
-    Input text      id=addauctionform-procuringentity_identifier_id                               ${procuringEntity_identifier_id}
-    Input text      id=addauctionform-procuringentity_name                                        ${procuringEntity_name}
 
     polonex.Додати предмети      ${items}
 
