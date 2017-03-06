@@ -781,7 +781,7 @@ Login
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     Click Element     id=signed_contract_btn
     Input Text  xpath=//input[contains(@id,"addsignform-contractnumber")]  12345
-    ${now}=  Get Current Date     increment=-00:05:00     result_format=%Y-%m-%d %H:%M
+    ${now}=  Get Current Date   UTC	  + 2 hours      increment=-00:05:00     result_format=%Y-%m-%d %H:%M
     Input Text  xpath=//input[contains(@id,"addsignform-datesigned")]   ${now}
     Click Button     id=submit_sign_contract
     Wait Until Page Contains  Договір підписано успішно  10
