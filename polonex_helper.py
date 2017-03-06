@@ -5,7 +5,6 @@ from pytz import timezone
 import os
 import urllib
 
-
 def polonex_convertdate(isodate):
     date = dateutil.parser.parse(isodate)
     return date.strftime("%Y-%m-%d %H:%M")

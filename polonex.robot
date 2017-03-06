@@ -628,8 +628,9 @@ Login
 
 Скасування рішення кваліфікаційної комісії
     [Arguments]  ${username}  ${tender_uaid}  ${award_num}
-    Click Element                         xpath=//a[contains(@id, "cansel_winer_btn")]
-    Wait Until Page Contains   Рішення кваліфікаційної комісії скасовано   30
+    polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+    Click Element                         xpath=//a[contains(@id, "refuse_btn")]
+    Wait Until Page Contains   Ви успішно відмовились від участі в кваліфікації переможців   10
 
 Дискваліфікувати постачальника
     [Arguments]  ${username}  ${tender_uaid}  ${award_num}  ${description}
@@ -773,14 +774,17 @@ Login
     Wait Until Element Is Visible       id=signed_contract_btn   30
 
 Підтвердити підписання контракту
-  [Documentation]
-  ...      [Arguments] Username, tender uaid, contract number
-  ...      [Return] Nothing
-  [Arguments]  ${username}  ${tender_uaid}  ${contract_num}
-  polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Click Element     id=signed_contract_btn
-  Input Text  xpath=//input[contains(@id,"addsignform-contractnumber")]  12345
-  Click Button     id=submit_sign_contract
+    [Documentation]
+    ...      [Arguments] Username, tender uaid, contract number
+    ...      [Return] Nothing
+    [Arguments]  ${username}  ${tender_uaid}  ${contract_num}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element     id=signed_contract_btn
+    Input Text  xpath=//input[contains(@id,"addsignform-contractnumber")]  12345
+    ${now}=  Get Current Date     increment=-00:05:00     result_format=%Y-%m-%d %H:%M
+    Input Text  xpath=//input[contains(@id,"addsignform-datesigned")]   ${now}
+    Click Button     id=submit_sign_contract
+    Wait Until Page Contains  Договір підписано успішно  10
 
 
 Скасувати закупівлю
