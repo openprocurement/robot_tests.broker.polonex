@@ -161,7 +161,6 @@ Login
     Input text      id=user-firm_phone                      ${procuringEntity_contactPoint_telephone}
     Input text      id=user-edrpoy                          ${procuringEntity_identifier_id}
     Input text      id=user-firm_name                       ${procuringEntity_name}
-    Click Element       id=user-reglament_apply
     Click Element       id=profile_save_btn
     Sleep   4
 
@@ -766,10 +765,11 @@ Login
 
 Підтвердити постачальника
     [Arguments]  ${username}  ${tender_uaid}  ${award_num}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     :FOR    ${i}    IN RANGE    1   5
     \    ${test}=   Wait Until Element Is Visible     id=cwalificate_winer_btn    30
     \    Exit For Loop If    ${test}
-    \    reload page
+    \    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     Click Element     id=cwalificate_winer_btn
     Wait Until Element Is Visible       id=signed_contract_btn   30
 
