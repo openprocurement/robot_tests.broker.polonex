@@ -77,7 +77,7 @@ ${locator.cancelldoc.description}                    xpath=//div[contains(@class
 
 Login
   [Arguments]  @{ARGUMENTS}
-  Click Element        xpath=//li[contains(@id, 'loginbtn')]/a
+  Click Element        xpath=//li[contains(@id, 'lbtn-mobile')]/a
   Sleep   2
   Clear Element Text   id=loginform-username
   Input text      ${login_email}      ${USERS.users['${ARGUMENTS[0]}'].login}
@@ -161,6 +161,7 @@ Login
     Input text      id=user-firm_phone                      ${procuringEntity_contactPoint_telephone}
     Input text      id=user-edrpoy                          ${procuringEntity_identifier_id}
     Input text      id=user-firm_name                       ${procuringEntity_name}
+    Click Element       id=user-reglament_apply
     Click Element       id=profile_save_btn
     Sleep   4
 
@@ -656,27 +657,15 @@ Login
     Wait Until Page Contains   ${answer_data.data.answer}   10
 
 Подати цінову пропозицію
-    [Arguments]  @{ARGUMENTS}
-    [Documentation]
-    ...    ${ARGUMENTS[0]} ==  username
-    ...    ${ARGUMENTS[1]} ==  tenderId
-    ...    ${ARGUMENTS[2]} ==  ${test_bid_data}
-    ${status}=          Get From Dictionary         ${ARGUMENTS[2].data}    qualified
-    ${amount}=    Get From Dictionary     ${ARGUMENTS[2].data.value}    amount
-    ${amount}=          Convert To String     ${amount}
-    Run Keyword If  ${status}
-    ...  polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[1]}
-    ...  ELSE   Go To   ${USERS.users['${ARGUMENTS[0]}'].homepage}
+    [Arguments]  ${username}  ${tender_uaid}  ${bid}
+    polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
     Click Element       id=add_bid_btn
-    Sleep   2
-    Input Text          id=addbidform-sum       ${amount}
-    ${present}=  Run Keyword And Return Status    Element Should Be Visible   id=addbidform-no_credit_relation
-    Run Keyword If    ${present}    Click Element       id=addbidform-no_credit_relation
+    Sleep   4
+    Click Element       id=addbidform-no_credit_relation
     Sleep   4
     Click Element       id=submit_add_bid_form
-    Wait Until Element Is Visible       id=userbidamount   30
-    ${resp}=    Get Text      id=userbidamount
-    [Return]    ${resp}
+    Wait Until Page Contains  Ваша пропозиція  10
+    [Return]    ${bid}
 
 Скасувати цінову пропозицію
     [Arguments]  ${username}  ${tender_uaid}
@@ -765,11 +754,10 @@ Login
 
 Підтвердити постачальника
     [Arguments]  ${username}  ${tender_uaid}  ${award_num}
-    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     :FOR    ${i}    IN RANGE    1   5
     \    ${test}=   Wait Until Element Is Visible     id=cwalificate_winer_btn    30
     \    Exit For Loop If    ${test}
-    \    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    \    reload page
     Click Element     id=cwalificate_winer_btn
     Wait Until Element Is Visible       id=signed_contract_btn   30
 
