@@ -39,6 +39,7 @@ def convert_polonex_string(string):
             u'Чорновик':                                            'draft',
             u'Майна банків':                                        'dgfOtherAssets',
             u'Прав вимоги за кредитами':                            'dgfFinancialAssets',
+            u'Голландський аукціон':                                'dgfInsider',
             u'Вперше':                                              1,
             u'Вдруге':                                              2,
             u'Втретє':                                              3,
