@@ -68,12 +68,14 @@ ${locator.cancelldoc.description}                    xpath=//div[contains(@class
 
 *** Keywords ***
 Підготувати клієнт для користувача
-  [Arguments]     @{ARGUMENTS}
+  [Arguments]     ${username}
   [Documentation]  Відкрити брaвзер, створити обєкт api wrapper, тощо
-  Open Browser  ${USERS.users['${ARGUMENTS[0]}'].homepage}  ${USERS.users['${ARGUMENTS[0]}'].browser}  alias=${ARGUMENTS[0]}
-  Set Window Size       @{USERS.users['${ARGUMENTS[0]}'].size}
-  Set Window Position   @{USERS.users['${ARGUMENTS[0]}'].position}
-  Run Keyword If   '${ARGUMENTS[0]}' != 'polonex_viewer'   Login   ${ARGUMENTS[0]}
+  ${alias}=   Catenate   SEPARATOR=   role_  ${username}
+  Set Global Variable   ${BROWSER_ALIAS}   ${alias}
+  Open Browser  ${USERS.users['${username}'].homepage}  ${USERS.users['${username}'].browser}  alias=${BROWSER_ALIAS}
+  Set Window Size       @{USERS.users['${username}'].size}
+  Set Window Position   @{USERS.users['${username}'].position}
+  Run Keyword If   '${username}' != 'polonex_viewer'   Login   ${username}
 
 Login
   [Arguments]  @{ARGUMENTS}
@@ -273,7 +275,7 @@ Login
   [Documentation]
   ...      ${ARGUMENTS[0]} ==  username
   ...      ${ARGUMENTS[1]} ==  ${tender_uaid}
-    Switch browser   ${ARGUMENTS[0]}
+    Switch Browser   ${BROWSER_ALIAS}
     Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     Sleep  2
     Click Element       name=more-search-btn
@@ -313,7 +315,7 @@ Login
     [Arguments]    @{ARGUMENTS}
     [Documentation]    ${ARGUMENTS[0]} = username
     ...      ${ARGUMENTS[1]} = ${TENDER_UAID}
-    Switch browser   ${ARGUMENTS[0]}
+    Switch Browser   ${BROWSER_ALIAS}
     Go to   ${USERS.users['${ARGUMENTS[0]}'].syncpage}
     Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
@@ -742,12 +744,14 @@ Login
 
 Отримати посилання на аукціон для глядача
     [Arguments]  @{ARGUMENTS}
+    Switch Browser   ${BROWSER_ALIAS}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
     ${result}=                  Get Element Attribute               id=show_public_btn@href
     [Return]   ${result}
 
 Отримати посилання на аукціон для учасника
     [Arguments]  @{ARGUMENTS}
+    Switch Browser   ${BROWSER_ALIAS}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
     ${result}=                  Get Element Attribute               id=show_private_btn@href
     [Return]   ${result}
