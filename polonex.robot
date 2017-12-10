@@ -286,10 +286,9 @@ Login
   ...      ${ARGUMENTS[0]} ==  username
   ...      ${ARGUMENTS[1]} ==  ${tender_uaid}
     Switch Browser   ${BROWSER_ALIAS}
-    Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
-    Sleep   2
-    Click Element   ${prozorropage}
-    Sleep  2
+    Go to   http://test.polonex.in.ua/prozorrosale2/auctions/sync-all
+    Go to   http://test.polonex.in.ua/prozorrosale2/auctions/public
+    Wait Until Element Is Visible       name=more-search-btn   30
     Click Element       name=more-search-btn
     Sleep  2
     Input Text          id=proauctionssearch-auctionid   ${ARGUMENTS[1]}
@@ -328,8 +327,6 @@ Login
     [Documentation]    ${ARGUMENTS[0]} = username
     ...      ${ARGUMENTS[1]} = ${TENDER_UAID}
     Switch Browser   ${BROWSER_ALIAS}
-    Go to   ${USERS.users['${ARGUMENTS[0]}'].syncpage}
-    Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
 
 Отримати інформацію із тендера
@@ -347,9 +344,10 @@ Login
 Отримати інформацію із предмету без індекса
     [Arguments]  ${field_name}
     ${prop_field_name}=         Replace String    ${field_name}    .   _    count=1
+    ${prop_field_name}=         Replace String    ${prop_field_name}    .   _    count=1
     ${return_value}=   Get Text     id=${prop_field_name}
     ${return_value}=  Run Keyword If
-    ...  'quantity' in '${prop_field_name}'    Convert To Integer    ${return_value}
+    ...  'quantity' in '${prop_field_name}'    Convert To Number    ${return_value}
     ...  ELSE       Convert To String   ${return_value}
     [Return]  ${return_value}
 
@@ -358,6 +356,8 @@ Login
     ${index}=   Get Substring   ${field_name}    10      11
     ${index}=   Convert To Integer    ${index}
     ${list}=    Split String    ${field_name}    .
+    Focus   xpath=//div[contains(@class, 'questions_item')]
+    Wait Until Element Is Visible       id=q[${index}]${list[1]}      30
     ${return_value}=   Get Text     id=q[${index}]${list[1]}
     [Return]  ${return_value}
 
@@ -454,7 +454,7 @@ Login
   polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ${prop_field_name}=         Replace String    ${field_name}    .   _    count=1
   Click Element     id=update_auction_btn
-  Sleep   2
+  Wait Until Element Is Visible       name=AddAuctionForm[${prop_field_name}]   30
   ${field_value}=  Convert To String  ${field_value}
   Input text  name=AddAuctionForm[${prop_field_name}]  ${field_value}
   Click Button    id=add-auction-form-save
@@ -682,17 +682,32 @@ Login
     Click Button                        id=submit_add_answer_form
     Wait Until Page Contains   ${answer_data.data.answer}   10
 
+
 Подати цінову пропозицію
-    [Arguments]  ${username}  ${tender_uaid}  ${bid}
-    polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+    [Arguments]  @{ARGUMENTS}
+    [Documentation]
+    ...    ${ARGUMENTS[0]} ==  username
+    ...    ${ARGUMENTS[1]} ==  tenderId
+    ...    ${ARGUMENTS[2]} ==  ${test_bid_data}
+    ${status}=          Get From Dictionary         ${ARGUMENTS[2].data}    qualified
+    log to console      ${status}
+    ${amount}=    Get From Dictionary     ${ARGUMENTS[2].data.value}    amount
+    ${amount}=          Convert To String     ${amount}
+    Run Keyword If  ${status}
+    ...  polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[1]}
+    ...  ELSE   Go To  http://test.polonex.in.ua
     Click Element       id=add_bid_btn
     Sleep   4
-    Wait Until Element Is Visible       id=addbidform-no_credit_relation   10
-    Click Element       id=addbidform-no_credit_relation
+    Wait Until Element Is Visible       id=addbidform-agriment   10
+    Click Element       id=addbidform-agriment
+    Sleep   2
+    Input Text          id=addbidform-sum       ${amount}
     Sleep   4
     Click Element       id=submit_add_bid_form
-    Wait Until Page Contains  Ваша пропозиція  10
-    [Return]    ${bid}
+    Wait Until Element Is Visible       id=userbidamount   30
+    ${resp}=    Get Text      id=userbidamount
+    [Return]    ${resp}
+
 
 Скасувати цінову пропозицію
     [Arguments]  ${username}  ${tender_uaid}
@@ -837,16 +852,18 @@ Login
 Завантажити протокол аукціону в авард
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${award_index}
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Click Element           id=upload_owner_protocol
+    Click Element           id=upload_owner_protocol_and_contract
     sleep  4
     Choose File             xpath=//input[contains(@id, "award_doc_upload_field_auctionProtocol")]   ${filepath}
-    sleep  5
-    Click Element           id=submit_owner_add_protocol
-    Wait Until Page Contains  Документи успішно збережено  10
-
 
 Підтвердити наявність протоколу аукціону
     [Arguments]  ${username}  ${tender_uaid}  ${award_index}
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Click Element           id=confirm_owner_protocol
-    Wait Until Page Contains  Переможець кваліфікований успішно  10
+    Click Element           id=upload_owner_protocol_and_payment
+    sleep  4
+    Click Element           id=submit_owner_add_protocol_andpay
+    Wait Until Page Contains  Переможець кваліфікований успішно  20
+    sleep  120
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Wait Until Page Contains  [Очікується оплата]  20
+
