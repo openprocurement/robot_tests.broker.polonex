@@ -99,11 +99,12 @@ Login
   ...      ${ARGUMENTS[0]} ==  username
   ...      ${ARGUMENTS[1]} ==  tender_data
 
-    Log To Console  ${ARGUMENTS[1]}
-
     ${procurementmethodtype}=                Get From Dictionary         ${ARGUMENTS[1].data}                   procurementMethodType
     ${title}=                                Get From Dictionary         ${ARGUMENTS[1].data}                   title
     ${dgfID}=                                Get From Dictionary         ${ARGUMENTS[1].data}                   dgfID
+
+    ${minNumberOfQualifiedBids}=             Get From Dictionary         ${ARGUMENTS[1].data}                   minNumberOfQualifiedBids
+
     ${tenderAttempts}=                       Get From Dictionary         ${ARGUMENTS[1].data}                   tenderAttempts
     ${description}=                          Get From Dictionary         ${ARGUMENTS[1].data}                   description
     ${auctionperiod_startdate}=              Get From Dictionary         ${ARGUMENTS[1].data.auctionPeriod}     startDate
@@ -181,6 +182,8 @@ Login
     Select From List    xpath=//select[@id="addauctionform-value_valueaddedtaxincluded"]          ${value_valueaddedtaxincluded}
     Input text      id=addauctionform-title                                                       ${title}
     Input text      id=addauctionform-dgfid                                                       ${dgfID}
+
+    Input text      id=addauctionform-minnumberofqualifiedbids                                    ${minNumberOfQualifiedBids}
 
     Input text      id=addauctionform-description                                                 ${description}
     Input text      id=addauctionform-auctionperiod_startdate                                     ${auctionperiod_startdate}
@@ -681,7 +684,6 @@ Login
     Sleep     2
     Click Button                        id=submit_add_answer_form
     Wait Until Page Contains   ${answer_data.data.answer}   10
-
 
 Подати цінову пропозицію
     [Arguments]  @{ARGUMENTS}
