@@ -20,6 +20,17 @@ def convert_polonex_date_to_iso_format(date_time_from_ui):
     new_date_time_string = new_timedata.strftime("%Y-%m-%d %H:%M:%S.%f")
     return new_date_time_string
 
+def convert_contract_date_to_iso(date_time_from_ui, i):
+    res=date_time_from_ui.split(' - ')
+    res=res[i]
+    new_timedata = datetime.strptime(res, '%Y-%m-%d %H:%M')
+    new_date_time_string = new_timedata.strftime("%Y-%m-%dT%H:%M:%S.%f")
+    return new_date_time_string
+
+def add_timezone_to_contact_date(date_str):
+    timezone="+02:00"
+    return date_str+timezone
+
 def polonex_download_file(url, file_name, output_dir):
     urllib.urlretrieve(url, ('{}/{}'.format(output_dir, file_name)))
 

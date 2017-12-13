@@ -10,11 +10,9 @@ Library     polonex_helper.py
 ${sign_in}                                           id=loginbtn
 ${login_email}                                       id=loginform-username
 ${login_pass}                                        id=loginform-password
-${prozorropage}                                      id=prozorropagebtn
+${prozorropage}                                      id=prozorropagebtn2
 ${locator.title}                                     id=auction_title
 ${locator.dgfID}                                     id=info_dgfID
-${locator.dgfDecisionDate}                           id=info_dgfDecisionDate
-${locator.dgfDecisionID}                             id=info_dgfDecisionID
 ${locator.tenderAttempts}                            id=info_tenderAttempts
 ${locator.procurementMethodType}                     id=info_procurementMethodType
 ${locator.eligibilityCriteria}                       id=eligibilityCriteria_marker
@@ -22,6 +20,7 @@ ${locator.status}                                    id=auction_status_name
 ${locator.description}                               id=info_description
 ${locator.minimalStep.amount}                        xpath=//td[contains(@id, 'info_minimalStep')]/span[contains(@class, 'amount')]
 ${locator.value.amount}                              xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'amount')]
+${locator.guarantee.amount}                          xpath=//td[contains(@id, 'info_guarantee')]/span[contains(@class, 'amount')]
 ${locator.value.currency}                            xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'currency')]
 ${locator.value.valueAddedTaxIncluded}               xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'tax')]
 ${locator.tenderId}                                  id=info_auctionID
@@ -51,10 +50,11 @@ ${locator.items[0].deliveryAddress.locality}         id=item[0]deliveryAddress_l
 ${locator.items[0].deliveryAddress.streetAddress}    id=item[0]deliveryAddress_streetAddress
 ${locator.items[0].deliveryLocation.latitude}        id=items[0]_deliveryLocation_latitude
 ${locator.items[0].deliveryLocation.longitude}       id=items[0]_deliveryLocation_longitude
-${locator.items[0].deliveryDate.endDate}             id=item[0]deliveryDate_endDate
 ${locator.items[0].classification.scheme}            id=classification_scheme
 ${locator.items[0].classification.id}                id=classification_id
 ${locator.items[0].classification.description}       id=classification_description
+${locator.items[0].contractPeriod}                   id=items[0]_contractPeriod
+
 ${locator.questions[0].title}                        id=q[0]title
 ${locator.questions[0].description}                  id=q[0]description
 ${locator.questions[0].date}                         id=q[0]date
@@ -102,8 +102,9 @@ Login
     ${procurementmethodtype}=                Get From Dictionary         ${ARGUMENTS[1].data}                   procurementMethodType
     ${title}=                                Get From Dictionary         ${ARGUMENTS[1].data}                   title
     ${dgfID}=                                Get From Dictionary         ${ARGUMENTS[1].data}                   dgfID
-    ${dgfDecisionDate}=                      Get From Dictionary         ${ARGUMENTS[1].data}                   dgfDecisionDate
-    ${dgfDecisionID}=                        Get From Dictionary         ${ARGUMENTS[1].data}                   dgfDecisionID
+
+    ${minNumberOfQualifiedBids}=             Get From Dictionary         ${ARGUMENTS[1].data}                   minNumberOfQualifiedBids
+
     ${tenderAttempts}=                       Get From Dictionary         ${ARGUMENTS[1].data}                   tenderAttempts
     ${description}=                          Get From Dictionary         ${ARGUMENTS[1].data}                   description
     ${auctionperiod_startdate}=              Get From Dictionary         ${ARGUMENTS[1].data.auctionPeriod}     startDate
@@ -128,7 +129,6 @@ Login
     ${deliveryaddress_streetaddress}=        Get From Dictionary         ${item0.deliveryAddress}               streetAddress
     ${deliveryaddress_region}=               Get From Dictionary         ${item0.deliveryAddress}               region
     ${deliveryaddress_locality}=             Get From Dictionary         ${item0.deliveryAddress}               locality
-    ${deliverydate_enddate}=                 Get From Dictionary         ${item0.deliveryDate}                  endDate
     ${unit_code}=                            Get From Dictionary         ${item0.unit}                          code
     ${unit_name}=                            Get From Dictionary         ${item0.unit}                          name
     ${quantity}=                             Get From Dictionary         ${item0}                               quantity
@@ -163,14 +163,16 @@ Login
     Input text      id=user-firm_phone                      ${procuringEntity_contactPoint_telephone}
     Input text      id=user-edrpoy                          ${procuringEntity_identifier_id}
     Input text      id=user-firm_name                       ${procuringEntity_name}
-    Click Element       id=user-reglament_apply
     Click Element       id=profile_save_btn
-    Sleep   4
-
+    Wait Until Page Contains    Інформацію успішно збережено!  10
 
     Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     Sleep   2
+    Click Element   ${prozorropage}
+    Sleep   2
     Click Element       xpath=//a[contains(@id, 'addauctionbtn')]
+    Sleep   2
+    Click Element   id=createtrade
     Sleep   4
 
 
@@ -181,8 +183,7 @@ Login
     Input text      id=addauctionform-title                                                       ${title}
     Input text      id=addauctionform-dgfid                                                       ${dgfID}
 
-    Input text      id=addauctionform-dgfdecisionid                                               ${dgfDecisionID}
-    Input text      id=addauctionform-dgfdecisiondate                                             ${dgfDecisionDate}
+    Input text      id=addauctionform-minnumberofqualifiedbids                                    ${minNumberOfQualifiedBids}
 
     Input text      id=addauctionform-description                                                 ${description}
     Input text      id=addauctionform-auctionperiod_startdate                                     ${auctionperiod_startdate}
@@ -192,7 +193,6 @@ Login
     Input text      id=addauctionform-guarantee_amount                                            ${guarantee_amount}
 
     polonex.Додати предмети      ${items}
-
     Sleep   5
     Click Element   xpath=//button[contains(@id, 'add-auction-form-save')]
     Wait Until Element Is Visible       xpath=//td[contains(@id, 'info_auctionID')]   30
@@ -213,9 +213,16 @@ Login
     Run Keyword If  ${index} != 0   Sleep           4
     Select From List    xpath=//select[@id="additemform-${index}-unit_code"]         ${item.unit.code}
     Input text      id=additemform-${index}-description                              ${item.description}
-    Input text      id=additemform-${index}-quantity                                 ${item.quantity}
-    Execute Javascript    $("#additemform-${index}-classification_id").val("${item.classification.id}");
-    Execute Javascript    $("#additemform-${index}-classification_id").trigger("change");
+    ${quantity}=  Convert To String  ${item.quantity}
+    Input text      id=additemform-${index}-quantity                                 ${quantity}
+    Run Keyword If
+    ...  '${item.classification.scheme}' == 'CAV-PS'  Execute Javascript    $("#additemform-${index}-classification_id").val("${item.classification.id}"); $("#additemform-${index}-classification_id").trigger("change");
+    ...  ELSE       Execute Javascript    $("#additemform-${index}-classification_id_cpv").val("${item.classification.id}"); $("#additemform-${index}-classification_id_cpv").trigger("change");
+    Execute Javascript    $("#additemform-${index}-additionalclassifications_id").val("${item.additionalClassifications[0].id}"); $("#additemform-${index}-additionalclassifications_id").trigger("change");
+    ${contractperiod_startdate}=        polonex_convertdate     ${item.contractPeriod.startDate}
+    Input text      id=additemform-${index}-contractperiod_startdate   ${contractperiod_startdate}
+    ${contractperiod_enddate}=        polonex_convertdate     ${item.contractPeriod.endDate}
+    Input text      id=additemform-${index}-contractperiod_enddate   ${contractperiod_enddate}
 
 Додати предмет закупівлі
     [Arguments]  ${username}  ${tender_uaid}  ${item}
@@ -227,10 +234,16 @@ Login
 
 Завантажити документ
     [Arguments]  ${username}  ${filepath}  ${tender_uaid}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element     id=update_auction_btn
+    Sleep   2
     Choose File     xpath=//input[contains(@id, "doc_upload_field_biddingDocuments")]   ${filepath}
 
 Завантажити ілюстрацію
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element     id=update_auction_btn
+    Sleep   2
     Choose File       id=doc_upload_field_illustration        ${filepath}
 
 Додати Virtual Data Room
@@ -276,8 +289,9 @@ Login
   ...      ${ARGUMENTS[0]} ==  username
   ...      ${ARGUMENTS[1]} ==  ${tender_uaid}
     Switch Browser   ${BROWSER_ALIAS}
-    Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
-    Sleep  2
+    Go to   http://test.polonex.in.ua/prozorrosale2/auctions/sync-all
+    Go to   http://test.polonex.in.ua/prozorrosale2/auctions/public
+    Wait Until Element Is Visible       name=more-search-btn   30
     Click Element       name=more-search-btn
     Sleep  2
     Input Text          id=proauctionssearch-auctionid   ${ARGUMENTS[1]}
@@ -316,14 +330,14 @@ Login
     [Documentation]    ${ARGUMENTS[0]} = username
     ...      ${ARGUMENTS[1]} = ${TENDER_UAID}
     Switch Browser   ${BROWSER_ALIAS}
-    Go to   ${USERS.users['${ARGUMENTS[0]}'].syncpage}
-    Go to   ${USERS.users['${ARGUMENTS[0]}'].homepage}
     polonex.Пошук тендера по ідентифікатору    ${ARGUMENTS[0]}    ${ARGUMENTS[1]}
 
 Отримати інформацію із тендера
     [Arguments]  ${username}  ${tender_uaid}  ${field_name}
     ${return_value}=  Run Keyword If
     ...  'classification' in '${field_name}'       Отримати інформацію про класифікатор із предмету  ${field_name}
+    ...  ELSE IF    'contractPeriod.startDate' in '${field_name}'     Отримати інформацію про items[0].contractPeriod.startDate
+    ...  ELSE IF    'contractPeriod.endDate' in '${field_name}'     Отримати інформацію про items[0].contractPeriod.endDate
     ...  ELSE IF    'unit' in '${field_name}'      Отримати інформацію про юніт із предмету  ${field_name}
     ...  ELSE IF    'items' in '${field_name}'     Отримати інформацію із предмету без індекса  ${field_name}
     ...  ELSE IF    'questions' in '${field_name}'     Отримати інформацію із запитання без індекса  ${field_name}
@@ -333,9 +347,10 @@ Login
 Отримати інформацію із предмету без індекса
     [Arguments]  ${field_name}
     ${prop_field_name}=         Replace String    ${field_name}    .   _    count=1
+    ${prop_field_name}=         Replace String    ${prop_field_name}    .   _    count=1
     ${return_value}=   Get Text     id=${prop_field_name}
     ${return_value}=  Run Keyword If
-    ...  'quantity' in '${prop_field_name}'    Convert To Integer    ${return_value}
+    ...  'quantity' in '${prop_field_name}'    Convert To Number    ${return_value}
     ...  ELSE       Convert To String   ${return_value}
     [Return]  ${return_value}
 
@@ -344,6 +359,8 @@ Login
     ${index}=   Get Substring   ${field_name}    10      11
     ${index}=   Convert To Integer    ${index}
     ${list}=    Split String    ${field_name}    .
+    Focus   xpath=//div[contains(@class, 'questions_item')]
+    Wait Until Element Is Visible       id=q[${index}]${list[1]}      30
     ${return_value}=   Get Text     id=q[${index}]${list[1]}
     [Return]  ${return_value}
 
@@ -397,14 +414,6 @@ Login
   ${return_value}=   Отримати текст із поля і показати на сторінці   dgfID
   [Return]  ${return_value}
 
-Отримати інформацію про dgfDecisionDate
-  ${return_value}=   Отримати текст із поля і показати на сторінці   dgfDecisionDate
-  [Return]  ${return_value}
-
-Отримати інформацію про dgfDecisionID
-  ${return_value}=   Отримати текст із поля і показати на сторінці   dgfDecisionID
-  [Return]  ${return_value}
-
 Отримати інформацію про tenderAttempts
     ${return_value}=   Отримати текст із поля і показати на сторінці   tenderAttempts
     [Return]  ${return_value}
@@ -433,6 +442,11 @@ Login
   ${return_value}=   Convert To Number   ${return_value}
   [Return]  ${return_value}
 
+Отримати інформацію про guarantee.amount
+  ${return_value}=   Отримати текст із поля і показати на сторінці  guarantee.amount
+  ${return_value}=   Convert To Number   ${return_value}
+  [Return]  ${return_value}
+
 Отримати інформацію про minimalStep.amount
   ${return_value}=   Отримати текст із поля і показати на сторінці   minimalStep.amount
   ${return_value}=   Convert To Number   ${return_value}
@@ -441,9 +455,11 @@ Login
 Внести зміни в тендер
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}  ${field_value}
   polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  ${prop_field_name}=         Replace String    ${field_name}    .   _    count=1
   Click Element     id=update_auction_btn
-  Sleep   2
-  Input text  name=addauctionform-[${field_name}]  ${field_value}
+  Wait Until Element Is Visible       name=AddAuctionForm[${prop_field_name}]   30
+  ${field_value}=  Convert To String  ${field_value}
+  Input text  name=AddAuctionForm[${prop_field_name}]  ${field_value}
   Click Button    id=add-auction-form-save
   Wait Until Page Contains  ${field_value}  30
 
@@ -502,6 +518,21 @@ Login
   ${return_value}=   add_timezone_to_date   ${return_value.split('.')[0]}
   [Return]  ${return_value}
 
+
+Отримати інформацію про items[0].contractPeriod.startDate
+  ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].contractPeriod
+  ${index}=  Convert To Integer  0
+  ${return_value}=   convert_contract_date_to_iso   ${return_value}  ${index}
+  ${return_value}=   add_timezone_to_contact_date   ${return_value.split('.')[0]}
+  [return]  ${return_value}
+
+Отримати інформацію про items[0].contractPeriod.endDate
+  ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].contractPeriod
+  ${index}=  Convert To Integer  1
+  ${return_value}=   convert_contract_date_to_iso   ${return_value}  ${index}
+  ${return_value}=   add_timezone_to_contact_date   ${return_value.split('.')[0]}
+  [return]  ${return_value}
+
 Отримати інформацію про items[0].quantity
   ${return_value}=   Отримати текст із поля і показати на сторінці   items[0].quantity
   ${return_value}=   Convert To Number   ${return_value}
@@ -552,10 +583,6 @@ Login
 
 Отримати інформацію про items[0].deliveryAddress.streetAddress
   ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].deliveryAddress.streetAddress
-  [Return]  ${return_value}
-
-Отримати інформацію про items[0].deliveryDate.endDate
-  ${return_value}=   Отримати текст із поля і показати на сторінці  items[0].deliveryDate.endDate
   [Return]  ${return_value}
 
 Отримати інформацію про items[0].deliveryLocation.latitude
@@ -659,15 +686,30 @@ Login
     Wait Until Page Contains   ${answer_data.data.answer}   10
 
 Подати цінову пропозицію
-    [Arguments]  ${username}  ${tender_uaid}  ${bid}
-    polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+    [Arguments]  @{ARGUMENTS}
+    [Documentation]
+    ...    ${ARGUMENTS[0]} ==  username
+    ...    ${ARGUMENTS[1]} ==  tenderId
+    ...    ${ARGUMENTS[2]} ==  ${test_bid_data}
+    ${status}=          Get From Dictionary         ${ARGUMENTS[2].data}    qualified
+    log to console      ${status}
+    ${amount}=    Get From Dictionary     ${ARGUMENTS[2].data.value}    amount
+    ${amount}=          Convert To String     ${amount}
+    Run Keyword If  ${status}
+    ...  polonex.Пошук тендера по ідентифікатору  ${ARGUMENTS[0]}  ${ARGUMENTS[1]}
+    ...  ELSE   Go To  http://test.polonex.in.ua
     Click Element       id=add_bid_btn
     Sleep   4
-    Click Element       id=addbidform-no_credit_relation
+    Wait Until Element Is Visible       id=addbidform-agriment   10
+    Click Element       id=addbidform-agriment
+    Sleep   2
+    Input Text          id=addbidform-sum       ${amount}
     Sleep   4
     Click Element       id=submit_add_bid_form
-    Wait Until Page Contains  Ваша пропозиція  10
-    [Return]    ${bid}
+    Wait Until Element Is Visible       id=userbidamount   30
+    ${resp}=    Get Text      id=userbidamount
+    [Return]    ${resp}
+
 
 Скасувати цінову пропозицію
     [Arguments]  ${username}  ${tender_uaid}
@@ -812,16 +854,18 @@ Login
 Завантажити протокол аукціону в авард
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${award_index}
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Click Element           id=upload_owner_protocol
+    Click Element           id=upload_owner_protocol_and_contract
     sleep  4
     Choose File             xpath=//input[contains(@id, "award_doc_upload_field_auctionProtocol")]   ${filepath}
-    sleep  5
-    Click Element           id=submit_owner_add_protocol
-    Wait Until Page Contains  Документи успішно збережено  10
-
 
 Підтвердити наявність протоколу аукціону
     [Arguments]  ${username}  ${tender_uaid}  ${award_index}
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-    Click Element           id=confirm_owner_protocol
-    Wait Until Page Contains  Переможець кваліфікований успішно  10
+    Click Element           id=upload_owner_protocol_and_payment
+    sleep  4
+    Click Element           id=submit_owner_add_protocol_andpay
+    Wait Until Page Contains  Переможець кваліфікований успішно  20
+    sleep  120
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+    Wait Until Page Contains  [Очікується оплата]  20
+
