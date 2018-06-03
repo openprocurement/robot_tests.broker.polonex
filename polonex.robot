@@ -872,3 +872,418 @@ Login
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     Wait Until Page Contains  [Очікується оплата]  20
 
+
+######################### Активи #########################
+
+Створити об'єкт МП
+    [Arguments]  ${username}  ${tender_data}
+    [Documentation]
+    ...      [Призначення] Створює об’єкт МП з початковими даними tender_data
+    ...      [Повертає] tender_uaid (ідентифікатор новоствореного об’єкта МП)
+    #####data:
+    #####    assetCustodian:
+    #####        address:
+    #####            countryName: Україна
+    #####            locality: Білогородка
+    #####            postalCode: 08140
+    #####            region: Київська область
+    #####            streetAddress: вулиця Припятська, 2
+    #####        contactPoint:
+    #####            email: tverdovska@atc.gov.ua
+    #####            faxNumber: 044-406-56-84
+    #####            name: Твердовська Тетяна Нінелівна
+    #####            telephone: 044-406-56-84
+    #####            url: http://www.energoatom.kiev.ua/ua/separated/atc/
+    #####        identifier:
+    #####            id: '20055078'
+    #####            legalName: ВП «Аварійно-технічний центр» ДП «НАЕК «Енергоатом»
+    #####            scheme: UA-EDR
+    #####        name: ВП «Аварійно-технічний центр» ДП «НАЕК «Енергоатом»
+    #####    assetHolder:
+    #####        address:
+    #####            countryName: Україна
+    #####            locality: Яготин
+    #####            postalCode: '01004'
+    #####            region: Київська область
+    #####            streetAddress: вулиця Пушкіна, 3, 1
+    #####        contactPoint:
+    #####            email: ssrv1970@ukr.net
+    #####            faxNumber: 0442798301
+    #####            name: Сорокун Рімма Вікторівна
+    #####            telephone: 0442798301
+    #####            url: http://don.kievcity.gov.ua
+    #####        identifier:
+    #####            id: 02147629
+    #####            legalName: Департамент освіти і науки, молоді та спорту виконавчого органу
+    #####                Київської міської ради (Київської міської державної адміністрації)
+    #####            scheme: UA-EDR
+    #####        name: Департамент освіти і науки, молоді та спорту виконавчого органу Київської
+    #####            міської ради (Київської міської державної адміністрації)
+    #####    assetType: domain
+    #####    decisions:
+    #####    -   decisionDate: '2018-06-01T12:10:11.437468+03:00'
+    #####        decisionID: 4048-6
+    #####        title: Викот буба чортеня недоношениця.
+    #####        title_en: Intuitive dedicated definition
+    #####        title_ru: Sharable encompassing access
+    #####    description: Чужинонька лакейча бісовщина привіт людино четверня попівський цирка
+    #####        начутися перетлівати клюка перестрах постогнувати гаїр паливо.
+    #####    description_en: Odit excepturi vel consequuntur nisi officiis libero perferendis
+    #####        quia commodi optio distinctio ut neque.
+    #####    description_ru: Аюдирэ ратионебюж аугюэ луптатум квуым дэлььынётё ты ут фалля
+    #####        нихйл пэртинакёа мыис.
+    #####    items:
+    #####    -   additionalClassifications:
+    #####        -   description: Будівлі підприємств легкої промисловості
+    #####            id: '1251.4'
+    #####            scheme: dk018
+    #####        address:
+    #####            countryName: Україна
+    #####            locality: Олександрія
+    #####            postalCode: '28000'
+    #####            region: Кіровоградська область
+    #####            streetAddress: вулиця 6-го Грудня, 7, 58
+    #####        classification:
+    #####            description: Промислова заводська, фабрична будівля та їх частини
+    #####            id: 04211000-0
+    #####            scheme: CAV-PS
+    #####        description: 'i-4d2f0e8c: Промислова заводська, фабрична будівля та їх частини'
+    #####        description_en: 'i-6ae7df64: Industrial factory, factory building and their
+    #####            parts'
+    #####        description_ru: 'i-341428c1: Промышленная заводская, фабричная здание и их
+    #####            части'
+    #####        quantity: 4.9697
+    #####        registrationDetails:
+    #####            status: complete
+    #####        unit:
+    #####            code: MTK
+    #####            name: метри квадратні
+    #####    mode: test
+    #####    title: '[ТЕСТУВАННЯ] Переплутувати маґерка.'
+    #####    title_en: '[TESTING] Cross-group mission-critical intranet'
+    #####    title_ru: '[ТЕСТИРОВАНИЕ] De-engineered impactful Graphic Interface'
+    Click Element    id=assets_btn
+    Sleep   5
+    Click Element    id=addassetsbtn
+
+    ${description}=                                         Get From Dictionary               ${tender_data.data}  description
+    ${title}=                                               Get From Dictionary               ${tender_data.data}  title
+    ${assetCustodian_address_countryName}=                  Get From Dictionary               ${tender_data.data.assetCustodian.address}  countryName
+    ${assetCustodian_address_locality}=                     Get From Dictionary               ${tender_data.data.assetCustodian.address}  locality
+    ${assetCustodian_address_postalCode}=                   Get From Dictionary               ${tender_data.data.assetCustodian.address}  postalCode
+    ${assetCustodian_address_region}=                       Get From Dictionary               ${tender_data.data.assetCustodian.address}  region
+    ${assetCustodian_address_streetAddress}=                Get From Dictionary               ${tender_data.data.assetCustodian.address}  streetAddress
+    ${assetCustodian_contactPoint_email}=                   Get From Dictionary               ${tender_data.data.assetCustodian.contactPoint}  email
+    ###${assetCustodian_contactPoint_faxNumber}=               Get From Dictionary               ${tender_data.data.assetCustodian.contactPoint}  faxNumber
+    ${assetCustodian_contactPoint_name}=                    Get From Dictionary               ${tender_data.data.assetCustodian.contactPoint}  name
+    ${assetCustodian_contactPoint_telephone}=               Get From Dictionary               ${tender_data.data.assetCustodian.contactPoint}  telephone
+    ${assetCustodian_contactPoint_url}=                     Get From Dictionary               ${tender_data.data.assetCustodian.contactPoint}  url
+    ${assetCustodian_identifier_id}=                        Get From Dictionary               ${tender_data.data.assetCustodian.identifier}  id
+    ${assetCustodian_identifier_legalName}=                 Get From Dictionary               ${tender_data.data.assetCustodian.identifier}  legalName
+    ${assetCustodian_identifier_scheme}=                    Get From Dictionary               ${tender_data.data.assetCustodian.identifier}  scheme
+    ${assetCustodian_name}=                                 Get From Dictionary               ${tender_data.data.assetCustodian}  name
+    ${assetHolder_address_countryName}=                     Get From Dictionary               ${tender_data.data.assetHolder.address}  countryName
+    ${assetHolder_address_locality}=                        Get From Dictionary               ${tender_data.data.assetHolder.address}  locality
+    ${assetHolder_address_postalCode}=                      Get From Dictionary               ${tender_data.data.assetHolder.address}  postalCode
+    ${assetHolder_address_region}=                          Get From Dictionary               ${tender_data.data.assetHolder.address}  region
+    ${assetHolder_address_streetAddress}=                   Get From Dictionary               ${tender_data.data.assetHolder.address}  streetAddress
+    ${assetHolder_contactPoint_email}=                      Get From Dictionary               ${tender_data.data.assetHolder.contactPoint}  email
+    ###${assetHolder_contactPoint_faxNumber}=                  Get From Dictionary               ${tender_data.data.assetHolder.contactPoint}  faxNumber
+    ${assetHolder_contactPoint_name}=                       Get From Dictionary               ${tender_data.data.assetHolder.contactPoint}  name
+    ${assetHolder_contactPoint_telephone}=                  Get From Dictionary               ${tender_data.data.assetHolder.contactPoint}  telephone
+    ${assetHolder_contactPoint_url}=                        Get From Dictionary               ${tender_data.data.assetHolder.contactPoint}  url
+    ${assetHolder_identifier_id}=                           Get From Dictionary               ${tender_data.data.assetHolder.identifier}  id
+    ${assetHolder_identifier_legalName}=                    Get From Dictionary               ${tender_data.data.assetHolder.identifier}  legalName
+    ${assetHolder_identifier_scheme}=                       Get From Dictionary               ${tender_data.data.assetHolder.identifier}  scheme
+    ${assetHolder_name}=                                    Get From Dictionary               ${tender_data.data.assetHolder}  name
+    ${decisions_0_decisionDate}=                            Get From Dictionary               ${tender_data.data.decisions[0]}  decisionDate
+    ${decisions_0_decisionID}=                              Get From Dictionary               ${tender_data.data.decisions[0]}  decisionID
+    ${decisions_0_title}=                                   Get From Dictionary               ${tender_data.data.decisions[0]}  title
+    ${items}=                                               Get From Dictionary               ${tender_data.data}  items
+    ${item}=                                                Get From List                     ${items}                                  0
+    ${items_0_additionalClassifications_0_description}=     Get From Dictionary               ${item.additionalClassifications[0]}  description
+    ${items_0_additionalClassifications_0_id}=              Get From Dictionary               ${item.additionalClassifications[0]}  id
+    ${items_0_additionalClassifications_0_scheme}=          Get From Dictionary               ${item.additionalClassifications[0]}  scheme
+    ${items_0_address_countryName}=                         Get From Dictionary               ${item.address}  countryName
+    ${items_0_address_locality}=                            Get From Dictionary               ${item.address}  locality
+    ${items_0_address_postalCode}=                          Get From Dictionary               ${item.address}  postalCode
+    ${items_0_address_region}=                              Get From Dictionary               ${item.address}  region
+    ${items_0_address_streetAddress}=                       Get From Dictionary               ${item.address}  streetAddress
+    ${items_0_classification_description}=                  Get From Dictionary               ${item.classification}  description
+    ${items_0_classification_id}=                           Get From Dictionary               ${item.classification}  id
+    ${items_0_classification_scheme}=                       Get From Dictionary               ${item.classification}  scheme
+    ${items_0_description}=                                 Get From Dictionary               ${item}  description
+    ${items_0_quantity}=                                    Get From Dictionary               ${item}  quantity
+    ${items_0_registrationDetails_status}=                  Get From Dictionary               ${item.registrationDetails}  status
+    ${items_0_unit_code}=                                   Get From Dictionary               ${item.unit}  code
+    ${items_0_unit_name}=                                   Get From Dictionary               ${item.unit}  name
+
+
+
+    ${description}=                                       Convert To String   ${description}
+    ${title}=                                             Convert To String   ${title}
+    ${assetCustodian_address_countryName}=                Convert To String   ${assetCustodian_address_countryName}
+    ${assetCustodian_address_locality}=                   Convert To String   ${assetCustodian_address_locality}
+    ${assetCustodian_address_postalCode}=                 Convert To String   ${assetCustodian_address_postalCode}
+    ${assetCustodian_address_region}=                     Convert To String   ${assetCustodian_address_region}
+    ${assetCustodian_address_streetAddress}=              Convert To String   ${assetCustodian_address_streetAddress}
+    ${assetCustodian_contactPoint_email}=                 Convert To String   ${assetCustodian_contactPoint_email}
+    ###${assetCustodian_contactPoint_faxNumber}=             Convert To String   ${assetCustodian_contactPoint_faxNumber}
+    ${assetCustodian_contactPoint_name}=                  Convert To String   ${assetCustodian_contactPoint_name}
+    ${assetCustodian_contactPoint_telephone}=             Convert To String   ${assetCustodian_contactPoint_telephone}
+    ${assetCustodian_contactPoint_url}=                   Convert To String   ${assetCustodian_contactPoint_url}
+    ${assetCustodian_identifier_id}=                      Convert To String   ${assetCustodian_identifier_id}
+    ${assetCustodian_identifier_legalName}=               Convert To String   ${assetCustodian_identifier_legalName}
+    ${assetCustodian_identifier_scheme}=                  Convert To String   ${assetCustodian_identifier_scheme}
+    ${assetCustodian_name}=                               Convert To String   ${assetCustodian_name}
+    ${assetHolder_address_countryName}=                   Convert To String   ${assetHolder_address_countryName}
+    ${assetHolder_address_locality}=                      Convert To String   ${assetHolder_address_locality}
+    ${assetHolder_address_postalCode}=                    Convert To String   ${assetHolder_address_postalCode}
+    ${assetHolder_address_region}=                        Convert To String   ${assetHolder_address_region}
+    ${assetHolder_address_streetAddress}=                 Convert To String   ${assetHolder_address_streetAddress}
+    ${assetHolder_contactPoint_email}=                    Convert To String   ${assetHolder_contactPoint_email}
+    ###${assetHolder_contactPoint_faxNumber}=                Convert To String   ${assetHolder_contactPoint_faxNumber}
+    ${assetHolder_contactPoint_name}=                     Convert To String   ${assetHolder_contactPoint_name}
+    ${assetHolder_contactPoint_telephone}=                Convert To String   ${assetHolder_contactPoint_telephone}
+    ${assetHolder_contactPoint_url}=                      Convert To String   ${assetHolder_contactPoint_url}
+    ${assetHolder_identifier_id}=                         Convert To String   ${assetHolder_identifier_id}
+    ${assetHolder_identifier_legalName}=                  Convert To String   ${assetHolder_identifier_legalName}
+    ${assetHolder_identifier_scheme}=                     Convert To String   ${assetHolder_identifier_scheme}
+    ${assetHolder_name}=                                  Convert To String   ${assetHolder_name}
+    ${decisions_0_decisionDate}=                          Convert To String   ${decisions_0_decisionDate}
+    ${decisions_0_decisionID}=                            Convert To String   ${decisions_0_decisionID}
+    ${decisions_0_title}=                                 Convert To String   ${decisions_0_title}
+    ${items}=                                             Convert To String   ${items}
+    ${item}=                                              Convert To String   ${item}
+    ${items_0_additionalClassifications_0_description}=   Convert To String   ${items_0_additionalClassifications_0_description}
+    ${items_0_additionalClassifications_0_id}=            Convert To String   ${items_0_additionalClassifications_0_id}
+    ${items_0_additionalClassifications_0_scheme}=        Convert To String   ${items_0_additionalClassifications_0_scheme}
+    ${items_0_address_countryName}=                       Convert To String   ${items_0_address_countryName}
+    ${items_0_address_locality}=                          Convert To String   ${items_0_address_locality}
+    ${items_0_address_postalCode}=                        Convert To String   ${items_0_address_postalCode}
+    ${items_0_address_region}=                            Convert To String   ${items_0_address_region}
+    ${items_0_address_streetAddress}=                     Convert To String   ${items_0_address_streetAddress}
+    ${items_0_classification_description}=                Convert To String   ${items_0_classification_description}
+    ${items_0_classification_id}=                         Convert To String   ${items_0_classification_id}
+    ${items_0_classification_scheme}=                     Convert To String   ${items_0_classification_scheme}
+    ${items_0_description}=                               Convert To String   ${items_0_description}
+    ${items_0_quantity}=                                  Convert To String   ${items_0_quantity}
+    ${items_0_registrationDetails_status}=                Convert To String   ${items_0_registrationDetails_status}
+    ${items_0_unit_code}=                                 Convert To String   ${items_0_unit_code}
+    ${items_0_unit_name}=                                 Convert To String   ${items_0_unit_name}
+
+
+
+    Input text      id=addassetform-title       ${title}
+    Input text      id=addassetform-description       ${description}
+    Input text      id=addassetdecisionsform-0-title       ${decisions_0_title}
+    Input text      id=addassetdecisionsform-0-decisiondate       ${decisions_0_decisionDate}
+    Input text      id=addassetdecisionsform-0-decisionid       ${decisions_0_decisionID}
+    Input text      id=addassetform-assetcustodian_address_countryname       ${assetCustodian_address_countryName}
+    Input text      id=addassetform-assetcustodian_address_locality       ${assetCustodian_address_locality}
+    Input text      id=addassetform-assetcustodian_address_postalcode       ${assetCustodian_address_postalCode}
+    Input text      id=addassetform-assetcustodian_address_region       ${assetCustodian_address_region}
+    Input text      id=addassetform-assetcustodian_address_streetaddress       ${assetCustodian_address_streetAddress}
+    Input text      id=addassetform-assetcustodian_contactpoint_email       ${assetCustodian_contactPoint_email}
+    ###Input text      id=addassetform-assetcustodian_contactpoint_faxNumber       ${assetCustodian_contactPoint_faxNumber}
+    Input text      id=addassetform-assetcustodian_contactpoint_name       ${assetCustodian_contactPoint_name}
+    Input text      id=addassetform-assetcustodian_contactpoint_telephone       ${assetCustodian_contactPoint_telephone}
+    Input text      id=addassetform-assetcustodian_contactpoint_url       ${assetCustodian_contactPoint_url}
+    Input text      id=addassetform-assetcustodian_identifier_id       ${assetCustodian_identifier_id}
+    ####Input text      id=addassetform-assetcustodian_identifier_id       ${assetCustodian_identifier_legalName}
+    Select From List    id=addassetform-assetcustodian_identifier_scheme       ${assetCustodian_identifier_scheme}
+    Input text      id=addassetform-assetcustodian_name       ${assetCustodian_name}
+    Input text      id=addassetform-assetholder_address_countryname       ${assetHolder_address_countryName}
+    Input text      id=addassetform-assetholder_address_locality       ${assetHolder_address_locality}
+    Input text      id=addassetform-assetholder_address_postalcode       ${assetHolder_address_postalCode}
+    Input text      id=addassetform-assetholder_address_region       ${assetHolder_address_region}
+    Input text      id=addassetform-assetholder_address_streetaddress       ${assetHolder_address_streetAddress}
+    Input text      id=addassetform-assetholder_contactpoint_email       ${assetHolder_contactPoint_email}
+    ###Input text      id=addassetform-assetholder_contactpoint_faxNumber       ${assetHolder_contactPoint_faxNumber}
+    Input text      id=addassetform-assetholder_contactpoint_name       ${assetHolder_contactPoint_name}
+    Input text      id=addassetform-assetholder_contactpoint_telephone       ${assetHolder_contactPoint_telephone}
+    Input text      id=addassetform-assetholder_contactpoint_url       ${assetHolder_contactPoint_url}
+    Input text      id=addassetform-assetholder_identifier_id       ${assetHolder_identifier_id}
+    ###Input text      id=addassetform-assetholder_identifier_legalName       ${assetHolder_identifier_legalName}
+    Select From List      id=addassetform-assetholder_identifier_scheme       ${assetHolder_identifier_scheme}
+    Input text      id=addassetform-assetholder_name       ${assetHolder_name}
+
+
+    Input text      id=addassetitemform-0-description       ${items_0_description}
+    Input text      id=addassetitemform-0-quantity       ${items_0_quantity}
+    Select From List      id=addassetitemform-0-unit_code       ${items_0_unit_code}
+    Select From List      id=addassetitemform-0-registrationdetails_status       ${items_0_registrationDetails_status}
+
+    Input text      id=addassetitemform-0-address_countryname       ${items_0_address_countryName}
+    Input text      id=addassetitemform-0-address_locality       ${items_0_address_locality}
+    Input text      id=addassetitemform-0-address_postalcode       ${items_0_address_postalCode}
+    Input text      id=addassetitemform-0-address_region       ${items_0_address_region}
+    Input text      id=addassetitemform-0-address_streetaddress       ${items_0_address_streetAddress}
+
+    Execute Javascript    $("#addassetitemform-0-classification_id").val("${items_0_classification_id}"); $("#addassetitemform-0-classification_id").trigger("change");
+    Execute Javascript    $("#addassetitemform-0-classification_id_cpv").val("${items_0_additionalClassifications_0_id}"); $("#addassetitemform-0-classification_id_cpv").trigger("change");
+
+    Sleep   5
+    Click Element   xpath=//button[contains(@id, 'save_asset')]
+    Wait Until Element Is Visible       xpath=//td[contains(@id, 'info_assetID')]   30
+
+    ${tender_uaid}=     Get Text        xpath=//td[contains(@id, 'info_assetID')]
+    [Return]    ${tender_uaid}
+
+
+Пошук об'єкта МП по ідентифікатору
+    [Arguments]  ${username}  ${tender_uaid}
+    [Documentation]
+    ...      [Призначення] Шукає об’єкт МП з uaid = tender_uaid.
+    ...      [Повертає] tender (словник з інформацією про об’єкт МП)
+    Go to    /prozorrosale2/auctions/assets
+    Input text      id=registr2assetssearch-all       ${tender_uaid}
+    Click Element   id=assets-search-btn
+    Sleep   5
+    Click Element   xpath=//a[contains(@class, 'show-one-btn')]
+    Wait Until Element Is Visible      id=info_status    30
+
+Оновити сторінку з об’єктом МП
+    [Arguments]  ${username}  ${tender_uaid}
+    [Documentation]
+    ...      [Призначення] Оновлює сторінку з об’єктом МП для отримання потенційно оновлених даних.
+    Sleep   20
+    Reload Page
+
+Отримати інформацію із об'єкта МП
+    [Arguments]  ${username}  ${tender_uaid}  ${field_name}
+    [Documentation]
+    ...      [Призначення] Отримує значення поля field_name для об’єкту МП tender_uaid.
+    ...      [Повертає] tender['field_name'] (значення поля).
+    log to console  ${field_name}
+
+Отримати інформацію з активу об'єкта МП
+    [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${field_name}
+    [Documentation]
+    ...      [Призначення] Отримує значення поля field_name з активу з item_id в описі об’єкта МП tender_uaid.
+    ...      [Повертає] item['field_name'] (значення поля).
+    log to console  ${field_name}
+
+Внести зміни в об'єкт МП
+    [Arguments]  ${username}  ${tender_uaid}  ${fieldname}  ${fieldvalue}
+    [Documentation]
+    ...      [Призначення] Змінює значення поля fieldname на fieldvalue для об’єкта МП tender_uaid.
+
+Внести зміни в актив об'єкта МП
+    [Arguments]  ${username}  ${item_id}  ${tender_uaid}  ${fieldname}  ${fieldvalue}
+    [Documentation]
+    ...      [Призначення] Змінює значення поля fieldname на fieldvalue для активу item_id об’єкта МП tender_uaid.
+
+Завантажити ілюстрацію в об'єкт МП
+    [Arguments]  ${username}  ${filepath}  ${tender_uaid}
+    [Documentation]
+    ...      [Призначення] Завантажує ілюстрацію, яка знаходиться по шляху filepath і має documentType = illustration, до об’єкта МП tender_uaid користувачем username.
+
+Завантажити документ в об'єкт МП з типом
+    [Arguments]  ${username}  ${filepath}  ${tender_uaid}  ${documentType}
+    [Documentation]
+    ...      [Призначення] Завантажує документ, який знаходиться по шляху filepath і має певний documentType (наприклад, notice і т.д), до об’єкта МП tender_uaid користувачем username.
+    ...      [Повертає] reply (словник з інформацією про документ).
+
+Додати актив до об'єкта МП
+    [Arguments]  ${username}  ${tender_uaid}  ${item}
+    [Documentation]
+    ...      [Призначення] Додає дані про предмет item до об’єкта МП tender_uaid користувачем username.
+
+Отримати кількість активів в об'єкті МП
+    [Arguments]  ${username}  ${tender_uaid}
+    [Documentation]
+    ...      [Призначення] Отримує кількість активів в об’єкті МП tender_uaid.
+    ...      [Повертає] number_of_items (кількість активів).
+
+Завантажити документ для видалення об'єкта МП
+    [Arguments]  ${username}  ${filepath}  ${tender_uaid}
+    [Documentation]
+    ...      [Призначення] Завантажує документ, який знаходиться по шляху filepath і має documentType = cancellationDetails, до об’єкта МП tender_uaid користувачем username.
+
+Видалити об'єкт МП
+    [Arguments]  ${username}  ${tender_uaid}
+    [Documentation]
+    ...      [Призначення] Видаляє об’єкт МП tender_uaid користувачем username.
+
+
+######################### Лоти #########################
+
+
+Створити лот
+    [Arguments]  ${username}  ${tender_data}  ${asset_uaid}
+    [Documentation]
+    ...      [Призначення] Створює лот з початковими даними tender_data і прив’язаним до нього об’єктом МП asset_uaid
+    ...      [Повертає] tender_uaid (ідентифікатор новоствореного лоту)
+
+Пошук лоту по ідентифікатору
+    [Arguments]  ${username}  ${tender_uaid}
+    [Documentation]
+    ...      [Призначення] Шукає лот з uaid = tender_uaid.
+    ...      [Повертає] tender (словник з інформацією про лот)
+
+Оновити сторінку з лотом
+    [Arguments]  ${username}  ${tender_uaid}
+    [Documentation]
+    ...      [Призначення] Оновлює сторінку з лотом для отримання потенційно оновлених даних.
+
+Отримати інформацію із лоту
+    [Arguments]  ${username}  ${tender_uaid}  ${field_name}
+    [Documentation]
+    ...      [Призначення] Отримує значення поля field_name для лоту tender_uaid.
+    ...      [Повертає] tender['field_name'] (значення поля).
+
+Отримати інформацію з активу лоту
+    [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${field_name}
+    [Documentation]
+    ...      [Призначення] Отримує значення поля field_name з активу з item_id в описі лоту tender_uaid.
+    ...      [Повертає] item['field_name'] (значення поля).
+
+Внести зміни в лот
+    [Arguments]  ${username}  ${tender_uaid}  ${fieldname}  ${fieldvalue}
+    [Documentation]
+    ...      [Призначення] Змінює значення поля fieldname на fieldvalue для лоту tender_uaid.
+
+Внести зміни в актив лоту
+    [Arguments]  ${username}  ${item_id}  ${tender_uaid}  ${fieldname}  ${fieldvalue}
+    [Documentation]
+    ...      [Призначення] Змінює значення поля fieldname на fieldvalue для активу item_id лоту tender_uaid.
+
+Завантажити ілюстрацію в лот
+    [Arguments]  ${username}  ${filepath}  ${tender_uaid}
+    [Documentation]
+    ...      [Призначення] Завантажує ілюстрацію, яка знаходиться по шляху filepath і має documentType = illustration, до лоту tender_uaid користувачем username.
+
+Завантажити документ в лот з типом
+    [Arguments]  ${username}  ${filepath}  ${tender_uaid}  ${documentType}
+    [Documentation]
+    ...      [Призначення] Завантажує документ, який знаходиться по шляху filepath і має певний documentType (наприклад, notice і т.д), до лоту tender_uaid користувачем username.
+    ...      [Повертає] reply (словник з інформацією про документ).
+
+Завантажити документ для видалення лоту
+    [Arguments]  ${username}  ${filepath}  ${tender_uaid}
+    [Documentation]
+    ...      [Призначення] Завантажує документ, який знаходиться по шляху filepath і має documentType = cancellationDetails, до лоту tender_uaid користувачем username.
+
+Видалити лот
+    [Arguments]  ${username}  ${tender_uaid}
+    [Documentation]
+    ...      [Призначення] Видаляє лот tender_uaid користувачем username.
+
+Додати умови проведення аукціону(викликається двічі, окремо для вказання умов проведення першого аукціону і окремо для другого)
+    [Arguments]  ${username}  ${auction}  ${auction_index}  ${tender_uaid}
+    [Documentation]
+    ...      [Призначення] Додає умови проведення аукціону(auction_index) auction користувачем username
+
+Внести зміни в умови проведення аукціону
+    [Arguments]  ${username}  ${tender_uaid}  ${fieldname}  ${fieldvalue}  ${auction_index}
+    [Documentation]
+    ...      [Призначення] Змінює значення поля fieldname на fieldvalue для аукціону auction_index лоту tender_uaid.
+
+Завантажити документ в умови проведення аукціону
+    [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${documentType}  ${auction_index}
+    [Documentation]
+    ...      [Призначення] Завантажує документ, який знаходиться по шляху filepath і має певний documentType (наприклад, notice і т.д), до умов проведення аукціону з індексом auction_index лоту tender_uaid.
+    ...      [Повертає] reply (словник з інформацією про документ).
+
+
