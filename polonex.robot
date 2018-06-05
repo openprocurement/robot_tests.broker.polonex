@@ -67,6 +67,51 @@ ${locator.cancellations[0].reason}                   id=cancell_reason
 ${locator.cancelldoc.title}                          xpath=//div[contains(@class, 'fg_modal_title')]
 ${locator.cancelldoc.description}                    xpath=//div[contains(@class, 'fg_modal_description')]
 
+###for assets
+
+${assetlocator.title}                          id=auction_title
+${assetlocator.status}                         id=info_status
+${assetlocator.id}                             id=info_id
+${assetlocator.assetID}                        id=info_assetID
+${assetlocator.date}                           id=info_date
+${assetlocator.dateModified}                   id=info_dateModified
+${assetlocator.rectificationPeriod}            id=info_rectificationPeriod
+${assetlocator.description}                    id=info_description
+${assetlocator.decisions[0].title}             id=decisions[0]_title
+${assetlocator.decisions[0].decisionDate}      id=decisions[0]_decisionDate
+${assetlocator.decisions[0].decisionID}        id=decisions[0]_decisionID
+${assetlocator.rectificationPeriod.endDate}    id=info_rectificationPeriod
+
+${assetlocator.assetHolder.name}                    id=assetHolder_name
+${assetlocator.assetHolder.identifier.scheme}       class=assetHolder_org_ident_scheme
+${assetlocator.assetHolder.identifier.id}           class=assetHolder_org_ident_id
+${assetlocator.assetHolder.identifier.legalName}    class=assetHolder_org_ident_legalName
+${assetlocator.assetHolder.contactPoint.name}       class=assetHolder_contactPoint_name
+${assetlocator.assetHolder.contactPoint.telephone}  class=assetHolder_contactPoint_telephone
+${assetlocator.assetHolder.contactPoint.email}      class=assetHolder_contactPoint_telephone
+
+${assetlocator.assetCustodian.name}                    id=assetCustodian_name
+${assetlocator.assetCustodian.identifier.scheme}       class=assetCustodian_org_ident_scheme
+${assetlocator.assetCustodian.identifier.id}           class=assetCustodian_org_ident_id
+${assetlocator.assetCustodian.identifier.legalName}    class=assetCustodian_org_ident_legalName
+${assetlocator.assetCustodian.contactPoint.name}       class=assetCustodian_contactPoint_name
+${assetlocator.assetCustodian.contactPoint.telephone}  class=assetCustodian_contactPoint_telephone
+${assetlocator.assetCustodian.contactPoint.email}      class=assetCustodian_contactPoint_telephone
+
+${assetlocator.items[0].unit.name}                   id=items[0]_unit
+${assetlocator.items[0].registrationDetails.status}  id=items[0]_registrationDetails_status
+
+${assetlocator.items[0].classification.scheme}   class=item[0]classification_scheme
+${assetlocator.items[0].classification.id}       class=item[0]classification_id
+
+###${assetlocator.documents[0].documentType}
+
+${assetitemlocator.id}           id=items[0]_id
+${assetitemlocator.description}  id=items[0]_description
+${assetitemlocator.address}      id=items[0]_address
+${assetitemlocator.quantity}     id=items[0]_quantity
+${assetitemlocator.unit}         id=items[0]_unit
+
 *** Keywords ***
 Підготувати клієнт для користувача
   [Arguments]     ${username}
@@ -880,88 +925,6 @@ Login
     [Documentation]
     ...      [Призначення] Створює об’єкт МП з початковими даними tender_data
     ...      [Повертає] tender_uaid (ідентифікатор новоствореного об’єкта МП)
-    #####data:
-    #####    assetCustodian:
-    #####        address:
-    #####            countryName: Україна
-    #####            locality: Білогородка
-    #####            postalCode: 08140
-    #####            region: Київська область
-    #####            streetAddress: вулиця Припятська, 2
-    #####        contactPoint:
-    #####            email: tverdovska@atc.gov.ua
-    #####            faxNumber: 044-406-56-84
-    #####            name: Твердовська Тетяна Нінелівна
-    #####            telephone: 044-406-56-84
-    #####            url: http://www.energoatom.kiev.ua/ua/separated/atc/
-    #####        identifier:
-    #####            id: '20055078'
-    #####            legalName: ВП «Аварійно-технічний центр» ДП «НАЕК «Енергоатом»
-    #####            scheme: UA-EDR
-    #####        name: ВП «Аварійно-технічний центр» ДП «НАЕК «Енергоатом»
-    #####    assetHolder:
-    #####        address:
-    #####            countryName: Україна
-    #####            locality: Яготин
-    #####            postalCode: '01004'
-    #####            region: Київська область
-    #####            streetAddress: вулиця Пушкіна, 3, 1
-    #####        contactPoint:
-    #####            email: ssrv1970@ukr.net
-    #####            faxNumber: 0442798301
-    #####            name: Сорокун Рімма Вікторівна
-    #####            telephone: 0442798301
-    #####            url: http://don.kievcity.gov.ua
-    #####        identifier:
-    #####            id: 02147629
-    #####            legalName: Департамент освіти і науки, молоді та спорту виконавчого органу
-    #####                Київської міської ради (Київської міської державної адміністрації)
-    #####            scheme: UA-EDR
-    #####        name: Департамент освіти і науки, молоді та спорту виконавчого органу Київської
-    #####            міської ради (Київської міської державної адміністрації)
-    #####    assetType: domain
-    #####    decisions:
-    #####    -   decisionDate: '2018-06-01T12:10:11.437468+03:00'
-    #####        decisionID: 4048-6
-    #####        title: Викот буба чортеня недоношениця.
-    #####        title_en: Intuitive dedicated definition
-    #####        title_ru: Sharable encompassing access
-    #####    description: Чужинонька лакейча бісовщина привіт людино четверня попівський цирка
-    #####        начутися перетлівати клюка перестрах постогнувати гаїр паливо.
-    #####    description_en: Odit excepturi vel consequuntur nisi officiis libero perferendis
-    #####        quia commodi optio distinctio ut neque.
-    #####    description_ru: Аюдирэ ратионебюж аугюэ луптатум квуым дэлььынётё ты ут фалля
-    #####        нихйл пэртинакёа мыис.
-    #####    items:
-    #####    -   additionalClassifications:
-    #####        -   description: Будівлі підприємств легкої промисловості
-    #####            id: '1251.4'
-    #####            scheme: dk018
-    #####        address:
-    #####            countryName: Україна
-    #####            locality: Олександрія
-    #####            postalCode: '28000'
-    #####            region: Кіровоградська область
-    #####            streetAddress: вулиця 6-го Грудня, 7, 58
-    #####        classification:
-    #####            description: Промислова заводська, фабрична будівля та їх частини
-    #####            id: 04211000-0
-    #####            scheme: CAV-PS
-    #####        description: 'i-4d2f0e8c: Промислова заводська, фабрична будівля та їх частини'
-    #####        description_en: 'i-6ae7df64: Industrial factory, factory building and their
-    #####            parts'
-    #####        description_ru: 'i-341428c1: Промышленная заводская, фабричная здание и их
-    #####            части'
-    #####        quantity: 4.9697
-    #####        registrationDetails:
-    #####            status: complete
-    #####        unit:
-    #####            code: MTK
-    #####            name: метри квадратні
-    #####    mode: test
-    #####    title: '[ТЕСТУВАННЯ] Переплутувати маґерка.'
-    #####    title_en: '[TESTING] Cross-group mission-critical intranet'
-    #####    title_ru: '[ТЕСТИРОВАНИЕ] De-engineered impactful Graphic Interface'
     Click Element    id=assets_btn
     Sleep   5
     Click Element    id=addassetsbtn
@@ -1126,24 +1089,26 @@ Login
     Sleep   5
     Click Element   xpath=//button[contains(@id, 'save_asset')]
     Wait Until Element Is Visible       xpath=//td[contains(@id, 'info_assetID')]   30
-
+    Click Element  id=update_asset_btn
+    Click Element  id=publish_asset
+    Wait Until Element Is Visible       xpath=//td[contains(@id, 'info_assetID')]   30
     ${tender_uaid}=     Get Text        xpath=//td[contains(@id, 'info_assetID')]
     [Return]    ${tender_uaid}
 
 
-Пошук об'єкта МП по ідентифікатору
+Пошук об’єкта МП по ідентифікатору
     [Arguments]  ${username}  ${tender_uaid}
     [Documentation]
     ...      [Призначення] Шукає об’єкт МП з uaid = tender_uaid.
     ...      [Повертає] tender (словник з інформацією про об’єкт МП)
-    Go to    /prozorrosale2/auctions/assets
+    Go to    http://test.polonex.in.ua/prozorrosale2/auctions/assets
     Input text      id=registr2assetssearch-all       ${tender_uaid}
     Click Element   id=assets-search-btn
     Sleep   5
     Click Element   xpath=//a[contains(@class, 'show-one-btn')]
     Wait Until Element Is Visible      id=info_status    30
 
-Оновити сторінку з об’єктом МП
+Оновити сторінку з об'єктом МП
     [Arguments]  ${username}  ${tender_uaid}
     [Documentation]
     ...      [Призначення] Оновлює сторінку з об’єктом МП для отримання потенційно оновлених даних.
@@ -1151,60 +1116,162 @@ Login
     Reload Page
 
 Отримати інформацію із об'єкта МП
-    [Arguments]  ${username}  ${tender_uaid}  ${field_name}
+    [Arguments]  ${username}  ${tender_uaid}  ${fieldname}
     [Documentation]
     ...      [Призначення] Отримує значення поля field_name для об’єкту МП tender_uaid.
     ...      [Повертає] tender['field_name'] (значення поля).
-    log to console  ${field_name}
+    ${return_value}=   Get Text  ${assetlocator.${fieldname}}
+    [Return]  ${return_value}
 
 Отримати інформацію з активу об'єкта МП
-    [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${field_name}
+    [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${fieldname}
     [Documentation]
     ...      [Призначення] Отримує значення поля field_name з активу з item_id в описі об’єкта МП tender_uaid.
     ...      [Повертає] item['field_name'] (значення поля).
-    log to console  ${field_name}
+
+    ${return_value}=   Get Text  ${assetitemlocator.${fieldname}}
+    [Return]  ${return_value}
 
 Внести зміни в об'єкт МП
     [Arguments]  ${username}  ${tender_uaid}  ${fieldname}  ${fieldvalue}
     [Documentation]
     ...      [Призначення] Змінює значення поля fieldname на fieldvalue для об’єкта МП tender_uaid.
+    polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
+    Wait Until Element Is Visible      id=info_status    30
+    Click Element  id=update_asset_btn
+    ${prop_field_name}=         Replace String    ${fieldname}    .   _    count=1
+    Wait Until Element Is Visible       name=AddAssetForm[${prop_field_name}]   30
+    ${field_value}=  Convert To String  ${fieldvalue}
+    Input text  name=AddAssetForm[${prop_field_name}]  ${fieldvalue}
+    Click Element  id=save_asset
+    Wait Until Page Contains  ${fieldvalue}  30
 
 Внести зміни в актив об'єкта МП
     [Arguments]  ${username}  ${item_id}  ${tender_uaid}  ${fieldname}  ${fieldvalue}
     [Documentation]
     ...      [Призначення] Змінює значення поля fieldname на fieldvalue для активу item_id об’єкта МП tender_uaid.
+    polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
+    Wait Until Element Is Visible      id=info_status    30
+    Click Element  id=update_asset_btn
+    ${prop_field_name}=         Replace String    ${fieldname}    .   _    count=1
+    Wait Until Element Is Visible       name=AddAssetItemForm[0][${prop_field_name}]   30
+    ${field_value}=  Convert To String  ${fieldvalue}
+    Input text  name=AddAssetItemForm[0][${prop_field_name}]  ${fieldvalue}
+    Click Element  id=save_asset
+    Wait Until Page Contains  ${fieldvalue}  30
 
 Завантажити ілюстрацію в об'єкт МП
-    [Arguments]  ${username}  ${filepath}  ${tender_uaid}
+    [Arguments]  ${username}  ${tender_uaid}  ${filepath}
     [Documentation]
     ...      [Призначення] Завантажує ілюстрацію, яка знаходиться по шляху filepath і має documentType = illustration, до об’єкта МП tender_uaid користувачем username.
+    polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element  id=update_asset_btn
+    Sleep   2
+    Choose File     xpath=//input[contains(@id, "doc_upload_field_illustration")]   ${filepath}
+    Sleep   10
+    Click Element  id=save_asset
 
 Завантажити документ в об'єкт МП з типом
-    [Arguments]  ${username}  ${filepath}  ${tender_uaid}  ${documentType}
+    [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${documentType}
     [Documentation]
     ...      [Призначення] Завантажує документ, який знаходиться по шляху filepath і має певний documentType (наприклад, notice і т.д), до об’єкта МП tender_uaid користувачем username.
     ...      [Повертає] reply (словник з інформацією про документ).
+    polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element  id=update_asset_btn
+    Sleep   2
+    Choose File     id=doc_upload_field_${documentType}   ${filepath}
+    Sleep   10
+    Click Element  id=save_asset
 
 Додати актив до об'єкта МП
     [Arguments]  ${username}  ${tender_uaid}  ${item}
     [Documentation]
     ...      [Призначення] Додає дані про предмет item до об’єкта МП tender_uaid користувачем username.
+    polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element  id=update_asset_btn
+    Sleep   2
+    Click Element  id=additem
+
+    ${items_1_additionalClassifications_0_description}=     Get From Dictionary               ${item.additionalClassifications[0]}  description
+    ${items_1_additionalClassifications_0_id}=              Get From Dictionary               ${item.additionalClassifications[0]}  id
+    ${items_1_additionalClassifications_0_scheme}=          Get From Dictionary               ${item.additionalClassifications[0]}  scheme
+    ${items_1_address_countryName}=                         Get From Dictionary               ${item.address}  countryName
+    ${items_1_address_locality}=                            Get From Dictionary               ${item.address}  locality
+    ${items_1_address_postalCode}=                          Get From Dictionary               ${item.address}  postalCode
+    ${items_1_address_region}=                              Get From Dictionary               ${item.address}  region
+    ${items_1_address_streetAddress}=                       Get From Dictionary               ${item.address}  streetAddress
+    ${items_1_classification_description}=                  Get From Dictionary               ${item.classification}  description
+    ${items_1_classification_id}=                           Get From Dictionary               ${item.classification}  id
+    ${items_1_classification_scheme}=                       Get From Dictionary               ${item.classification}  scheme
+    ${items_1_description}=                                 Get From Dictionary               ${item}  description
+    ${items_1_quantity}=                                    Get From Dictionary               ${item}  quantity
+    ${items_1_registrationDetails_status}=                  Get From Dictionary               ${item.registrationDetails}  status
+    ${items_1_unit_code}=                                   Get From Dictionary               ${item.unit}  code
+    ${items_1_unit_name}=                                   Get From Dictionary               ${item.unit}  name
+
+    ${items_1_additionalClassifications_0_description}=   Convert To String   ${items_1_additionalClassifications_0_description}
+    ${items_1_additionalClassifications_0_id}=            Convert To String   ${items_1_additionalClassifications_0_id}
+    ${items_1_additionalClassifications_0_scheme}=        Convert To String   ${items_1_additionalClassifications_0_scheme}
+    ${items_1_address_countryName}=                       Convert To String   ${items_1_address_countryName}
+    ${items_1_address_locality}=                          Convert To String   ${items_1_address_locality}
+    ${items_1_address_postalCode}=                        Convert To String   ${items_1_address_postalCode}
+    ${items_1_address_region}=                            Convert To String   ${items_1_address_region}
+    ${items_1_address_streetAddress}=                     Convert To String   ${items_1_address_streetAddress}
+    ${items_1_classification_description}=                Convert To String   ${items_1_classification_description}
+    ${items_1_classification_id}=                         Convert To String   ${items_1_classification_id}
+    ${items_1_classification_scheme}=                     Convert To String   ${items_1_classification_scheme}
+    ${items_1_description}=                               Convert To String   ${items_1_description}
+    ${items_1_quantity}=                                  Convert To String   ${items_1_quantity}
+    ${items_1_registrationDetails_status}=                Convert To String   ${items_1_registrationDetails_status}
+    ${items_1_unit_code}=                                 Convert To String   ${items_1_unit_code}
+    ${items_1_unit_name}=                                 Convert To String   ${items_1_unit_name}
+
+
+    Input text      id=addassetitemform-1-description       ${items_1_description}
+    Input text      id=addassetitemform-1-quantity       ${items_1_quantity}
+    Select From List      id=addassetitemform-1-unit_code       ${items_1_unit_code}
+    Select From List      id=addassetitemform-1-registrationdetails_status       ${items_1_registrationDetails_status}
+
+    Input text      id=addassetitemform-1-address_countryname       ${items_1_address_countryName}
+    Input text      id=addassetitemform-1-address_locality       ${items_1_address_locality}
+    Input text      id=addassetitemform-1-address_postalcode       ${items_1_address_postalCode}
+    Input text      id=addassetitemform-1-address_region       ${items_1_address_region}
+    Input text      id=addassetitemform-1-address_streetaddress       ${items_1_address_streetAddress}
+
+    Execute Javascript    $("#addassetitemform-1-classification_id").val("${items_1_classification_id}"); $("#addassetitemform-1-classification_id").trigger("change");
+    Execute Javascript    $("#addassetitemform-1-classification_id_cpv").val("${items_1_additionalClassifications_0_id}"); $("#addassetitemform-1-classification_id_cpv").trigger("change");
+
+    Sleep   5
+    Click Element   xpath=//button[contains(@id, 'save_asset')]
+    Wait Until Element Is Visible       xpath=//td[contains(@id, 'info_assetID')]   30
 
 Отримати кількість активів в об'єкті МП
     [Arguments]  ${username}  ${tender_uaid}
     [Documentation]
     ...      [Призначення] Отримує кількість активів в об’єкті МП tender_uaid.
     ...      [Повертає] number_of_items (кількість активів).
+    polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
+    ${res}=   Get Text      id=item_count
+    [return]  ${res}
 
 Завантажити документ для видалення об'єкта МП
-    [Arguments]  ${username}  ${filepath}  ${tender_uaid}
+    [Arguments]  ${username}  ${tender_uaid}  ${filepath}
     [Documentation]
     ...      [Призначення] Завантажує документ, який знаходиться по шляху filepath і має documentType = cancellationDetails, до об’єкта МП tender_uaid користувачем username.
+    polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element  id=update_asset_btn
+    Sleep   2
+    Choose File     xpath=//input[contains(@id, "doc_upload_field_cancellationDetails")]   ${filepath}
+    Sleep   10
+    Click Element  id=save_asset
 
 Видалити об'єкт МП
     [Arguments]  ${username}  ${tender_uaid}
     [Documentation]
     ...      [Призначення] Видаляє об’єкт МП tender_uaid користувачем username.
+    polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element  id=delete_asset_btn
+    Wait Until Page Contains    Видалено з реєстру актив  20
 
 
 ######################### Лоти #########################
@@ -1215,6 +1282,19 @@ Login
     [Documentation]
     ...      [Призначення] Створює лот з початковими даними tender_data і прив’язаним до нього об’єктом МП asset_uaid
     ...      [Повертає] tender_uaid (ідентифікатор новоствореного лоту)
+    log to console   ${tender_data}
+    Click Element    id=lots_btn
+    Sleep   5
+    Click Element    id=addlotbtn
+
+
+    ${decisions}=            Get From Dictionary               ${tender_data.data}  decisions
+    ${decision}=             Get From List                     ${decisions}                                  0
+    ${decisions_0_decisionDate}=     Get From Dictionary               ${decision}  decisionDate
+    ${decisions_0_decisionID}=     Get From Dictionary               ${decision}  decisionID
+
+
+
 
 Пошук лоту по ідентифікатору
     [Arguments]  ${username}  ${tender_uaid}
@@ -1250,18 +1330,18 @@ Login
     ...      [Призначення] Змінює значення поля fieldname на fieldvalue для активу item_id лоту tender_uaid.
 
 Завантажити ілюстрацію в лот
-    [Arguments]  ${username}  ${filepath}  ${tender_uaid}
+    [Arguments]  ${username}  ${tender_uaid}  ${filepath}
     [Documentation]
     ...      [Призначення] Завантажує ілюстрацію, яка знаходиться по шляху filepath і має documentType = illustration, до лоту tender_uaid користувачем username.
 
 Завантажити документ в лот з типом
-    [Arguments]  ${username}  ${filepath}  ${tender_uaid}  ${documentType}
+    [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${documentType}
     [Documentation]
     ...      [Призначення] Завантажує документ, який знаходиться по шляху filepath і має певний documentType (наприклад, notice і т.д), до лоту tender_uaid користувачем username.
     ...      [Повертає] reply (словник з інформацією про документ).
 
 Завантажити документ для видалення лоту
-    [Arguments]  ${username}  ${filepath}  ${tender_uaid}
+    [Arguments]  ${username}  ${tender_uaid}  ${filepath}
     [Documentation]
     ...      [Призначення] Завантажує документ, який знаходиться по шляху filepath і має documentType = cancellationDetails, до лоту tender_uaid користувачем username.
 
