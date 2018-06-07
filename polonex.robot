@@ -69,48 +69,140 @@ ${locator.cancelldoc.description}                    xpath=//div[contains(@class
 
 ###for assets
 
-${assetlocator.title}                          id=auction_title
-${assetlocator.status}                         id=info_status
-${assetlocator.id}                             id=info_id
-${assetlocator.assetID}                        id=info_assetID
-${assetlocator.date}                           id=info_date
-${assetlocator.dateModified}                   id=info_dateModified
-${assetlocator.rectificationPeriod}            id=info_rectificationPeriod
-${assetlocator.description}                    id=info_description
-${assetlocator.decisions[0].title}             id=decisions[0]_title
-${assetlocator.decisions[0].decisionDate}      id=decisions[0]_decisionDate
-${assetlocator.decisions[0].decisionID}        id=decisions[0]_decisionID
-${assetlocator.rectificationPeriod.endDate}    id=info_rectificationPeriod
+${assetlocator.title}                                    id=auction_title
+${assetlocator.status}                                   id=info_status
+${assetlocator.id}                                       id=info_id
+${assetlocator.assetID}                                  id=info_assetID
+${assetlocator.date}                                     id=info_date
+${assetlocator.dateModified}                             id=info_dateModified
+${assetlocator.rectificationPeriod}                      id=info_rectificationPeriod
+${assetlocator.description}                              id=info_description
+${assetlocator.decisions[0].title}                       id=decisions[0]_title
+${assetlocator.decisions[0].decisionDate}                id=decisions[0]_decisionDate
+${assetlocator.decisions[0].decisionID}                  id=decisions[0]_decisionID
+${assetlocator.rectificationPeriod.endDate}              xpath=//td[contains(@id, 'info_rectificationPeriod')]/span[contains(@class, 'endDate')]
+${assetlocator.assetHolder.name}                         id=assetHolder_name
+${assetlocator.assetHolder.identifier.scheme}            xpath=//span[contains(@class, 'assetHolder_org_ident_scheme')]
+${assetlocator.assetHolder.identifier.id}                xpath=//span[contains(@class, 'assetHolder_org_ident_id')]
+${assetlocator.assetHolder.identifier.legalName}         xpath=//span[contains(@class, 'assetHolder_org_ident_legalName')]
+${assetlocator.assetHolder.contactPoint.name}            xpath=//div[contains(@class, 'assetHolder_contactPoint_name')]
+${assetlocator.assetHolder.contactPoint.telephone}       xpath=//div[contains(@class, 'assetHolder_contactPoint_telephone')]
+${assetlocator.assetHolder.contactPoint.email}           xpath=//div[contains(@class, 'assetHolder_contactPoint_email')]
+${assetlocator.assetCustodian.name}                      id=assetCustodian_name
+${assetlocator.assetCustodian.identifier.scheme}         xpath=//span[contains(@class, 'assetCustodian_org_ident_scheme')]
+${assetlocator.assetCustodian.identifier.id}             xpath=//span[contains(@class, 'assetCustodian_org_ident_id')]
+${assetlocator.assetCustodian.identifier.legalName}      xpath=//span[contains(@class, 'assetCustodian_org_ident_legalName')]
+${assetlocator.assetCustodian.contactPoint.name}         xpath=//div[contains(@class, 'assetCustodian_contactPoint_name')]
+${assetlocator.assetCustodian.contactPoint.telephone}    xpath=//div[contains(@class, 'assetCustodian_contactPoint_telephone')]
+${assetlocator.assetCustodian.contactPoint.email}        xpath=//div[contains(@class, 'assetCustodian_contactPoint_email')]
+${assetlocator.items[0].unit.name}                       id=items[0]_unit
+${assetlocator.items[0].registrationDetails.status}      id=items[0]_registrationDetails_status
+${assetlocator.items[0].classification.scheme}           xpath=//span[contains(@class, 'item[0]classification_scheme')]
+${assetlocator.items[0].classification.id}               xpath=//span[contains(@class, 'item[0]classification_id')]
 
-${assetlocator.assetHolder.name}                    id=assetHolder_name
-${assetlocator.assetHolder.identifier.scheme}       class=assetHolder_org_ident_scheme
-${assetlocator.assetHolder.identifier.id}           class=assetHolder_org_ident_id
-${assetlocator.assetHolder.identifier.legalName}    class=assetHolder_org_ident_legalName
-${assetlocator.assetHolder.contactPoint.name}       class=assetHolder_contactPoint_name
-${assetlocator.assetHolder.contactPoint.telephone}  class=assetHolder_contactPoint_telephone
-${assetlocator.assetHolder.contactPoint.email}      class=assetHolder_contactPoint_telephone
-
-${assetlocator.assetCustodian.name}                    id=assetCustodian_name
-${assetlocator.assetCustodian.identifier.scheme}       class=assetCustodian_org_ident_scheme
-${assetlocator.assetCustodian.identifier.id}           class=assetCustodian_org_ident_id
-${assetlocator.assetCustodian.identifier.legalName}    class=assetCustodian_org_ident_legalName
-${assetlocator.assetCustodian.contactPoint.name}       class=assetCustodian_contactPoint_name
-${assetlocator.assetCustodian.contactPoint.telephone}  class=assetCustodian_contactPoint_telephone
-${assetlocator.assetCustodian.contactPoint.email}      class=assetCustodian_contactPoint_telephone
-
-${assetlocator.items[0].unit.name}                   id=items[0]_unit
-${assetlocator.items[0].registrationDetails.status}  id=items[0]_registrationDetails_status
-
-${assetlocator.items[0].classification.scheme}   class=item[0]classification_scheme
-${assetlocator.items[0].classification.id}       class=item[0]classification_id
-
-###${assetlocator.documents[0].documentType}
+${assetlocator.documents[0].documentType}                id=doclist_0
 
 ${assetitemlocator.id}           id=items[0]_id
 ${assetitemlocator.description}  id=items[0]_description
 ${assetitemlocator.address}      id=items[0]_address
 ${assetitemlocator.quantity}     id=items[0]_quantity
 ${assetitemlocator.unit}         id=items[0]_unit
+
+${lotlocator.status}                                           id=info_status
+${lotlocator.id}                                               id=info_id
+${lotlocator.lotID}                                            id=info_lotID
+${lotlocator.title}                                            id=info_title
+${lotlocator.description}                                      id=info_description
+${lotlocator.assets}                                           id=info_assets
+${lotlocator.auctions}                                         id=info_auctions
+${lotlocator.lotHolder.name}                                   id=lotHolder_name
+${lotlocator.org.name}                                         id=org_name
+${lotlocator.decisions[0].title}                               id=decisions[0]_title
+${lotlocator.decisions[0].decisionDate}                        id=decisions[0]_decisionDate
+${lotlocator.decisions[0].decisionID}                          id=decisions[0]_decisionID
+${lotlocator.decisions[1].title}                               id=decisions[1]_title
+${lotlocator.decisions[1].decisionDate}                        id=decisions[1]_decisionDate
+${lotlocator.decisions[1].decisionID}                          id=decisions[1]_decisionID
+${lotlocator.auctions[0].auctionID}                            id=auctions[0]_auctionID
+${lotlocator.auctions[0].status}                               id=auctions[0]_status
+${lotlocator.auctions[0].tenderAttempts}                       id=auctions[0]_tenderAttempts
+${lotlocator.auctions[0].procurementMethodType}                id=auctions[0]_procurementMethodType
+${lotlocator.auctions[0].auctionPeriod}                        id=auctions[0]_auctionPeriod
+${lotlocator.auctions[0].tenderingDuration}                    id=auctions[0]_tenderingDuration
+${lotlocator.auctions[0].value.amount}                         id=auctions[0]_value
+${lotlocator.auctions[0].minimalStep.amount}                   id=auctions[0]_minimalStep
+${lotlocator.auctions[0].guarantee.amount}                     id=auctions[0]_guarantee
+${lotlocator.auctions[0].registrationFee.amount}               id=auctions[0]_registrationFee
+${lotlocator.auctions[0].dutchSteps}                           id=auctions[0]_dutchSteps
+${lotlocator.auctions[1].auctionID}                            id=auctions[1]_auctionID
+${lotlocator.auctions[1].status}                               id=auctions[1]_status
+${lotlocator.auctions[1].tenderAttempts}                       id=auctions[1]_tenderAttempts
+${lotlocator.auctions[1].procurementMethodType}                id=auctions[1]_procurementMethodType
+${lotlocator.auctions[1].auctionPeriod}                        id=auctions[1]_auctionPeriod
+${lotlocator.auctions[1].tenderingDuration}                    id=auctions[1]_tenderingDuration
+${lotlocator.auctions[1].value.amount}                         id=auctions[1]_value
+${lotlocator.auctions[1].minimalStep.amount}                   id=auctions[1]_minimalStep
+${lotlocator.auctions[1].guarantee.amount}                     id=auctions[1]_guarantee
+${lotlocator.auctions[1].registrationFee.amount}               id=auctions[1]_registrationFee
+${lotlocator.auctions[1].dutchSteps}                           id=auctions[1]_dutchSteps
+${lotlocator.auctions[2].auctionID}                            id=auctions[2]_auctionID
+${lotlocator.auctions[2].status}                               id=auctions[2]_status
+${lotlocator.auctions[2].tenderAttempts}                       id=auctions[2]_tenderAttempts
+${lotlocator.auctions[2].procurementMethodType}                id=auctions[2]_procurementMethodType
+${lotlocator.auctions[2].auctionPeriod}                        id=auctions[2]_auctionPeriod
+${lotlocator.auctions[2].tenderingDuration}                    id=auctions[2]_tenderingDuration
+${lotlocator.auctions[2].value.amount}                         id=auctions[2]_value
+${lotlocator.auctions[2].minimalStep.amount}                   id=auctions[2]_minimalStep
+${lotlocator.auctions[2].guarantee.amount}                     id=auctions[2]_guarantee
+${lotlocator.auctions[2].registrationFee.amount}               id=auctions[2]_registrationFee
+${lotlocator.auctions[2].dutchSteps}                           id=auctions[2]_dutchSteps
+${lotlocator.items[0].id}                                      id=items[0]_id
+${lotlocator.items[0].description}                             id=items[0]_description
+${lotlocator.items[0].classification}                          id=items[0]_classification
+${lotlocator.items[0].address}                                 id=items[0]_address
+${lotlocator.items[0].quantity}                                id=items[0]_quantity
+${lotlocator.items[0].unit}                                    id=items[0]_unit
+${lotlocator.items[0].registrationDetails.status}              id=items[0]_registrationDetails_status
+${lotlocator.items[0].registrationDetails.registrationID}      id=items[0]_registrationDetails_registrationID
+${lotlocator.items[0].registrationDetails.registrationDate}    id=items[0]_registrationDetails_registrationDate
+${lotlocator.items[1].description}                             id=items[1]_description
+${lotlocator.items[1].classification}                          id=items[1]_classification
+${lotlocator.items[1].address}                                 id=items[1]_address
+${lotlocator.items[1].quantity}                                id=items[1]_quantity
+${lotlocator.items[1].unit}                                    id=items[1]_unit
+${lotlocator.items[1].registrationDetails.status}              id=items[1]_registrationDetails_status
+${lotlocator.items[1].registrationDetails.registrationID}      id=items[1]_registrationDetails_registrationID
+${lotlocator.items[1].registrationDetails.registrationDate}    id=items[1]_registrationDetails_registrationDate
+${lotlocator.lotHolder.identifier.scheme}                      xpath=//span[contains(@class, 'lotHolder_org_ident_scheme')]
+${lotlocator.lotHolder.identifier.id}                          xpath=//span[contains(@class, 'lotHolder_org_ident_id')]
+${lotlocator.lotHolder.identifier.legalName}                   xpath=//span[contains(@class, 'lotHolder_org_ident_legalName')]
+${lotlocator.lotHolder.identifier.uri}                         xpath=//span[contains(@class, 'lotHolder_org_ident_uri')]
+${lotlocator.lotHolder.address.streetAddress}                  xpath=//div[contains(@class, 'lotHolder_address_streetAddress')]
+${lotlocator.lotHolder.address.locality}                       xpath=//div[contains(@class, 'lotHolder_address_locality')]
+${lotlocator.lotHolder.address.region}                         xpath=//div[contains(@class, 'lotHolder_address_region')]
+${lotlocator.lotHolder.address.postalCode}                     xpath=//div[contains(@class, 'lotHolder_address_postalCode')]
+${lotlocator.lotHolder.address.countryName}                    xpath=//div[contains(@class, 'lotHolder_address_countryName')]
+${lotlocator.lotHolder.contactPoint.name}                      xpath=//div[contains(@class, 'lotHolder_contactPoint_name')]
+${lotlocator.lotHolder.contactPoint.email}                     xpath=//div[contains(@class, 'lotHolder_contactPoint_email')]
+${lotlocator.lotHolder.contactPoint.telephone}                 xpath=//div[contains(@class, 'lotHolder_contactPoint_telephone')]
+${lotlocator.lotCustodian.identifier.scheme}                   xpath=//span[contains(@class, 'lotCustodian_org_ident_scheme')]
+${lotlocator.lotCustodian.identifier.id}                       xpath=//span[contains(@class, 'lotCustodian_org_ident_id')]
+${lotlocator.lotCustodian.identifier.legalName}                xpath=//span[contains(@class, 'lotCustodian_org_ident_legalName')]
+${lotlocator.lotCustodian.address.streetAddress}               xpath=//div[contains(@class, 'lotCustodian_address_streetAddress')]
+${lotlocator.lotCustodian.address.locality}                    xpath=//div[contains(@class, 'lotCustodian_address_locality')]
+${lotlocator.lotCustodian.address.region}                      xpath=//div[contains(@class, 'lotCustodian_address_region')]
+${lotlocator.lotCustodian.address.postalCode}                  xpath=//div[contains(@class, 'lotCustodian_address_postalCode')]
+${lotlocator.lotCustodian.address.countryName}                 xpath=//div[contains(@class, 'lotCustodian_address_countryName')]
+${lotlocator.lotCustodian.contactPoint.name}                   xpath=//div[contains(@class, 'lotCustodian_contactPoint_name')]
+${lotlocator.lotCustodian.contactPoint.email}                  xpath=//div[contains(@class, 'lotCustodian_contactPoint_email')]
+${lotlocator.lotCustodian.contactPoint.telephone}              xpath=//div[contains(@class, 'lotCustodian_contactPoint_telephone')]
+${lotlocator.date}                                             id=info_date
+${lotlocator.rectificationPeriod.endDate}                      xpath=//td[contains(@id, 'info_rectificationPeriod')]/span[contains(@class, 'endDate')]
+${lotlocator.assets[0]}                                        xpath=//td[contains(@id, 'info_assets')]/a
+${lotlocator.auctions[0].auctionPeriod.startDate}              xpath=//td[contains(@id, 'auctions[0]_auctionPeriod')]/span[contains(@class, 'startDate')]
+${lotlocator.dateModified}                                     id=info_dateModified
+
+
 
 *** Keywords ***
 Підготувати клієнт для користувача
@@ -428,14 +520,14 @@ Login
     ${return_value}=   Get Text     id=${prop_field_name}
     [Return]  ${return_value}
 
-Отримати інформацію із предмету
-    [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${field_name}
-    ${index}=   Get Element Attribute   xpath=//td[contains(text(), '${item_id}')]@id
-    ${index}=   Get Substring   ${index}    0   9
-    ${return_value}=    Get Text     id=${item_id}${field_name}
-    ${return_value}=  Run Keyword If
-    ...  ${field_name} == 'quantity'      Convert To Integer    ${return_value}
-    [Return]  ${return_value}
+####Отримати інформацію із предмету
+####    [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${field_name}
+####    ${index}=   Get Element Attribute   xpath=//td[contains(text(), '${item_id}')]@id
+####    ${index}=   Get Substring   ${index}    0   9
+####    ${return_value}=    Get Text     id=${item_id}${field_name}
+####    ${return_value}=  Run Keyword If
+####    ...  ${field_name} == 'quantity'      Convert To Integer    ${return_value}
+####    [Return]  ${return_value}
 
 Отримати текст із поля і показати на сторінці
   [Arguments]   ${fieldname}
@@ -679,8 +771,9 @@ Login
 
 Отримати документ
     [Arguments]  ${username}  ${tender_uaid}  ${doc_id}
-    ${file_name}=   Get Element Attribute   xpath=//div[contains(@data-name,'${doc_id}')]@data-name
-    ${url}=   Get Element Attribute   xpath=//div[contains(@data-name,'${doc_id}')]@data-src
+    ###${file_name}=   Get Element Attribute   xpath=//div[contains(@data-name,'${doc_id}')]@data-name
+    ${file_name}=   Get Text   xpath=//div[contains(text(),'${doc_id}')]
+    ${url}=   Get Element Attribute   xpath=//div[contains(@data-name,'${file_name}')]@data-src
     polonex_download_file   ${url}  ${file_name}  ${OUTPUT_DIR}
     [return]  ${file_name}
 
@@ -1053,7 +1146,7 @@ Login
     Input text      id=addassetform-assetcustodian_contactpoint_telephone       ${assetCustodian_contactPoint_telephone}
     Input text      id=addassetform-assetcustodian_contactpoint_url       ${assetCustodian_contactPoint_url}
     Input text      id=addassetform-assetcustodian_identifier_id       ${assetCustodian_identifier_id}
-    ####Input text      id=addassetform-assetcustodian_identifier_id       ${assetCustodian_identifier_legalName}
+    Input text      id=addassetform-assetcustodian_identifier_legalname       ${assetCustodian_identifier_legalName}
     Select From List    id=addassetform-assetcustodian_identifier_scheme       ${assetCustodian_identifier_scheme}
     Input text      id=addassetform-assetcustodian_name       ${assetCustodian_name}
     Input text      id=addassetform-assetholder_address_countryname       ${assetHolder_address_countryName}
@@ -1067,7 +1160,7 @@ Login
     Input text      id=addassetform-assetholder_contactpoint_telephone       ${assetHolder_contactPoint_telephone}
     Input text      id=addassetform-assetholder_contactpoint_url       ${assetHolder_contactPoint_url}
     Input text      id=addassetform-assetholder_identifier_id       ${assetHolder_identifier_id}
-    ###Input text      id=addassetform-assetholder_identifier_legalName       ${assetHolder_identifier_legalName}
+    Input text      id=addassetform-assetholder_identifier_legalname       ${assetHolder_identifier_legalName}
     Select From List      id=addassetform-assetholder_identifier_scheme       ${assetHolder_identifier_scheme}
     Input text      id=addassetform-assetholder_name       ${assetHolder_name}
 
@@ -1112,8 +1205,9 @@ Login
     [Arguments]  ${username}  ${tender_uaid}
     [Documentation]
     ...      [Призначення] Оновлює сторінку з об’єктом МП для отримання потенційно оновлених даних.
-    Sleep   20
-    Reload Page
+    Go to    http://test.polonex.in.ua/prozorrosale2/auctions/get-all-assets?n=10
+    Sleep   10
+    polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
 
 Отримати інформацію із об'єкта МП
     [Arguments]  ${username}  ${tender_uaid}  ${fieldname}
@@ -1121,6 +1215,15 @@ Login
     ...      [Призначення] Отримує значення поля field_name для об’єкту МП tender_uaid.
     ...      [Повертає] tender['field_name'] (значення поля).
     ${return_value}=   Get Text  ${assetlocator.${fieldname}}
+
+    ${return_value}=  Run Keyword If
+    ...  'status' in '${fieldname}'                                   convert_polonex_string  ${return_value}
+    ...  ELSE IF    'registrationDetails.status' in '${fieldname}'    convert_polonex_string  ${return_value}
+    ...  ELSE IF    'rectificationPeriod.endDate' in '${fieldname}'  convert_polonex_date_to_iso_format  ${return_value}
+    ...  ELSE IF    'quantity' in '${fieldname}'  Convert To Number  ${return_value}
+    ...  ELSE IF    'documentType' in '${fieldname}'  Execute Javascript  return $("#doclist_0").html();
+    ...  ELSE       Convert to string  ${return_value}
+
     [Return]  ${return_value}
 
 Отримати інформацію з активу об'єкта МП
@@ -1128,8 +1231,15 @@ Login
     [Documentation]
     ...      [Призначення] Отримує значення поля field_name з активу з item_id в описі об’єкта МП tender_uaid.
     ...      [Повертає] item['field_name'] (значення поля).
-
     ${return_value}=   Get Text  ${assetitemlocator.${fieldname}}
+
+    ${return_value}=  Run Keyword If
+    ...  'status' in '${fieldname}'                                   convert_polonex_string  ${return_value}
+    ...  ELSE IF    'registrationDetails.status' in '${fieldname}'    convert_polonex_string  ${return_value}
+    ...  ELSE IF    'rectificationPeriod.endDate' in '${fieldname}'  convert_polonex_date_to_iso_format  ${return_value}
+    ...  ELSE IF    'quantity' in '${fieldname}'  Convert To Number  ${return_value}
+    ...  ELSE       Convert to string  ${return_value}
+
     [Return]  ${return_value}
 
 Внести зміни в об'єкт МП
@@ -1283,29 +1393,56 @@ Login
     ...      [Призначення] Створює лот з початковими даними tender_data і прив’язаним до нього об’єктом МП asset_uaid
     ...      [Повертає] tender_uaid (ідентифікатор новоствореного лоту)
     log to console   ${tender_data}
-    Click Element    id=lots_btn
-    Sleep   5
-    Click Element    id=addlotbtn
 
+    polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${asset_uaid}
+    ${asset_id}=   Get Text  id=info_id
+
+    Go to    http://test.polonex.in.ua/prozorrosale2/auctions/lots
+    sleep  5
+    Click Element    id=addlotbtn
 
     ${decisions}=            Get From Dictionary               ${tender_data.data}  decisions
     ${decision}=             Get From List                     ${decisions}                                  0
     ${decisions_0_decisionDate}=     Get From Dictionary               ${decision}  decisionDate
     ${decisions_0_decisionID}=     Get From Dictionary               ${decision}  decisionID
 
+    ${decisions}=                    Convert To String       ${decisions}
+    ${decision}=                     Convert To String       ${decision}
+    ${decisions_0_decisionDate}=     Convert To String       ${decisions_0_decisionDate}
+    ${decisions_0_decisionID}=       Convert To String       ${decisions_0_decisionID}
 
+    Input text      id=addlotform-asset_id                   ${asset_id}
+    Input text      id=addassetdecisionsform-0-title         ${asset_uaid}
+    Input text      id=addassetdecisionsform-0-decisiondate  ${asset_uaid}
+    Input text      id=addassetdecisionsform-0-decisionid    ${asset_uaid}
 
+    Sleep   5
+    Click Element   xpath=//button[contains(@id, 'save_lot')]
+    Wait Until Element Is Visible       xpath=//td[contains(@id, 'info_lotID')]   30
+    Click Element  id=to_compose_lot_btn
+    Wait Until Element Is Visible       xpath=//td[contains(@id, 'info_lotID')]   30
+    ${tender_uaid}=     Get Text        xpath=//td[contains(@id, 'info_lotID')]
+    [Return]    ${tender_uaid}
 
 Пошук лоту по ідентифікатору
     [Arguments]  ${username}  ${tender_uaid}
     [Documentation]
     ...      [Призначення] Шукає лот з uaid = tender_uaid.
     ...      [Повертає] tender (словник з інформацією про лот)
+    Go to    http://test.polonex.in.ua/prozorrosale2/auctions/lots
+    Input text      id=registr2lotssearch-all       ${tender_uaid}
+    Click Element   id=lots-search-btn
+    Sleep   5
+    Click Element   xpath=//a[contains(@class, 'show-one-btn')]
+    Wait Until Element Is Visible      id=info_status    30
 
 Оновити сторінку з лотом
     [Arguments]  ${username}  ${tender_uaid}
     [Documentation]
     ...      [Призначення] Оновлює сторінку з лотом для отримання потенційно оновлених даних.
+    Go to    http://test.polonex.in.ua/prozorrosale2/auctions/get-all-lots?n=10
+    Sleep   10
+    polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
 
 Отримати інформацію із лоту
     [Arguments]  ${username}  ${tender_uaid}  ${field_name}
@@ -1313,47 +1450,145 @@ Login
     ...      [Призначення] Отримує значення поля field_name для лоту tender_uaid.
     ...      [Повертає] tender['field_name'] (значення поля).
 
+    ${return_value}=   Get Text  ${lotlocator.${fieldname}}
+
+    ###${return_value}=  Run Keyword If
+    ###...  'status' in '${fieldname}'                                   convert_polonex_string  ${return_value}
+    ###...  ELSE IF    'registrationDetails.status' in '${fieldname}'    convert_polonex_string  ${return_value}
+    ###...  ELSE IF    'rectificationPeriod.endDate' in '${fieldname}'  convert_polonex_date_to_iso_format  ${return_value}
+    ###...  ELSE IF    'quantity' in '${fieldname}'  Convert To Number  ${return_value}
+    ###...  ELSE       Convert to string  ${return_value}
+
+    [Return]  ${return_value}
+
 Отримати інформацію з активу лоту
     [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${field_name}
     [Documentation]
     ...      [Призначення] Отримує значення поля field_name з активу з item_id в описі лоту tender_uaid.
     ...      [Повертає] item['field_name'] (значення поля).
 
+    ${return_value}=   Get Text  ${lotitemlocator.${fieldname}}
+
+    ###${return_value}=  Run Keyword If
+    ###...  'status' in '${fieldname}'                                   convert_polonex_string  ${return_value}
+    ###...  ELSE IF    'registrationDetails.status' in '${fieldname}'    convert_polonex_string  ${return_value}
+    ###...  ELSE IF    'rectificationPeriod.endDate' in '${fieldname}'  convert_polonex_date_to_iso_format  ${return_value}
+    ###...  ELSE IF    'quantity' in '${fieldname}'  Convert To Number  ${return_value}
+    ###...  ELSE       Convert to string  ${return_value}
+
+    [Return]  ${return_value}
+
 Внести зміни в лот
     [Arguments]  ${username}  ${tender_uaid}  ${fieldname}  ${fieldvalue}
     [Documentation]
     ...      [Призначення] Змінює значення поля fieldname на fieldvalue для лоту tender_uaid.
+    polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
+    Wait Until Element Is Visible      id=info_status    30
+    Click Element  id=update_lot_btn
+    ${prop_field_name}=         Replace String    ${fieldname}    .   _    count=1
+    Wait Until Element Is Visible       name=AddLotForm[${prop_field_name}]   30
+    ${field_value}=  Convert To String  ${fieldvalue}
+    Input text  name=AddLotForm[${prop_field_name}]  ${fieldvalue}
+    Click Element  id=save_lot
+    Wait Until Page Contains  ${fieldvalue}  30
 
 Внести зміни в актив лоту
     [Arguments]  ${username}  ${item_id}  ${tender_uaid}  ${fieldname}  ${fieldvalue}
     [Documentation]
     ...      [Призначення] Змінює значення поля fieldname на fieldvalue для активу item_id лоту tender_uaid.
+    polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
+    Wait Until Element Is Visible      id=info_status    30
+    Click Element  id=update_lot_btn
+    ${prop_field_name}=         Replace String    ${fieldname}    .   _    count=1
+    Wait Until Element Is Visible       name=AddAssetItemForm[0][${prop_field_name}]   30
+    ${field_value}=  Convert To String  ${fieldvalue}
+    Input text  name=AddAssetItemForm[0][${prop_field_name}]  ${fieldvalue}
+    Click Element  id=save_lot
+    Wait Until Page Contains  ${fieldvalue}  30
 
 Завантажити ілюстрацію в лот
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}
     [Documentation]
     ...      [Призначення] Завантажує ілюстрацію, яка знаходиться по шляху filepath і має documentType = illustration, до лоту tender_uaid користувачем username.
+    polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element  id=update_lot_btn
+    Sleep   2
+    Choose File     xpath=//input[contains(@id, "doc_upload_field_illustration")]   ${filepath}
+    Sleep   10
+    Click Element  id=save_lot
 
 Завантажити документ в лот з типом
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${documentType}
     [Documentation]
     ...      [Призначення] Завантажує документ, який знаходиться по шляху filepath і має певний documentType (наприклад, notice і т.д), до лоту tender_uaid користувачем username.
     ...      [Повертає] reply (словник з інформацією про документ).
+    polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element  id=update_lot_btn
+    Sleep   2
+    Choose File     id=doc_upload_field_${documentType}   ${filepath}
+    Sleep   10
+    Click Element  id=save_lot
+
 
 Завантажити документ для видалення лоту
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}
     [Documentation]
     ...      [Призначення] Завантажує документ, який знаходиться по шляху filepath і має documentType = cancellationDetails, до лоту tender_uaid користувачем username.
+    polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element  id=update_lot_btn
+    Sleep   2
+    Choose File     xpath=//input[contains(@id, "doc_upload_field_cancellationDetails")]   ${filepath}
+    Sleep   10
+    Click Element  id=save_lot
 
 Видалити лот
     [Arguments]  ${username}  ${tender_uaid}
     [Documentation]
     ...      [Призначення] Видаляє лот tender_uaid користувачем username.
+    polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
+    Click Element  id=delete_lot_btn
+    Wait Until Page Contains    Видалено з реєстру лот  20
 
-Додати умови проведення аукціону(викликається двічі, окремо для вказання умов проведення першого аукціону і окремо для другого)
+Додати умови проведення аукціону
     [Arguments]  ${username}  ${auction}  ${auction_index}  ${tender_uaid}
     [Documentation]
     ...      [Призначення] Додає умови проведення аукціону(auction_index) auction користувачем username
+    polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
+    Wait Until Element Is Visible      id=info_status    30
+    Click Element  id=update_lot_btn
+    log to console  ${auction}
+
+    ${auctionPeriod.startDate}=             Get From Dictionary      ${auction.auctionPeriod}    startDate
+    ${guarantee.amount}=                    Get From Dictionary      ${auction.guarantee}        amount
+    ${minimalStep.amount}=                  Get From Dictionary      ${auction.minimalStep}      amount
+    ${minimalStep.valueAddedTaxIncluded}=   Get From Dictionary      ${auction.minimalStep}      valueAddedTaxIncluded
+    ${registrationFee.amount}=              Get From Dictionary      ${auction.registrationFee}  amount
+    ${value.amount}=                        Get From Dictionary      ${auction.value}            amount
+    ${value.valueAddedTaxIncluded}=         Get From Dictionary      ${auction.value}            valueAddedTaxIncluded
+
+
+    ${auctionPeriod.startDate}=             Convert to string     ${auctionPeriod.startDate}
+    ${guarantee.amount}=                    Convert to string     ${guarantee.amount}
+    ${minimalStep.amount}=                  Convert to string     ${minimalStep.amount}
+    ${minimalStep.valueAddedTaxIncluded}=   Convert to Number     ${minimalStep.valueAddedTaxIncluded}
+    ${registrationFee.amount}=              Convert to string     ${registrationFee.amount}
+    ${value.amount}=                        Convert to string     ${value.amount}
+    ${value.valueAddedTaxIncluded}=         Convert to Number     ${value.valueAddedTaxIncluded}
+
+
+    ${auctionPeriod.startDate}=             polonex_convertdate     ${auctionPeriod.startDate}
+
+    Input text    id=addlotauctionform-0-auctionperiod_startdate                    ${auctionPeriod.startDate}
+    Input text    id=addlotauctionform-0-value_amount                               ${value.amount}
+    Input text    id=addlotauctionform-0-minimalstep_amount                         ${minimalStep.amount}
+    Input text    id=addlotauctionform-0-guarantee_amount                           ${guarantee.amount}
+    Input text    id=addlotauctionform-0-registrationfee_amount                     ${registrationFee.amount}
+
+    Select From List    id=addlotauctionform-0-value_valueaddedtaxincluded          ${value.valueAddedTaxIncluded}
+    Select From List    id=addlotauctionform-0-minimalstep_valueaddedtaxincluded    ${minimalStep.valueAddedTaxIncluded}
+
+    Click Element  id=publish_lot
+    Wait Until Element Is Visible      id=info_status    30
 
 Внести зміни в умови проведення аукціону
     [Arguments]  ${username}  ${tender_uaid}  ${fieldname}  ${fieldvalue}  ${auction_index}
