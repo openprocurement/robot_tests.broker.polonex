@@ -35,7 +35,7 @@ def polonex_download_file(url, file_name, output_dir):
     urllib.urlretrieve(url, ('{}/{}'.format(output_dir, file_name)))
 
 def convert_polonex_string(string):
-    return {
+    data = {
             'True':                                                   '1',
             'False':                                                  '0',
             u"Так":                                                   True,
@@ -50,7 +50,6 @@ def convert_polonex_string(string):
             u'Чорновик':                                              'draft',
             u'Майна банків':                                          'dgfOtherAssets',
             u'Прав вимоги за кредитами':                              'dgfFinancialAssets',
-            u'Голландський аукціон':                                  'dgfInsider',
             u'Вперше':                                                1,
             u'Вдруге':                                                2,
             u'Втретє':                                                3,
@@ -66,6 +65,20 @@ def convert_polonex_string(string):
             u'[Оплачено, очікується підписання договору]':            'active',
             u'[Кваліфікаційна комісія відмовила переможцю]':          'unsuccessful',
             u'Опубліковано. Очікування інформаційного повідомлення.': 'pending',
+            u'Виключено з переліку':                                  'deleted',
             u'Реєстрацію завершено':                                  'complete',
-            }.get(string, string)
+            u'Повідомлення не валідне':                               'pending.deleted',
+            u'Англійський аукціон':                                   'sellout.english',
+            u'Аукціон заплановано':                                   'scheduled',
+            }
+    return data.get(string, string)
+
+def convert_polonex_lot_string(string):
+    data = {
+            u'Опубліковано': 'pending',
+            }
+    return data.get(string, string)
+
+
+
 
