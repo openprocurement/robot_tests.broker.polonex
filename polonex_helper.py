@@ -68,14 +68,17 @@ def convert_polonex_string(string):
             u'Виключено з переліку':                                  'deleted',
             u'Реєстрацію завершено':                                  'complete',
             u'Повідомлення не валідне':                               'pending.deleted',
-            u'Англійський аукціон':                                   'sellout.english',
             u'Аукціон заплановано':                                   'scheduled',
             }
     return data.get(string, string)
 
 def convert_polonex_lot_string(string):
     data = {
-            u'Опубліковано': 'pending',
+            u'Опубліковано':         'pending',
+            u'Англійський аукціон':  'sellout.english',
+            u'Голландський аукціон': 'sellout.insider',
+            u'Аукціон заплановано':  'scheduled',
+            u'Реєстрацію завершено': 'complete',
             }
     return data.get(string, string)
 
