@@ -526,14 +526,6 @@ Login
     ${return_value}=   Get Text     id=${prop_field_name}
     [Return]  ${return_value}
 
-####Отримати інформацію із предмету
-####    [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${field_name}
-####    ${index}=   Get Element Attribute   xpath=//td[contains(text(), '${item_id}')]@id
-####    ${index}=   Get Substring   ${index}    0   9
-####    ${return_value}=    Get Text     id=${item_id}${field_name}
-####    ${return_value}=  Run Keyword If
-####    ...  ${field_name} == 'quantity'      Convert To Integer    ${return_value}
-####    [Return]  ${return_value}
 
 Отримати текст із поля і показати на сторінці
   [Arguments]   ${fieldname}
@@ -777,7 +769,6 @@ Login
 
 Отримати документ
     [Arguments]  ${username}  ${tender_uaid}  ${doc_id}
-    ###${file_name}=   Get Element Attribute   xpath=//div[contains(@data-name,'${doc_id}')]@data-name
     ${file_name}=   Get Text   xpath=//div[contains(text(),'${doc_id}')]
     ${url}=   Get Element Attribute   xpath=//div[contains(@data-name,'${file_name}')]@data-src
     polonex_download_file   ${url}  ${file_name}  ${OUTPUT_DIR}
@@ -843,7 +834,6 @@ Login
     ...    ${ARGUMENTS[1]} ==  tenderId
     ...    ${ARGUMENTS[2]} ==  ${test_bid_data}
     ${status}=          Get From Dictionary         ${ARGUMENTS[2].data}    qualified
-    log to console      ${status}
     ${amount}=    Get From Dictionary     ${ARGUMENTS[2].data.value}    amount
     ${amount}=          Convert To String     ${amount}
     Run Keyword If  ${status}
@@ -1036,7 +1026,6 @@ Login
     ${assetCustodian_address_region}=                       Get From Dictionary               ${tender_data.data.assetCustodian.address}  region
     ${assetCustodian_address_streetAddress}=                Get From Dictionary               ${tender_data.data.assetCustodian.address}  streetAddress
     ${assetCustodian_contactPoint_email}=                   Get From Dictionary               ${tender_data.data.assetCustodian.contactPoint}  email
-    ###${assetCustodian_contactPoint_faxNumber}=               Get From Dictionary               ${tender_data.data.assetCustodian.contactPoint}  faxNumber
     ${assetCustodian_contactPoint_name}=                    Get From Dictionary               ${tender_data.data.assetCustodian.contactPoint}  name
     ${assetCustodian_contactPoint_telephone}=               Get From Dictionary               ${tender_data.data.assetCustodian.contactPoint}  telephone
     ${assetCustodian_contactPoint_url}=                     Get From Dictionary               ${tender_data.data.assetCustodian.contactPoint}  url
@@ -1050,7 +1039,6 @@ Login
     ${assetHolder_address_region}=                          Get From Dictionary               ${tender_data.data.assetHolder.address}  region
     ${assetHolder_address_streetAddress}=                   Get From Dictionary               ${tender_data.data.assetHolder.address}  streetAddress
     ${assetHolder_contactPoint_email}=                      Get From Dictionary               ${tender_data.data.assetHolder.contactPoint}  email
-    ###${assetHolder_contactPoint_faxNumber}=                  Get From Dictionary               ${tender_data.data.assetHolder.contactPoint}  faxNumber
     ${assetHolder_contactPoint_name}=                       Get From Dictionary               ${tender_data.data.assetHolder.contactPoint}  name
     ${assetHolder_contactPoint_telephone}=                  Get From Dictionary               ${tender_data.data.assetHolder.contactPoint}  telephone
     ${assetHolder_contactPoint_url}=                        Get From Dictionary               ${tender_data.data.assetHolder.contactPoint}  url
@@ -1090,7 +1078,6 @@ Login
     ${assetCustodian_address_region}=                     Convert To String   ${assetCustodian_address_region}
     ${assetCustodian_address_streetAddress}=              Convert To String   ${assetCustodian_address_streetAddress}
     ${assetCustodian_contactPoint_email}=                 Convert To String   ${assetCustodian_contactPoint_email}
-    ###${assetCustodian_contactPoint_faxNumber}=             Convert To String   ${assetCustodian_contactPoint_faxNumber}
     ${assetCustodian_contactPoint_name}=                  Convert To String   ${assetCustodian_contactPoint_name}
     ${assetCustodian_contactPoint_telephone}=             Convert To String   ${assetCustodian_contactPoint_telephone}
     ${assetCustodian_contactPoint_url}=                   Convert To String   ${assetCustodian_contactPoint_url}
@@ -1104,7 +1091,6 @@ Login
     ${assetHolder_address_region}=                        Convert To String   ${assetHolder_address_region}
     ${assetHolder_address_streetAddress}=                 Convert To String   ${assetHolder_address_streetAddress}
     ${assetHolder_contactPoint_email}=                    Convert To String   ${assetHolder_contactPoint_email}
-    ###${assetHolder_contactPoint_faxNumber}=                Convert To String   ${assetHolder_contactPoint_faxNumber}
     ${assetHolder_contactPoint_name}=                     Convert To String   ${assetHolder_contactPoint_name}
     ${assetHolder_contactPoint_telephone}=                Convert To String   ${assetHolder_contactPoint_telephone}
     ${assetHolder_contactPoint_url}=                      Convert To String   ${assetHolder_contactPoint_url}
@@ -1147,7 +1133,6 @@ Login
     Input text      id=addassetform-assetcustodian_address_region       ${assetCustodian_address_region}
     Input text      id=addassetform-assetcustodian_address_streetaddress       ${assetCustodian_address_streetAddress}
     Input text      id=addassetform-assetcustodian_contactpoint_email       ${assetCustodian_contactPoint_email}
-    ###Input text      id=addassetform-assetcustodian_contactpoint_faxNumber       ${assetCustodian_contactPoint_faxNumber}
     Input text      id=addassetform-assetcustodian_contactpoint_name       ${assetCustodian_contactPoint_name}
     Input text      id=addassetform-assetcustodian_contactpoint_telephone       ${assetCustodian_contactPoint_telephone}
     Input text      id=addassetform-assetcustodian_contactpoint_url       ${assetCustodian_contactPoint_url}
@@ -1161,7 +1146,6 @@ Login
     Input text      id=addassetform-assetholder_address_region       ${assetHolder_address_region}
     Input text      id=addassetform-assetholder_address_streetaddress       ${assetHolder_address_streetAddress}
     Input text      id=addassetform-assetholder_contactpoint_email       ${assetHolder_contactPoint_email}
-    ###Input text      id=addassetform-assetholder_contactpoint_faxNumber       ${assetHolder_contactPoint_faxNumber}
     Input text      id=addassetform-assetholder_contactpoint_name       ${assetHolder_contactPoint_name}
     Input text      id=addassetform-assetholder_contactpoint_telephone       ${assetHolder_contactPoint_telephone}
     Input text      id=addassetform-assetholder_contactpoint_url       ${assetHolder_contactPoint_url}
@@ -1399,7 +1383,6 @@ Login
     [Documentation]
     ...      [Призначення] Створює лот з початковими даними tender_data і прив’язаним до нього об’єктом МП asset_uaid
     ...      [Повертає] tender_uaid (ідентифікатор новоствореного лоту)
-    log to console   ${tender_data}
 
     polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${asset_uaid}
     ${asset_id}=   Get Text  id=info_id
@@ -1587,7 +1570,6 @@ Login
 
 Додати умови проведення аукціону для індексу 0
     [Arguments]  ${username}  ${auction}  ${auction_index}  ${tender_uaid}
-    log to console     ${auction}
     polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
     Wait Until Element Is Visible      id=info_status    30
     Click Element  id=update_lot_btn
@@ -1602,10 +1584,8 @@ Login
     ${auctionPeriod.startDate}=             Convert to string     ${auctionPeriod.startDate}
     ${guarantee.amount}=                    Convert to string     ${guarantee.amount}
     ${minimalStep.amount}=                  Convert to string     ${minimalStep.amount}
-    ###${minimalStep.valueAddedTaxIncluded}=   Convert to Number     ${minimalStep.valueAddedTaxIncluded}
     ${registrationFee.amount}=              Convert to string     ${registrationFee.amount}
     ${value.amount}=                        Convert to string     ${value.amount}
-    ###${value.valueAddedTaxIncluded}=         Convert to Number     ${value.valueAddedTaxIncluded}
     ${auctionPeriod.startDate}=             polonex_convertdate     ${auctionPeriod.startDate}
 
     Input text    id=addlotauctionform-0-auctionperiod_startdate                    ${auctionPeriod.startDate}
@@ -1616,7 +1596,6 @@ Login
 
 Додати умови проведення аукціону для індексу 1
     [Arguments]  ${username}  ${auction}  ${auction_index}  ${tender_uaid}
-    log to console     ${auction}
     ${w}=      Get From Dictionary     ${auction}    tenderingDuration
     Input text    addlotauctionform-1-tenderingduration_y    ${EMPTY}
     Input text    addlotauctionform-1-tenderingduration_m    ${EMPTY}
@@ -1627,7 +1606,6 @@ Login
 
 Додати умови проведення аукціону для індексу 2
     [Arguments]  ${username}  ${auction}  ${auction_index}  ${tender_uaid}
-    log to console     ${auction}
     Click Element  id=publish_lot
     Wait Until Element Is Visible      id=info_status    30
 
