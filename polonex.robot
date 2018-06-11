@@ -1372,7 +1372,7 @@ Login
     ...      [Призначення] Видаляє об’єкт МП tender_uaid користувачем username.
     polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
     Click Element  id=delete_asset_btn
-    Wait Until Page Contains    Видалено з реєстру актив  20
+    Wait Until Page Contains    Видалено з реєстру  20
 
 
 ######################### Лоти #########################
@@ -1557,7 +1557,7 @@ Login
     ...      [Призначення] Видаляє лот tender_uaid користувачем username.
     polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
     Click Element  id=delete_lot_btn
-    Wait Until Page Contains    Видалено з реєстру лот  20
+    Wait Until Page Contains    Видалено з реєстру 20
 
 Додати умови проведення аукціону
     [Arguments]  ${username}  ${auction}  ${auction_index}  ${tender_uaid}

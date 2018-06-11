@@ -74,11 +74,12 @@ def convert_polonex_string(string):
 
 def convert_polonex_lot_string(string):
     data = {
-            u'Опубліковано':         'pending',
-            u'Англійський аукціон':  'sellout.english',
-            u'Голландський аукціон': 'sellout.insider',
-            u'Аукціон заплановано':  'scheduled',
-            u'Реєстрацію завершено': 'complete',
+            u'Опубліковано':                     'pending',
+            u'Англійський аукціон':              'sellout.english',
+            u'Голландський аукціон':             'sellout.insider',
+            u'Аукціон заплановано':              'scheduled',
+            u'Реєстрацію завершено':             'complete',
+            u'Перевірка коректності оголошення': 'verification',
             }
     return data.get(string, string)
 
