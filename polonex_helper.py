@@ -35,35 +35,54 @@ def polonex_download_file(url, file_name, output_dir):
     urllib.urlretrieve(url, ('{}/{}'.format(output_dir, file_name)))
 
 def convert_polonex_string(string):
-    return {
-            'True':                                                 '1',
-            'False':                                                '0',
-            u"Так":                                                 True,
-            u"Hi":                                                  False,
-            u'Очікування пропозицій':                               'active.tendering',
-            u'Період аукціону':                                     'active.auction',
-            u'Кваліфікація переможця':                              'active.qualification',
-            u'Пропозиції розглянуто':                               'active.awarded',
-            u'Аукціон не відбувся':                                 'unsuccessful',
-            u'Аукціон завершено':                                   'complete',
-            u'Аукціон відмінено':                                   'cancelled',
-            u'Чорновик':                                            'draft',
-            u'Майна банків':                                        'dgfOtherAssets',
-            u'Прав вимоги за кредитами':                            'dgfFinancialAssets',
-            u'Голландський аукціон':                                'dgfInsider',
-            u'Вперше':                                              1,
-            u'Вдруге':                                              2,
-            u'Втретє':                                              3,
-            u'Вчетверте':                                           4,
-            u'Грн.':                                                'UAH',
-            u'(включно з ПДВ)':                                     True,
-            u'(без ПДВ)':                                           False,
-            u'[переможець розглядається кваліфікаційною комісією]': 'pending',
-            u'[Oчікування кінця кваліфікації переможця]':           'pending.waiting',
-            u'[Учасник достроково забрав гарантійний внесок]':      'cancelled',
-            u'[Очікується протокол]':                               'pending.verification',
-            u'[Очікується оплата]':                                 'pending.payment',
-            u'[Оплачено, очікується підписання договору]':          'active',
-            u'[Кваліфікаційна комісія відмовила переможцю]':        'unsuccessful',
-            }.get(string, string)
+    data = {
+            'True':                                                   '1',
+            'False':                                                  '0',
+            u"Так":                                                   True,
+            u"Hi":                                                    False,
+            u'Очікування пропозицій':                                 'active.tendering',
+            u'Період аукціону':                                       'active.auction',
+            u'Кваліфікація переможця':                                'active.qualification',
+            u'Пропозиції розглянуто':                                 'active.awarded',
+            u'Аукціон не відбувся':                                   'unsuccessful',
+            u'Аукціон завершено':                                     'complete',
+            u'Аукціон відмінено':                                     'cancelled',
+            u'Чорновик':                                              'draft',
+            u'Майна банків':                                          'dgfOtherAssets',
+            u'Прав вимоги за кредитами':                              'dgfFinancialAssets',
+            u'Вперше':                                                1,
+            u'Вдруге':                                                2,
+            u'Втретє':                                                3,
+            u'Вчетверте':                                             4,
+            u'Грн.':                                                  'UAH',
+            u'(включно з ПДВ)':                                       True,
+            u'(без ПДВ)':                                             False,
+            u'[переможець розглядається кваліфікаційною комісією]':   'pending',
+            u'[Oчікування кінця кваліфікації переможця]':             'pending.waiting',
+            u'[Учасник достроково забрав гарантійний внесок]':        'cancelled',
+            u'[Очікується протокол]':                                 'pending.verification',
+            u'[Очікується оплата]':                                   'pending.payment',
+            u'[Оплачено, очікується підписання договору]':            'active',
+            u'[Кваліфікаційна комісія відмовила переможцю]':          'unsuccessful',
+            u'Опубліковано. Очікування інформаційного повідомлення.': 'pending',
+            u'Виключено з переліку':                                  'deleted',
+            u'Реєстрацію завершено':                                  'complete',
+            u'Повідомлення не валідне':                               'pending.deleted',
+            u'Аукціон заплановано':                                   'scheduled',
+            }
+    return data.get(string, string)
+
+def convert_polonex_lot_string(string):
+    data = {
+            u'Опубліковано':                     'pending',
+            u'Англійський аукціон':              'sellout.english',
+            u'Голландський аукціон':             'sellout.insider',
+            u'Аукціон заплановано':              'scheduled',
+            u'Реєстрацію завершено':             'complete',
+            u'Перевірка коректності оголошення': 'verification',
+            }
+    return data.get(string, string)
+
+
+
 
