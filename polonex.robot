@@ -1557,7 +1557,7 @@ Login
     ...      [Призначення] Видаляє лот tender_uaid користувачем username.
     polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
     Click Element  id=delete_lot_btn
-    Wait Until Page Contains    Видалено з реєстру 20
+    Wait Until Page Contains    Видалено з реєстру  20
 
 Додати умови проведення аукціону
     [Arguments]  ${username}  ${auction}  ${auction_index}  ${tender_uaid}
@@ -1596,7 +1596,6 @@ Login
 
 Додати умови проведення аукціону для індексу 1
     [Arguments]  ${username}  ${auction}  ${auction_index}  ${tender_uaid}
-    ${w}=      Get From Dictionary     ${auction}    tenderingDuration
     Input text    addlotauctionform-1-tenderingduration_y    ${EMPTY}
     Input text    addlotauctionform-1-tenderingduration_m    ${EMPTY}
     Input text    addlotauctionform-1-tenderingduration_w    1
