@@ -80,6 +80,7 @@ def convert_polonex_lot_string(string):
             u'Аукціон заплановано':              'scheduled',
             u'Реєстрацію завершено':             'complete',
             u'Перевірка коректності оголошення': 'verification',
+            u'Об’єкт виключено':                 'deleted',
             }
     return data.get(string, string)
 

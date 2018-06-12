@@ -92,7 +92,7 @@ ${assetlocator.assetHolder.contactPoint.email}           xpath=//div[contains(@c
 ${assetlocator.assetCustodian.name}                      id=assetCustodian_name_fortest
 ${assetlocator.assetCustodian.identifier.scheme}         xpath=//span[contains(@class, 'assetCustodian_org_ident_scheme')]
 ${assetlocator.assetCustodian.identifier.id}             xpath=//span[contains(@class, 'assetCustodian_org_ident_id')]
-${assetlocator.assetCustodian.identifier.legalName}      xpath=//td[contains(@id, 'assetCustodian_name')]
+${assetlocator.assetCustodian.identifier.legalName}      id=assetCustodian_name_fortest
 ${assetlocator.assetCustodian.contactPoint.name}         xpath=//div[contains(@class, 'assetCustodian_contactPoint_name')]
 ${assetlocator.assetCustodian.contactPoint.telephone}    xpath=//div[contains(@class, 'assetCustodian_contactPoint_telephone')]
 ${assetlocator.assetCustodian.contactPoint.email}        xpath=//div[contains(@class, 'assetCustodian_contactPoint_email')]
@@ -1420,6 +1420,7 @@ Login
     ...      [Призначення] Шукає лот з uaid = tender_uaid.
     ...      [Повертає] tender (словник з інформацією про лот)
     Go to    ${TESTDOMAIN}/prozorrosale2/auctions/lots
+    Wait Until Element Is Visible       id=registr2lotssearch-all   30
     Input text      id=registr2lotssearch-all       ${tender_uaid}
     Click Element   id=lots-search-btn
     Sleep   5
@@ -1621,7 +1622,7 @@ Login
     Wait Until Element Is Visible       name=AddLotAuctionForm[${auction_index}][${prop_field_name}]   30
 
     ${fieldvalue}=  Run keyword if
-    ...  'auctionPeriod_startDate' in '${fieldname}'    polonex_convertdate  ${fieldname}
+    ...  'startDate' in '${fieldname}'    polonex_convertdate  ${fieldvalue}
     ...  ELSE    Convert to string   ${fieldvalue}
 
     Input text  name=AddLotAuctionForm[${auction_index}][${prop_field_name}]  ${fieldvalue}
