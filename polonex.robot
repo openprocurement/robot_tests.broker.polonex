@@ -89,7 +89,7 @@ ${assetlocator.assetHolder.identifier.legalName}         xpath=//span[contains(@
 ${assetlocator.assetHolder.contactPoint.name}            xpath=//div[contains(@class, 'assetHolder_contactPoint_name')]
 ${assetlocator.assetHolder.contactPoint.telephone}       xpath=//div[contains(@class, 'assetHolder_contactPoint_telephone')]
 ${assetlocator.assetHolder.contactPoint.email}           xpath=//div[contains(@class, 'assetHolder_contactPoint_email')]
-${assetlocator.assetCustodian.name}                      id=assetCustodian_name_fortest
+${assetlocator.assetCustodian.name}                      id=assetCustodian_name
 ${assetlocator.assetCustodian.identifier.scheme}         xpath=//span[contains(@class, 'assetCustodian_org_ident_scheme')]
 ${assetlocator.assetCustodian.identifier.id}             xpath=//span[contains(@class, 'assetCustodian_org_ident_id')]
 ${assetlocator.assetCustodian.identifier.legalName}      id=assetCustodian_name_fortest
@@ -769,6 +769,8 @@ Login
 
 Отримати документ
     [Arguments]  ${username}  ${tender_uaid}  ${doc_id}
+    sleep  60
+    reload page
     ${file_name}=   Get Text   xpath=//div[contains(text(),'${doc_id}')]
     ${url}=   Get Element Attribute   xpath=//div[contains(@data-name,'${file_name}')]@data-src
     polonex_download_file   ${url}  ${file_name}  ${OUTPUT_DIR}
@@ -1185,6 +1187,7 @@ Login
     ...      [Призначення] Шукає об’єкт МП з uaid = tender_uaid.
     ...      [Повертає] tender (словник з інформацією про об’єкт МП)
     Go to    ${TESTDOMAIN}/prozorrosale2/auctions/assets
+    Wait Until Element Is Visible      id=registr2assetssearch-all    30
     Input text      id=registr2assetssearch-all       ${tender_uaid}
     Click Element   id=assets-search-btn
     Sleep   5
@@ -1196,7 +1199,7 @@ Login
     [Documentation]
     ...      [Призначення] Оновлює сторінку з об’єктом МП для отримання потенційно оновлених даних.
     Go to    ${TESTDOMAIN}/prozorrosale2/auctions/get-all-assets?n=10
-    Sleep   10
+    Sleep   30
     polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
 
 Отримати інформацію із об'єкта МП
@@ -1204,6 +1207,9 @@ Login
     [Documentation]
     ...      [Призначення] Отримує значення поля field_name для об’єкту МП tender_uaid.
     ...      [Повертає] tender['field_name'] (значення поля).
+    sleep  60
+    reload page
+    Wait Until Element Is Visible      ${assetlocator.${fieldname}}    30
     ${return_value}=   Get Text  ${assetlocator.${fieldname}}
 
     ${return_value}=  Run Keyword If
@@ -1440,7 +1446,9 @@ Login
     [Documentation]
     ...      [Призначення] Отримує значення поля field_name для лоту tender_uaid.
     ...      [Повертає] tender['field_name'] (значення поля).
-
+    sleep  60
+    reload page
+    Wait Until Element Is Visible      ${lotlocator.${fieldname}}    30
     ${return_value}=   Get Text  ${lotlocator.${fieldname}}
 
     ${return_value}=  Run Keyword If
