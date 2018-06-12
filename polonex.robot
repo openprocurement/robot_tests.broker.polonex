@@ -92,7 +92,7 @@ ${assetlocator.assetHolder.contactPoint.email}           xpath=//div[contains(@c
 ${assetlocator.assetCustodian.name}                      id=assetCustodian_name
 ${assetlocator.assetCustodian.identifier.scheme}         xpath=//span[contains(@class, 'assetCustodian_org_ident_scheme')]
 ${assetlocator.assetCustodian.identifier.id}             xpath=//span[contains(@class, 'assetCustodian_org_ident_id')]
-${assetlocator.assetCustodian.identifier.legalName}      id=assetCustodian_name_fortest
+${assetlocator.assetCustodian.identifier.legalName}      id=assetCustodian_name
 ${assetlocator.assetCustodian.contactPoint.name}         xpath=//div[contains(@class, 'assetCustodian_contactPoint_name')]
 ${assetlocator.assetCustodian.contactPoint.telephone}    xpath=//div[contains(@class, 'assetCustodian_contactPoint_telephone')]
 ${assetlocator.assetCustodian.contactPoint.email}        xpath=//div[contains(@class, 'assetCustodian_contactPoint_email')]
@@ -769,7 +769,7 @@ Login
 
 Отримати документ
     [Arguments]  ${username}  ${tender_uaid}  ${doc_id}
-    sleep  60
+    sleep  20
     reload page
     ${file_name}=   Get Text   xpath=//div[contains(text(),'${doc_id}')]
     ${url}=   Get Element Attribute   xpath=//div[contains(@data-name,'${file_name}')]@data-src
@@ -877,7 +877,7 @@ Login
 
 Завантажити документ в ставку
     [Arguments]  ${username}  ${path}  ${tender_uaid}  ${doc_type}=documents
-    Sleep   60
+    Sleep   20
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     Click Element           id=edit_user_bid
     Sleep   2
@@ -1207,9 +1207,8 @@ Login
     [Documentation]
     ...      [Призначення] Отримує значення поля field_name для об’єкту МП tender_uaid.
     ...      [Повертає] tender['field_name'] (значення поля).
-    sleep  60
+    sleep  20
     reload page
-    Wait Until Element Is Visible      ${assetlocator.${fieldname}}    30
     ${return_value}=   Get Text  ${assetlocator.${fieldname}}
 
     ${return_value}=  Run Keyword If
@@ -1446,9 +1445,8 @@ Login
     [Documentation]
     ...      [Призначення] Отримує значення поля field_name для лоту tender_uaid.
     ...      [Повертає] tender['field_name'] (значення поля).
-    sleep  60
+    sleep  20
     reload page
-    Wait Until Element Is Visible      ${lotlocator.${fieldname}}    30
     ${return_value}=   Get Text  ${lotlocator.${fieldname}}
 
     ${return_value}=  Run Keyword If
@@ -1610,7 +1608,7 @@ Login
     Input text    addlotauctionform-1-tenderingduration_w    1
     Input text    addlotauctionform-1-tenderingduration_d    ${EMPTY}
     Click Element  id=publish_lot
-    Wait Until Element Is Visible      id=info_status    60
+    Wait Until Element Is Visible      id=info_status    30
 
 Додати умови проведення аукціону для індексу 2
     [Arguments]  ${username}  ${auction}  ${auction_index}  ${tender_uaid}
