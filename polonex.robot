@@ -1209,8 +1209,7 @@ Login
     [Documentation]
     ...      [Призначення] Отримує значення поля field_name для об’єкту МП tender_uaid.
     ...      [Повертає] tender['field_name'] (значення поля).
-    sleep  20
-    reload page
+    polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
     ${return_value}=   Get Text  ${assetlocator.${fieldname}}
 
     ${return_value}=  Run Keyword If
@@ -1449,8 +1448,7 @@ Login
     [Documentation]
     ...      [Призначення] Отримує значення поля field_name для лоту tender_uaid.
     ...      [Повертає] tender['field_name'] (значення поля).
-    sleep  20
-    reload page
+    polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
     ${return_value}=   Get Text  ${lotlocator.${fieldname}}
 
     ${return_value}=  Run Keyword If
