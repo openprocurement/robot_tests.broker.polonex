@@ -1186,8 +1186,11 @@ Login
     [Documentation]
     ...      [Призначення] Шукає об’єкт МП з uaid = tender_uaid.
     ...      [Повертає] tender (словник з інформацією про об’єкт МП)
+    Switch Browser   ${BROWSER_ALIAS}
+    Go to    ${TESTDOMAIN}/prozorrosale2/auctions/get-all-assets?n=10
+    Sleep   10
     Go to    ${TESTDOMAIN}/prozorrosale2/auctions/assets
-    Wait Until Element Is Visible      id=registr2assetssearch-all    30
+    Wait Until Element Is Visible      id=registr2assetssearch-all    10
     Input text      id=registr2assetssearch-all       ${tender_uaid}
     Click Element   id=assets-search-btn
     Sleep   5
@@ -1198,9 +1201,8 @@ Login
     [Arguments]  ${username}  ${tender_uaid}
     [Documentation]
     ...      [Призначення] Оновлює сторінку з об’єктом МП для отримання потенційно оновлених даних.
-    Go to    ${TESTDOMAIN}/prozorrosale2/auctions/get-all-assets?n=10
     Sleep   30
-    polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
+    reload page
 
 Отримати інформацію із об'єкта МП
     [Arguments]  ${username}  ${tender_uaid}  ${fieldname}
@@ -1424,6 +1426,9 @@ Login
     [Documentation]
     ...      [Призначення] Шукає лот з uaid = tender_uaid.
     ...      [Повертає] tender (словник з інформацією про лот)
+    Switch Browser   ${BROWSER_ALIAS}
+    Go to    ${TESTDOMAIN}/prozorrosale2/auctions/get-all-lots?n=10
+    Sleep   10
     Go to    ${TESTDOMAIN}/prozorrosale2/auctions/lots
     Wait Until Element Is Visible       id=registr2lotssearch-all   30
     Input text      id=registr2lotssearch-all       ${tender_uaid}
@@ -1436,9 +1441,8 @@ Login
     [Arguments]  ${username}  ${tender_uaid}
     [Documentation]
     ...      [Призначення] Оновлює сторінку з лотом для отримання потенційно оновлених даних.
-    Go to    ${TESTDOMAIN}/prozorrosale2/auctions/get-all-lots?n=10
-    Sleep   10
-    polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
+    Sleep   30
+    reload page
 
 Отримати інформацію із лоту
     [Arguments]  ${username}  ${tender_uaid}  ${field_name}
