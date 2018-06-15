@@ -1569,7 +1569,6 @@ Login
 Додати умови проведення аукціону
     [Arguments]  ${username}  ${auction}  ${auction_index}  ${tender_uaid}
     [Documentation]
-    log to console  ${auction}
     ...      [Призначення] Додає умови проведення аукціону(auction_index) auction користувачем username
     Run Keyword If
     ...  ${auction_index} == 0  Додати умови проведення аукціону для індексу 0    ${username}  ${auction}  ${auction_index}  ${tender_uaid}
