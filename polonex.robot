@@ -769,7 +769,7 @@ Login
 
 Отримати документ
     [Arguments]  ${username}  ${tender_uaid}  ${doc_id}
-    sleep  20
+    sleep  60
     reload page
     ${file_name}=   Get Text   xpath=//div[contains(text(),'${doc_id}')]
     ${url}=   Get Element Attribute   xpath=//div[contains(@data-name,'${file_name}')]@data-src
@@ -1201,8 +1201,7 @@ Login
     [Arguments]  ${username}  ${tender_uaid}
     [Documentation]
     ...      [Призначення] Оновлює сторінку з об’єктом МП для отримання потенційно оновлених даних.
-    Sleep   30
-    reload page
+    polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
 
 Отримати інформацію із об'єкта МП
     [Arguments]  ${username}  ${tender_uaid}  ${fieldname}
@@ -1440,8 +1439,7 @@ Login
     [Arguments]  ${username}  ${tender_uaid}
     [Documentation]
     ...      [Призначення] Оновлює сторінку з лотом для отримання потенційно оновлених даних.
-    Sleep   30
-    reload page
+    polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
 
 Отримати інформацію із лоту
     [Arguments]  ${username}  ${tender_uaid}  ${field_name}
