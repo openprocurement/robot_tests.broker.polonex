@@ -1209,6 +1209,8 @@ Login
     ...      [Призначення] Отримує значення поля field_name для об’єкту МП tender_uaid.
     ...      [Повертає] tender['field_name'] (значення поля).
     polonex.Пошук об’єкта МП по ідентифікатору  ${username}  ${tender_uaid}
+    Run Keyword If
+    ...    'documentType' not in '${fieldname}'  polonex.wait with reload    assetlocator   ${fieldname}
     ${return_value}=   Get Text  ${assetlocator.${fieldname}}
 
     ${return_value}=  Run Keyword If
@@ -1442,12 +1444,14 @@ Login
     polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
 
 Отримати інформацію із лоту
-    [Arguments]  ${username}  ${tender_uaid}  ${field_name}
+    [Arguments]  ${username}  ${tender_uaid}  ${fieldname}
     [Documentation]
     ...      [Призначення] Отримує значення поля field_name для лоту tender_uaid.
     ...      [Повертає] tender['field_name'] (значення поля).
     polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
+    polonex.wait with reload  lotlocator  ${fieldname}
     ${return_value}=   Get Text  ${lotlocator.${fieldname}}
+
 
     ${return_value}=  Run Keyword If
     ...  'status' in '${fieldname}'                                   convert_polonex_lot_string  ${return_value}
@@ -1466,7 +1470,7 @@ Login
     [Return]  ${return_value}
 
 Отримати інформацію з активу лоту
-    [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${field_name}
+    [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${fieldname}
     [Documentation]
     ...      [Призначення] Отримує значення поля field_name з активу з item_id в описі лоту tender_uaid.
     ...      [Повертає] item['field_name'] (значення поля).
@@ -1648,5 +1652,12 @@ Login
     Choose File     xpath=//input[contains(@id, 'lot_auctions_doc_upload_field_${auction_index}_${documentType}')]   ${filepath}
     Sleep   10
     Click Element  id=save_lot
+
+wait with reload
+    [Arguments]  ${locator}  ${fieldname}
+    :FOR    ${i}    IN RANGE    1   5
+    \    ${test}=   Wait Until Element Is Visible    ${${locator}.${fieldname}}    60
+    \    Exit For Loop If    ${test}
+    \    reload page
 
 
