@@ -1652,11 +1652,15 @@ Login
     Choose File     xpath=//input[contains(@id, 'lot_auctions_doc_upload_field_${auction_index}_${documentType}')]   ${filepath}
     Sleep   10
     Click Element  id=save_lot
+    Wait Until Element Is Visible    id=docuploadsuccess  120
+    Click Element  id=docuploadsuccess
+    Wait Until Element Is Visible      id=info_status    30
 
 wait with reload
     [Arguments]  ${locator}  ${fieldname}
     :FOR    ${i}    IN RANGE    1   5
-    \    ${test}=   Wait Until Element Is Visible    ${${locator}.${fieldname}}    60
+    \    ${test}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${${locator}.${fieldname}}    60
+    \    Log to console      ${test}
     \    Exit For Loop If    ${test}
     \    reload page
 
