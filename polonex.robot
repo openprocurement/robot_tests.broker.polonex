@@ -1548,7 +1548,9 @@ Login
     Choose File     id=doc_upload_field_${documentType}   ${filepath}
     Sleep   10
     Click Element  id=save_lot
-
+    Wait Until Element Is Visible    id=docuploadsuccess  120
+    Click Element  id=docuploadsuccess
+    Wait Until Element Is Visible      id=info_status    30
 
 Завантажити документ для видалення лоту
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}
@@ -1660,7 +1662,6 @@ wait with reload
     [Arguments]  ${locator}  ${fieldname}
     :FOR    ${i}    IN RANGE    1   5
     \    ${test}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${${locator}.${fieldname}}    60
-    \    Log to console      ${test}
     \    Exit For Loop If    ${test}
     \    reload page
 
