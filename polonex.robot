@@ -22,6 +22,7 @@ ${locator.description}                               id=info_description
 ${locator.minNumberOfQualifiedBids}                  id=info_minNumberOfQualifiedBids
 ${locator.minimalStep.amount}                        xpath=//td[contains(@id, 'info_minimalStep')]/span[contains(@class, 'amount')]
 ${locator.value.amount}                              xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'amount')]
+${locator.registrationFee.amount}                    xpath=//td[contains(@id, 'info_registrationFee')]/span[contains(@class, 'amount')]
 ${locator.guarantee.amount}                          xpath=//td[contains(@id, 'info_guarantee')]/span[contains(@class, 'amount')]
 ${locator.value.currency}                            xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'currency')]
 ${locator.value.valueAddedTaxIncluded}               xpath=//td[contains(@id, 'info_value')]/span[contains(@class, 'tax')]
@@ -208,6 +209,27 @@ ${lotlocator.items[0].classification.scheme}                   xpath=//span[cont
 ${lotlocator.items[0].classification.id}                       xpath=//span[contains(@class, 'item[0]classification_id')]
 ${lotlocator.items[0].unit.name}                               id=items[0]_unit
 
+
+${lotitemlocator0.classification.scheme}                   xpath=//span[contains(@class, 'item[0]classification_scheme')]
+${lotitemlocator0.classification.id}                       xpath=//span[contains(@class, 'item[0]classification_id')]
+${lotitemlocator0.unit.name}                               id=items[0]_unit
+${lotitemlocator0.id}                                      id=items[0]_id
+${lotitemlocator0.description}                             id=items[0]_description
+${lotitemlocator0.classification}                          id=items[0]_classification
+${lotitemlocator0.address}                                 id=items[0]_address
+${lotitemlocator0.quantity}                                id=items[0]_quantity
+${lotitemlocator0.unit}                                    id=items[0]_unit
+${lotitemlocator0.registrationDetails.status}              id=items[0]_registrationDetails_status
+${lotitemlocator0.registrationDetails.registrationID}      id=items[0]_registrationDetails_registrationID
+${lotitemlocator0.registrationDetails.registrationDate}    id=items[0]_registrationDetails_registrationDate
+${lotitemlocator1.description}                             id=items[1]_description
+${lotitemlocator1.classification}                          id=items[1]_classification
+${lotitemlocator1.address}                                 id=items[1]_address
+${lotitemlocator1.quantity}                                id=items[1]_quantity
+${lotitemlocator1.unit}                                    id=items[1]_unit
+${lotitemlocator1.registrationDetails.status}              id=items[1]_registrationDetails_status
+${lotitemlocator1.registrationDetails.registrationID}      id=items[1]_registrationDetails_registrationID
+${lotitemlocator1.registrationDetails.registrationDate}    id=items[1]_registrationDetails_registrationDate
 
 
 *** Keywords ***
@@ -486,10 +508,26 @@ Login
     ...  ELSE IF    'items' in '${field_name}'     Отримати інформацію із предмету без індекса  ${field_name}
     ...  ELSE IF    'questions' in '${field_name}'     Отримати інформацію із запитання без індекса  ${field_name}
     ...  ELSE       Отримати інформацію про ${field_name}
+
+
+    ${return_value}=  Run Keyword If
+    ...  'status' in '${field_name}'       convert_polonex_string    ${return_value}
+    ...  ELSE     Set Variable  ${return_value}
+
     [Return]  ${return_value}
 
 Отримати інформацію із предмету без індекса
     [Arguments]  ${field_name}
+    ${prop_field_name}=         Replace String    ${field_name}    .   _    count=1
+    ${prop_field_name}=         Replace String    ${prop_field_name}    .   _    count=1
+    ${return_value}=   Get Text     id=${prop_field_name}
+    ${return_value}=  Run Keyword If
+    ...  'quantity' in '${prop_field_name}'    Convert To Number    ${return_value}
+    ...  ELSE       Convert To String   ${return_value}
+    [Return]  ${return_value}
+
+Отримати інформацію із предмету
+    [Arguments]   ${username}   ${tender_uaid}   ${item_id}   ${field_name}
     ${prop_field_name}=         Replace String    ${field_name}    .   _    count=1
     ${prop_field_name}=         Replace String    ${prop_field_name}    .   _    count=1
     ${return_value}=   Get Text     id=${prop_field_name}
@@ -593,6 +631,11 @@ Login
   ${return_value}=   Отримати текст із поля і показати на сторінці   minimalStep.amount
   ${return_value}=   Convert To Number   ${return_value}
   [Return]   ${return_value}
+
+Отримати інформацію про registrationFee.amount
+  ${return_value}=   Отримати текст із поля і показати на сторінці  registrationFee.amount
+  ${return_value}=   Convert To Number   ${return_value}
+  [Return]  ${return_value}
 
 Внести зміни в тендер
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}  ${field_value}
@@ -814,10 +857,6 @@ Login
     Execute Javascript          $('#submit_bid_disqualify_form_${award_num}').click();
     Wait Until Page Contains   Учасника дискваліфіковано   30
 
-Завантажити документ рішення кваліфікаційної комісії
-    [Arguments]  ${username}  ${document}  ${tender_uaid}  ${award_num}
-    polonex.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
-
 Відповісти на запитання
     [Arguments]  ${username}  ${tender_uaid}  ${answer_data}  ${question_id}
     ${index}=   Get Element Attribute   xpath=//div[contains(text(), '${question_id}')]@id
@@ -877,7 +916,7 @@ Login
 
 Завантажити документ в ставку
     [Arguments]  ${username}  ${path}  ${tender_uaid}  ${doc_type}=documents
-    Sleep   20
+    Sleep   60
     polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
     Click Element           id=edit_user_bid
     Sleep   2
@@ -985,10 +1024,6 @@ Login
   Click Element           id=fileeditform_submit
   sleep  2
   Click Element           id=submit_cansel_form
-
-Завантажити угоду до тендера
-    [Arguments]  ${username}  ${tender_uaid}  ${contract_num}  ${filepath}
-    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
 
 Завантажити протокол аукціону в авард
     [Arguments]  ${username}  ${tender_uaid}  ${filepath}  ${award_index}
@@ -1168,9 +1203,7 @@ Login
     Input text      id=addassetitemform-0-address_region       ${items_0_address_region}
     Input text      id=addassetitemform-0-address_streetaddress       ${items_0_address_streetAddress}
 
-    Execute Javascript    $("#addassetitemform-0-classification_id").val("${items_0_classification_id}"); $("#addassetitemform-0-classification_id").trigger("change");
-    Execute Javascript    $("#addassetitemform-0-classification_id_cpv").val("${items_0_additionalClassifications_0_id}"); $("#addassetitemform-0-classification_id_cpv").trigger("change");
-
+    Execute Javascript    $("#addassetitemform-0-classification_id").val("${items_0_classification_id}");
     Sleep   5
     Click Element   xpath=//button[contains(@id, 'save_asset')]
     Wait Until Element Is Visible       xpath=//td[contains(@id, 'info_assetID')]   30
@@ -1187,15 +1220,15 @@ Login
     ...      [Призначення] Шукає об’єкт МП з uaid = tender_uaid.
     ...      [Повертає] tender (словник з інформацією про об’єкт МП)
     Switch Browser   ${BROWSER_ALIAS}
-    Go to    ${TESTDOMAIN}/prozorrosale2/auctions/get-all-assets?n=10
-    Sleep   10
+    Go to    ${TESTDOMAIN}/prozorrosale2/auctions/get-all-assets?n=5
+    Sleep   3
     Go to    ${TESTDOMAIN}/prozorrosale2/auctions/assets
     Wait Until Element Is Visible      id=registr2assetssearch-all    10
     Input text      id=registr2assetssearch-all       ${tender_uaid}
     Click Element   id=assets-search-btn
-    Sleep   5
+    Sleep   3
     Click Element   xpath=//a[contains(@class, 'show-one-btn')]
-    Wait Until Element Is Visible      id=info_status    30
+    Wait Until Element Is Visible      id=info_status    15
 
 Оновити сторінку з об'єктом МП
     [Arguments]  ${username}  ${tender_uaid}
@@ -1275,7 +1308,7 @@ Login
     Click Element  id=update_asset_btn
     Sleep   2
     Choose File     xpath=//input[contains(@id, "doc_upload_field_illustration")]   ${filepath}
-    Sleep   10
+    Sleep   5
     Click Element  id=save_asset
 
 Завантажити документ в об'єкт МП з типом
@@ -1287,7 +1320,7 @@ Login
     Click Element  id=update_asset_btn
     Sleep   2
     Choose File     id=doc_upload_field_${documentType}   ${filepath}
-    Sleep   10
+    Sleep   5
     Click Element  id=save_asset
 
 Додати актив до об'єкта МП
@@ -1370,7 +1403,7 @@ Login
     Click Element  id=update_asset_btn
     Sleep   2
     Choose File     xpath=//input[contains(@id, "doc_upload_field_cancellationDetails")]   ${filepath}
-    Sleep   10
+    Sleep   5
     Click Element  id=save_asset
 
 Видалити об'єкт МП
@@ -1408,7 +1441,7 @@ Login
     ${decisions_0_decisionDate}=     Convert To String       ${decisions_0_decisionDate}
     ${decisions_0_decisionID}=       Convert To String       ${decisions_0_decisionID}
 
-    Input text      id=addlotform-asset_id                   ${asset_id}
+    Execute Javascript    $("#addlotform-asset_id").val("${asset_id}"); $("#addlotform-asset_id").trigger("change");
     Input text      id=addassetdecisionsform-0-title         ${asset_uaid}
     Input text      id=addassetdecisionsform-0-decisiondate  ${asset_uaid}
     Input text      id=addassetdecisionsform-0-decisionid    ${asset_uaid}
@@ -1427,15 +1460,15 @@ Login
     ...      [Призначення] Шукає лот з uaid = tender_uaid.
     ...      [Повертає] tender (словник з інформацією про лот)
     Switch Browser   ${BROWSER_ALIAS}
-    Go to    ${TESTDOMAIN}/prozorrosale2/auctions/get-all-lots?n=10
-    Sleep   10
+    Go to    ${TESTDOMAIN}/prozorrosale2/auctions/get-all-lots?n=5
+    Sleep   5
     Go to    ${TESTDOMAIN}/prozorrosale2/auctions/lots
-    Wait Until Element Is Visible       id=registr2lotssearch-all   30
+    Wait Until Element Is Visible       id=registr2lotssearch-all   15
     Input text      id=registr2lotssearch-all       ${tender_uaid}
     Click Element   id=lots-search-btn
-    Sleep   5
+    Sleep   2
     Click Element   xpath=//a[contains(@class, 'show-one-btn')]
-    Wait Until Element Is Visible      id=info_status    30
+    Wait Until Element Is Visible      id=info_status    15
 
 Оновити сторінку з лотом
     [Arguments]  ${username}  ${tender_uaid}
@@ -1448,19 +1481,18 @@ Login
     [Documentation]
     ...      [Призначення] Отримує значення поля field_name для лоту tender_uaid.
     ...      [Повертає] tender['field_name'] (значення поля).
-    polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
+    ##polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
     polonex.wait with reload  lotlocator  ${fieldname}
     ${return_value}=   Get Text  ${lotlocator.${fieldname}}
-
 
     ${return_value}=  Run Keyword If
     ...  'status' in '${fieldname}'                                   convert_polonex_lot_string  ${return_value}
     ...  ELSE IF    'registrationDetails.status' in '${fieldname}'    convert_polonex_lot_string  ${return_value}
-    ...  ELSE IF    'procurementMethodType' in '${fieldname}'    convert_polonex_lot_string  ${return_value}
-    ...  ELSE IF    'rectificationPeriod.endDate' in '${fieldname}'  convert_polonex_date_to_iso_format  ${return_value}
+    ...  ELSE IF    'procurementMethodType' in '${fieldname}'    convert_polonex_lot_auction_string  ${return_value}
+    ...  ELSE IF    'rectificationPeriod.endDate' in '${fieldname}'  convert_polonex_date_to_iso_format_with_tz  ${return_value}
     ...  ELSE IF    'auctionPeriod' in '${fieldname}'  convert_polonex_date_to_iso_format  ${return_value}
     ...  ELSE IF    'quantity' in '${fieldname}'  Convert To Number  ${return_value}
-    ...  ELSE IF    'tenderAttempts' in '${fieldname}'  Convert To Number  ${return_value}
+    ...  ELSE IF    'tenderAttempts' in '${fieldname}'  Convert To Integer  ${return_value}
     ...  ELSE IF    'value' in '${fieldname}'  Convert To Number  ${return_value}
     ...  ELSE IF    'minimalStep' in '${fieldname}'  Convert To Number  ${return_value}
     ...  ELSE IF    'guarantee' in '${fieldname}'  Convert To Number  ${return_value}
@@ -1475,13 +1507,13 @@ Login
     ...      [Призначення] Отримує значення поля field_name з активу з item_id в описі лоту tender_uaid.
     ...      [Повертає] item['field_name'] (значення поля).
 
-    ${return_value}=   Get Text  ${lotitemlocator.${fieldname}}
+    ${return_value}=   Get Text  ${lotitemlocator${item_id}.${fieldname}}
 
     ${return_value}=  Run Keyword If
     ...  'status' in '${fieldname}'                                   convert_polonex_lot_string  ${return_value}
     ...  ELSE IF    'registrationDetails.status' in '${fieldname}'    convert_polonex_lot_string  ${return_value}
     ...  ELSE IF    'procurementMethodType' in '${fieldname}'    convert_polonex_lot_string  ${return_value}
-    ...  ELSE IF    'rectificationPeriod.endDate' in '${fieldname}'  convert_polonex_date_to_iso_format  ${return_value}
+    ...  ELSE IF    'rectificationPeriod.endDate' in '${fieldname}'  convert_polonex_date_to_iso_format_with_tz  ${return_value}
     ...  ELSE IF    'auctionPeriod' in '${fieldname}'  convert_polonex_date_to_iso_format  ${return_value}
     ...  ELSE IF    'quantity' in '${fieldname}'  Convert To Number  ${return_value}
     ...  ELSE IF    'tenderAttempts' in '${fieldname}'  Convert To Number  ${return_value}
@@ -1490,6 +1522,9 @@ Login
     ...  ELSE IF    'guarantee' in '${fieldname}'  Convert To Number  ${return_value}
     ...  ELSE IF    'registrationFee' in '${fieldname}'  Convert To Number  ${return_value}
     ...  ELSE       Convert to string  ${return_value}
+
+    ${return_value}=  Run Keyword If
+    ...  'rectificationPeriod.endDate' in '${fieldname}'  add_timezone_to_contact_date  ${return_value}
 
     [Return]  ${return_value}
 
@@ -1500,7 +1535,6 @@ Login
     polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
     Wait Until Element Is Visible      id=info_status    30
     Click Element  id=update_lot_btn
-    Wait Until Element Is Visible      id=addlotform-asset_id    30
     ${prop_field_name}=         Replace String    ${fieldname}    .   _    count=1
     Wait Until Element Is Visible       name=AddLotForm[${prop_field_name}]   30
     ${field_value}=  Convert To String  ${fieldvalue}
@@ -1515,7 +1549,6 @@ Login
     polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
     Wait Until Element Is Visible      id=info_status    30
     Click Element  id=update_lot_btn
-    Wait Until Element Is Visible      id=addlotform-asset_id    30
     ${prop_field_name}=         Replace String    ${fieldname}    .   _    count=1
     Wait Until Element Is Visible       name=AddAssetItemForm[0][${prop_field_name}]   30
     ${field_value}=  Convert To String  ${fieldvalue}
@@ -1529,9 +1562,7 @@ Login
     ...      [Призначення] Завантажує ілюстрацію, яка знаходиться по шляху filepath і має documentType = illustration, до лоту tender_uaid користувачем username.
     polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
     Click Element  id=update_lot_btn
-    Wait Until Element Is Visible      id=addlotform-asset_id    30
-
-    Sleep   2
+    Sleep   5
     Choose File     xpath=//input[contains(@id, "doc_upload_field_illustration")]   ${filepath}
     Sleep   10
     Click Element  id=save_lot
@@ -1543,10 +1574,9 @@ Login
     ...      [Повертає] reply (словник з інформацією про документ).
     polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
     Click Element  id=update_lot_btn
-    Wait Until Element Is Visible      id=addlotform-asset_id    30
-    Sleep   2
+    Sleep   5
     Choose File     id=doc_upload_field_${documentType}   ${filepath}
-    Sleep   10
+    Sleep   5
     Click Element  id=save_lot
     Wait Until Element Is Visible    id=docuploadsuccess  120
     Click Element  id=docuploadsuccess
@@ -1561,7 +1591,7 @@ Login
     Wait Until Element Is Visible      id=addlotform-asset_id    30
     Sleep   2
     Choose File     xpath=//input[contains(@id, "doc_upload_field_cancellationDetails")]   ${filepath}
-    Sleep   10
+    Sleep   5
     Click Element  id=save_lot
 
 Видалити лот
@@ -1586,11 +1616,12 @@ Login
     polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
     Wait Until Element Is Visible      id=info_status    30
     Click Element  id=update_lot_btn
-    Wait Until Element Is Visible      id=addlotform-asset_id    30
     ${auctionPeriod.startDate}=             Get From Dictionary      ${auction.auctionPeriod}    startDate
     ${guarantee.amount}=                    Get From Dictionary      ${auction.guarantee}        amount
     ${minimalStep.amount}=                  Get From Dictionary      ${auction.minimalStep}      amount
     ${minimalStep.valueAddedTaxIncluded}=   Get From Dictionary      ${auction.minimalStep}      valueAddedTaxIncluded
+    ${minimalStep.valueAddedTaxIncluded}=   Convert To String        ${minimalStep.valueAddedTaxIncluded}
+    ${minimalStep.valueAddedTaxIncluded}=   convert_polonex_string  ${minimalStep.valueAddedTaxIncluded}
     ${registrationFee.amount}=              Get From Dictionary      ${auction.registrationFee}  amount
     ${value.amount}=                        Get From Dictionary      ${auction.value}            amount
     ${value.valueAddedTaxIncluded}=         Get From Dictionary      ${auction.value}            valueAddedTaxIncluded
@@ -1601,18 +1632,16 @@ Login
     ${value.amount}=                        Convert to string     ${value.amount}
     ${auctionPeriod.startDate}=             polonex_convertdate     ${auctionPeriod.startDate}
 
-    Input text    id=addlotauctionform-0-auctionperiod_startdate                    ${auctionPeriod.startDate}
-    Input text    id=addlotauctionform-0-value_amount                               ${value.amount}
-    Input text    id=addlotauctionform-0-minimalstep_amount                         ${minimalStep.amount}
-    Input text    id=addlotauctionform-0-guarantee_amount                           ${guarantee.amount}
-    Input text    id=addlotauctionform-0-registrationfee_amount                     ${registrationFee.amount}
+    Input text          id=addlotauctionform-0-auctionperiod_startdate                           ${auctionPeriod.startDate}
+    Input text          id=addlotauctionform-0-value_amount                                      ${value.amount}
+    Input text          id=addlotauctionform-0-minimalstep_amount                                ${minimalStep.amount}
+    Input text          id=addlotauctionform-0-guarantee_amount                                  ${guarantee.amount}
+    Input text          id=addlotauctionform-0-registrationfee_amount                            ${registrationFee.amount}
+    Select From List    xpath=//select[@id="addlotauctionform-0-value_valueaddedtaxincluded"]    ${minimalStep.valueAddedTaxIncluded}
 
 Додати умови проведення аукціону для індексу 1
     [Arguments]  ${username}  ${auction}  ${auction_index}  ${tender_uaid}
-    Input text    addlotauctionform-1-tenderingduration_y    ${EMPTY}
-    Input text    addlotauctionform-1-tenderingduration_m    ${EMPTY}
-    Input text    addlotauctionform-1-tenderingduration_w    1
-    Input text    addlotauctionform-1-tenderingduration_d    ${EMPTY}
+    Input text    addlotauctionform-1-tenderingduration_d    30
     Click Element  id=publish_lot
     Wait Until Element Is Visible      id=info_status    30
 
@@ -1628,8 +1657,7 @@ Login
     polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
     Wait Until Element Is Visible      id=info_status    30
     Click Element  id=update_lot_btn
-    Wait Until Element Is Visible      id=addlotform-asset_id    30
-
+    Sleep  5
     ${prop_field_name}=         Replace String    ${fieldname}    .   _    count=1
     Wait Until Element Is Visible       name=AddLotAuctionForm[${auction_index}][${prop_field_name}]   30
 
@@ -1649,8 +1677,7 @@ Login
     ...      [Повертає] reply (словник з інформацією про документ).
     polonex.Пошук лоту по ідентифікатору  ${username}  ${tender_uaid}
     Click Element  id=update_lot_btn
-    Wait Until Element Is Visible      id=addlotform-asset_id    30
-    Sleep   2
+    Sleep   5
     Choose File     xpath=//input[contains(@id, 'lot_auctions_doc_upload_field_${auction_index}_${documentType}')]   ${filepath}
     Sleep   10
     Click Element  id=save_lot
@@ -1660,9 +1687,14 @@ Login
 
 wait with reload
     [Arguments]  ${locator}  ${fieldname}
+    reload page
     :FOR    ${i}    IN RANGE    1   5
     \    ${test}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${${locator}.${fieldname}}    60
     \    Exit For Loop If    ${test}
     \    reload page
 
-
+Активувати процедуру
+    [Arguments]  ${username}  ${tender_uaid}
+    Go to    ${TESTDOMAIN}/prozorrosale2/auctions/get-all?n=15
+    Sleep   15
+    polonex.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}

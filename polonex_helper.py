@@ -20,6 +20,12 @@ def convert_polonex_date_to_iso_format(date_time_from_ui):
     new_date_time_string = new_timedata.strftime("%Y-%m-%d %H:%M:%S.%f")
     return new_date_time_string
 
+def convert_polonex_date_to_iso_format_with_tz(date_time_from_ui):
+    new_timedata = datetime.strptime(date_time_from_ui, '%d-%m-%Y\n%H:%M')
+    new_date_time_string = new_timedata.strftime("%Y-%m-%d %H:%M:%S.%f")
+    return add_timezone_to_contact_date(new_date_time_string)
+
+
 def convert_contract_date_to_iso(date_time_from_ui, i):
     res=date_time_from_ui.split(' - ')
     res=res[i]
@@ -28,7 +34,7 @@ def convert_contract_date_to_iso(date_time_from_ui, i):
     return new_date_time_string
 
 def add_timezone_to_contact_date(date_str):
-    timezone="+02:00"
+    timezone="+03:00"
     return date_str+timezone
 
 def polonex_download_file(url, file_name, output_dir):
@@ -69,18 +75,27 @@ def convert_polonex_string(string):
             u'Реєстрацію завершено':                                  'complete',
             u'Повідомлення не валідне':                               'pending.deleted',
             u'Аукціон заплановано':                                   'scheduled',
+            u'Мала приватизація':                                     'sellout.english',
             }
     return data.get(string, string)
 
 def convert_polonex_lot_string(string):
     data = {
             u'Опубліковано':                     'pending',
-            u'Англійський аукціон':              'sellout.english',
-            u'Голландський аукціон':             'sellout.insider',
+            u'Аукціон в стадії проведення':      'active',
             u'Аукціон заплановано':              'scheduled',
             u'Реєстрацію завершено':             'complete',
             u'Перевірка коректності оголошення': 'verification',
             u'Об’єкт виключено':                 'deleted',
+            u'Аукціон':                          'active.auction',
+            }
+    return data.get(string, string)
+
+def convert_polonex_lot_auction_string(string):
+    data = {
+            u'Аукціон':                                                                                         'sellout.english',
+            u'Аукціон із зниженням стартової ціни':                                                             'sellout.english',
+            u'Аукціон за методом покрокового зниження стартової ціни та подальшого подання цінових пропозицій': 'sellout.insider',
             }
     return data.get(string, string)
 
